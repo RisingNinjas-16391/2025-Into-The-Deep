@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.RobotContainer;
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp", group = "Teleop")
 public class TeleOp extends CommandOpMode {
     private Telemetry m_telemetry;
-
     @Override
     public void initialize() {
         m_telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -19,6 +18,12 @@ public class TeleOp extends CommandOpMode {
 
         waitForStart();
 
+    }
+
+    @Override
+    public void run() {
+        super.run();
+        m_telemetry.update();
     }
 
 }

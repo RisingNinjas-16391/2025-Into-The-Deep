@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems.drivetrain;
 
+import com.acmerobotics.roadrunner.control.PIDFController;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.localization.Localizer;
@@ -11,6 +12,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.subsystems.drivetrain.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.drive.OTOSLocalizer;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.drive.trajectorysequence.TrajectorySequence;
@@ -31,17 +33,29 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private final MecanumDrive drive;
     private final boolean fieldCentric;
 
+    private final PIDFController kHeadingPID;
+    private double desiredHeading = 0;
+    public static double omegaSpeed = 0.5;
+    private double m_headingOffset = 0;
+
+
     public DrivetrainSubsystem(HardwareMap hardwareMap, Telemetry telemetry, boolean isFieldCentric) {
         this.telemetry = telemetry;
 
         localizer = new OTOSLocalizer(hardwareMap, telemetry);
         drive = new MecanumDrive(hardwareMap, localizer);
         fieldCentric = isFieldCentric;
+
+        kHeadingPID = new PIDFController(DriveConstants.TELEOP_HEADING_PID);
+        kHeadingPID.setInputBounds(0, 2 * Math.PI);
     }
 
     @Override
     public void periodic() {
+        drive.updatePoseEstimate();
         telemetry.addLine("Drivetrain");
+        telemetry.addData("Heading", drive.getPoseEstimate().getHeading());
+        telemetry.addData("Desired Heading", desiredHeading);
     }
 
     public void setMode(DcMotor.RunMode mode) {
@@ -78,6 +92,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
                         -rightX
                 )
         );
+    }
+
+    public void driveHeadingPID(double leftY, double leftX, double rightX) {
+        drive(leftY, leftX, calculatePID());
+
+        if (Math.abs(rightX) > 0.1) {
+            setHeading(getHeading() + rightX * omegaSpeed);
+        }
     }
 
     public void setDrivePower(Pose2d drivePower) {
@@ -134,6 +156,27 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public Localizer getLocalizer() {
         return drive.getLocalizer();
+    }
+
+    public void setHeading(double heading) {
+        desiredHeading = heading;
+    }
+
+    public double getHeading() {
+        return drive.getHeading() - m_headingOffset;
+    }
+
+    public double calculatePID() {
+        kHeadingPID.setTargetPosition(desiredHeading);
+        return kHeadingPID.update(getHeading());
+    }
+
+    public boolean isFinishedHeadingPID() {
+        return (desiredHeading - getHeading()) < 0.2;
+    }
+
+    public void resetHeading() {
+        m_headingOffset = getHeading();
     }
 
 }
