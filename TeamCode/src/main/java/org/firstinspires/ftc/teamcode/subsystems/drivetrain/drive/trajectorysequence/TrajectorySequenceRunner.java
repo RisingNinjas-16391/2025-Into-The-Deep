@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.subsystems.drivetrain.drive.trajectorysequ
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.drive.trajectorysequence.sequencesegment.TrajectorySegment;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.drive.trajectorysequence.sequencesegment.TurnSegment;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.drive.trajectorysequence.sequencesegment.WaitSegment;
-import org.firstinspires.ftc.teamcode.util.DashboardUtil;
+import org.firstinspires.ftc.teamcode.helpers.util.DashboardUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
