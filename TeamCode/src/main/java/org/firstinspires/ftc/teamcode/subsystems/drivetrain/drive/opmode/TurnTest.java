@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.commands.drivetrain.TurnCommand;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.DrivetrainSubsystem;
@@ -15,6 +16,8 @@ import org.firstinspires.ftc.teamcode.subsystems.drivetrain.DrivetrainSubsystem;
  */
 @Config
 @Autonomous(group = "drive")
+@Disabled
+
 public class TurnTest extends CommandOpMode {
 
     public static double ANGLE = 90; // deg

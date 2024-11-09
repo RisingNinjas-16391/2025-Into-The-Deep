@@ -16,6 +16,7 @@ import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.teamcode.commands.drivetrain.RunCommand;
@@ -51,6 +52,8 @@ import static org.firstinspires.ftc.teamcode.subsystems.drivetrain.drive.DriveCo
  */
 @Config
 @Autonomous(group = "drive")
+@Disabled
+
 public class ManualFeedforwardTuner extends CommandOpMode {
 
     public static double DISTANCE = 72; // in

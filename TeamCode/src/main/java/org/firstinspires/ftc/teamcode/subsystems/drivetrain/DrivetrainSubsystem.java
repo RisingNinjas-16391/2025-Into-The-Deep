@@ -51,7 +51,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        drive.updatePoseEstimate();
+        try {
+            drive.updatePoseEstimate();
+
+        } catch(Exception ignored) {
+
+        }
         telemetry.addLine("Drivetrain");
         telemetry.addData("Heading", getHeading());
         telemetry.addData("Desired Heading", desiredHeading);

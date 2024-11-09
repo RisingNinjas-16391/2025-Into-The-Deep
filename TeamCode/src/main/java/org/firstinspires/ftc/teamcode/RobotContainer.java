@@ -12,15 +12,19 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.auto.BlueAutoCommand;
 import org.firstinspires.ftc.teamcode.commands.auto.RedAutoCommand;
+import org.firstinspires.ftc.teamcode.commands.automation.TopTransferCommand;
+import org.firstinspires.ftc.teamcode.commands.automation.TransferCommand;
 import org.firstinspires.ftc.teamcode.commands.claw.ClawPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.drivetrain.MecanumDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.drivetrain.TeleOpHeadingCommand;
 import org.firstinspires.ftc.teamcode.commands.pivot.IntakePivotPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.pivot.OuttakePivotPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.slide.ElevatorPositionCommand;
+import org.firstinspires.ftc.teamcode.commands.slide.ElevatorVelocityCommand;
 import org.firstinspires.ftc.teamcode.commands.slide.ExtendoPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.slide.ExtendoVelocityCommand;
 import org.firstinspires.ftc.teamcode.commands.wrist.WristPositionCommand;
+import org.firstinspires.ftc.teamcode.constants.OperatorPresets;
 import org.firstinspires.ftc.teamcode.subsystems.claws.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.DrivetrainSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.pivot.IntakePivotSubsystem;
@@ -138,49 +142,28 @@ public class RobotContainer {
         new GamepadButton(m_driverController, GamepadKeys.Button.Y).whenPressed(new ExtendoPositionCommand(m_extendoSubsystem, () -> 25));
         new GamepadButton(m_driverController, GamepadKeys.Button.A).whenHeld(new ExtendoVelocityCommand(m_extendoSubsystem, () -> -150));
 
-        m_elevatorUp.whenPressed(new ElevatorPositionCommand(m_elevatorSubsystem, () -> m_elevatorSubsystem.getExtensionMeters() + 10));
-        m_elevatorDown.whenPressed(new ElevatorPositionCommand(m_elevatorSubsystem, () -> m_elevatorSubsystem.getExtensionMeters() - 10));
+        new GamepadButton(m_operatorController, GamepadKeys.Button.Y).whenPressed(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.HighBar));
+        new GamepadButton(m_operatorController, GamepadKeys.Button.A).whenPressed(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.LowBar));
 
-        m_intakePivotUp.whenPressed(new IntakePivotPositionCommand(m_intakePivotSubsystem, 25));
-        m_intakePivotDown.whenPressed(new IntakePivotPositionCommand(m_intakePivotSubsystem, 0));
-
-        m_outtakePivotUp.whenPressed(new OuttakePivotPositionCommand(m_outtakePivotSubsystem, 160));
-        m_outtakePivotDown.whenPressed(new OuttakePivotPositionCommand(m_outtakePivotSubsystem, 355));
-
-//        m_intakeClawIn.whenPressed(new ClawPositionCommand(m_intakeClawSubsystem, () -> 90));
-//        m_outtakeClawOut.whenPressed(new ClawPositionCommand(m_intakeClawSubsystem, () -> 180));
-
-        m_outtakeClawIn.whenPressed(new ClawPositionCommand(m_outtakeClawSubsystem, () -> 65));
-        m_outtakeClawOut.whenPressed(new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90));
+        new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_UP).whenPressed(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.HighBucket));
+        new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_DOWN).whenPressed(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.LowBucket));
 
         // Bottom Transfer
         new GamepadButton(m_driverController, GamepadKeys.Button.DPAD_DOWN).whenPressed(new SequentialCommandGroup(
-                new IntakePivotPositionCommand(m_intakePivotSubsystem, 0),
-                new WaitCommand(500),
-                new ClawPositionCommand(m_intakeClawSubsystem, () -> 180),
-                new WristPositionCommand(m_wristSubsystem, () -> 150),
-                new WaitCommand(500),
-                new IntakePivotPositionCommand(m_intakePivotSubsystem, 27),
-                new ExtendoPositionCommand(m_extendoSubsystem, () -> 0),
-                new WaitCommand(500),
-                new ClawPositionCommand(m_intakeClawSubsystem, () -> 90),
-                new WaitCommand(500),
-                new IntakePivotPositionCommand(m_intakePivotSubsystem, 20),
-                new WaitCommand(500),
-                new ElevatorPositionCommand(m_elevatorSubsystem, () -> 10),
-                new OuttakePivotPositionCommand(m_outtakePivotSubsystem, 160),
-                new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90),
-                new ElevatorPositionCommand(m_elevatorSubsystem, () -> 1),
-                new ClawPositionCommand(m_outtakeClawSubsystem, () -> 65),
-                new WaitCommand(900),
-                new ElevatorPositionCommand(m_elevatorSubsystem, () -> 10),
-                new OuttakePivotPositionCommand(m_outtakePivotSubsystem, 355)
+                new TransferCommand(
+                        m_intakePivotSubsystem,
+                        m_intakeClawSubsystem,
+                        m_wristSubsystem,
+                        m_outtakeClawSubsystem,
+                        m_elevatorSubsystem,
+                        m_extendoSubsystem,
+                        m_outtakePivotSubsystem)
         ));
 
         // Rotate Claw
-        new GamepadButton(m_driverController, GamepadKeys.Button.DPAD_UP).whenPressed(new SequentialCommandGroup(
-            new WristPositionCommand(m_wristSubsystem, () -> 355)
-        ));
+        new GamepadButton(m_driverController, GamepadKeys.Button.DPAD_UP).toggleWhenPressed(
+                new WristPositionCommand(m_wristSubsystem, () -> 355),
+                new WristPositionCommand(m_wristSubsystem, () -> 150));
 
         // Get ready to intake
         new GamepadButton(m_driverController, GamepadKeys.Button.DPAD_RIGHT).whenPressed(new SequentialCommandGroup(
@@ -195,20 +178,224 @@ public class RobotContainer {
 
         // Score on bar
         new GamepadButton(m_driverController, GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new SequentialCommandGroup(
-                new OuttakePivotPositionCommand(m_outtakePivotSubsystem, 330),
-                new WaitCommand(500),
+                new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> OperatorPresets.ScoreSpecimen)
+        ));
+
+        new GamepadButton(m_driverController, GamepadKeys.Button.LEFT_BUMPER).whenPressed(new SequentialCommandGroup(
                 new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90)
         ));
-    }
+        new GamepadButton(m_driverController, GamepadKeys.Button.B).whenPressed(new SequentialCommandGroup(
+                new ElevatorPositionCommand(m_elevatorSubsystem, () -> 0),
+                new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> OperatorPresets.IntakeSpecimen),
+                new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90)
+        ));
 
+        new GamepadButton(m_driverController, GamepadKeys.Button.X).whenPressed(new SequentialCommandGroup(
+                new ClawPositionCommand(m_outtakeClawSubsystem, () -> 65),
+                new WaitCommand(500),
+                new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> 355)
+        ));
+
+        new GamepadButton(m_operatorController, GamepadKeys.Button.START).whenHeld(new ElevatorVelocityCommand(m_elevatorSubsystem, () -> -50).whenFinished(m_elevatorSubsystem::resetPosition));
+        new GamepadButton(m_driverController, GamepadKeys.Button.BACK).or(new GamepadButton(m_operatorController, GamepadKeys.Button.BACK)).whenActive(new TopTransferCommand(m_outtakeClawSubsystem, m_elevatorSubsystem, m_outtakePivotSubsystem));
+
+        new GamepadButton(m_operatorController, GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new ExtendoVelocityCommand(m_extendoSubsystem, () -> -50).whenFinished(m_extendoSubsystem::resetPosition));
+    }
     private void setAutoCommands(int chooser) {
         switch (chooser) {
             case 1:
-                new BlueAutoCommand(m_driveSubsystem).schedule();
+                new BlueAutoCommand(m_driveSubsystem, m_elevatorSubsystem, m_outtakePivotSubsystem, m_outtakeClawSubsystem).schedule();
                 break;
             case 2:
                 new RedAutoCommand(m_driveSubsystem).schedule();
                 break;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         }
 
     }

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems.drivetrain.drive.opmode;
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.drivetrain.MecanumDriveCommand;
@@ -19,6 +20,8 @@ import org.firstinspires.ftc.teamcode.subsystems.drivetrain.DrivetrainSubsystem;
  * @author Jackson
  */
 @Config
+@Disabled
+
 @TeleOp
 public class FieldCentricTest extends CommandOpMode {
 

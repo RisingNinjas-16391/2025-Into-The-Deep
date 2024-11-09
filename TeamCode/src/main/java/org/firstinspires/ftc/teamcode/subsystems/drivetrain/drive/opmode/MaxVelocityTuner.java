@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -26,6 +27,8 @@ import java.util.Objects;
  */
 @Config
 @Autonomous(group = "drive")
+@Disabled
+
 public class MaxVelocityTuner extends CommandOpMode {
 
     public static double RUNTIME = 2.0;

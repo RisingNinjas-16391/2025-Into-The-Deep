@@ -22,7 +22,7 @@
             <goBILDA5202SeriesMotor name="BR" port="3"/>
 
 
-            <SparkFunOTOS name="sensor_otos" port="1" bus="3"/>
+            <SparkFunOTOS name="sensor_otos" port="3" bus="3"/>
 <!--            <ColorSensor name=""-->
 
             <Servo name="rightDepositPivot" port="1"/>

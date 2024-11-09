@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.commands.drivetrain.RunCommand;
 import org.firstinspires.ftc.teamcode.commands.drivetrain.FollowTrajectoryCommand;
@@ -29,6 +30,8 @@ import org.firstinspires.ftc.teamcode.subsystems.drivetrain.DrivetrainSubsystem;
  * NOTE: this has been refactored to use FTCLib's command-based
  */
 @Config
+@Disabled
+
 @Autonomous(group = "drive")
 public class FollowerPIDTuner extends CommandOpMode {
 

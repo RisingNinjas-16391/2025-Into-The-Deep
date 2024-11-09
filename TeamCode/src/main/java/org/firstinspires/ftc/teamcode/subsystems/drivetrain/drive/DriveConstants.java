@@ -40,7 +40,7 @@ public class DriveConstants {
     public static final RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR = RevHubOrientationOnRobot.LogoFacingDirection.LEFT;
     public static final RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR = RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
-    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(15, 0, 3,
+    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(5, 0, 3,
             13);
 
     public static PIDCoefficients TELEOP_HEADING_PID = new PIDCoefficients(1, 0.5, 0);
@@ -96,8 +96,8 @@ public class DriveConstants {
      * You are free to raise this on your own if you would like. It is best determined through experimentation.
 
      */
-    public static double MAX_VEL = 40;
-    public static double MAX_ACCEL = 40;
+    public static double MAX_VEL = 20;
+    public static double MAX_ACCEL = 20;
     public static double MAX_ANG_VEL = Math.toRadians(184.02607784577722);
     public static double MAX_ANG_ACCEL = Math.toRadians(184.02607784577722);
 
