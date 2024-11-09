@@ -19,4 +19,9 @@ public class WristPositionCommand extends CommandBase {
     public void execute() {
         m_wrist.turnToAngle(m_position.getAsDouble());
     }
+
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
 }

@@ -53,7 +53,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void periodic() {
         drive.updatePoseEstimate();
         telemetry.addLine("Drivetrain");
-        telemetry.addData("Heading", drive.getPoseEstimate().getHeading());
+        telemetry.addData("Heading", getHeading());
         telemetry.addData("Desired Heading", desiredHeading);
     }
 
@@ -81,7 +81,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         Pose2d poseEstimate = getPoseEstimate();
 
         Vector2d input = new Vector2d(-leftY, -leftX).rotated(
-                fieldCentric ? -poseEstimate.getHeading() : 0
+                fieldCentric ? -getHeading() : 0
         );
 
         drive.setWeightedDrivePower(
@@ -175,7 +175,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public void resetHeading() {
-        m_headingOffset = getHeading();
+        m_headingOffset = getHeading() + m_headingOffset;
     }
 
 }

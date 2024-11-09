@@ -23,7 +23,7 @@ public class MecanumDriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        drive.drive(leftY.getAsDouble(), leftX.getAsDouble(), rightX.getAsDouble());
+        drive.drive(leftY.getAsDouble(), -leftX.getAsDouble(), rightX.getAsDouble());
         drive.updatePoseEstimate();
     }
 
