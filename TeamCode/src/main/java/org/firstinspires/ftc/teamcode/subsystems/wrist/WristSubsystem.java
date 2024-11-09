@@ -9,18 +9,16 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 public class WristSubsystem extends SubsystemBase {
     private final SimpleServo m_claw;
-    private final String m_name;
 
-    public WristSubsystem(HardwareMap hwMap, String name) {
-        m_claw = new SimpleServo(hwMap, name, 0,
-                180, AngleUnit.DEGREES);
-        m_name = name;
+    public WristSubsystem(HardwareMap hwMap) {
+        m_claw = new SimpleServo(hwMap, "wrist", 0,
+                355, AngleUnit.DEGREES);
 
-        turnToAngle(90);
+        turnToAngle(150);
     }
 
     public void updateTelemetry(Telemetry telemetry) {
-        telemetry.addLine(m_name);
+        telemetry.addLine("Wrist");
         telemetry.addData("Angle", m_claw.getAngle());
     }
 

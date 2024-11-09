@@ -16,17 +16,17 @@ import org.firstinspires.ftc.teamcode.subsystems.slides.elevator.ElevatorConstan
 @Config
 public class ExtendoSubsystem extends TrapezoidalSubsystemBase {
     private final Motor m_motor;
-    private final PIDFController m_feedbackController = ExtendoConstants.PIDF_CONTROLLER;
-    private final BetterElevatorFeedforward m_feedforwardController = ExtendoConstants.FEEDFORWARD_CONTROLLER;
+    private final PIDFController m_feedbackController = new PIDFController(ExtendoConstants.kP,ExtendoConstants.kI,ExtendoConstants.kD, 0);
+    private final BetterElevatorFeedforward m_feedforwardController = new BetterElevatorFeedforward(ExtendoConstants.kS, ExtendoConstants.kG, ExtendoConstants.kV, ExtendoConstants.kA);
 
     public ExtendoSubsystem(HardwareMap hardwareMap){
         super(ExtendoConstants.TRAPEZOIDAL_CONSTRAINTS, ExtendoConstants.ERROR_MARGIN);
 
-        m_motor = new Motor(hardwareMap, "extendo");
+        m_motor = new Motor(hardwareMap, "extension");
 
         m_motor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
 
-        m_motor.setInverted(false);
+        m_motor.setInverted(true);
 
         m_motor.stopAndResetEncoder();
 
@@ -43,8 +43,7 @@ public class ExtendoSubsystem extends TrapezoidalSubsystemBase {
     }
 
     public void updateTelemetry(Telemetry telemetry) {
-        super.updateTelemetry(telemetry);
-        telemetry.addLine("Extendo");
+        super.updateTelemetry(telemetry, "Extendo");
         telemetry.addData("Motor Ticks:", m_motor.getCurrentPosition());
         telemetry.addData("Position Centimeters:", getExtensionMeters());
         telemetry.addData("Velocity Centimeters Per Second:", getVelocity());

@@ -96,8 +96,8 @@ public abstract class TrapezoidalSubsystemBase extends SubsystemBase {
 
     }
 
-    public void updateTelemetry(Telemetry telemetry) {
-        telemetry.addLine("Elevator");
+    public void updateTelemetry(Telemetry telemetry, String name) {
+        telemetry.addLine(name);
         telemetry.addData("Desired Position", m_desiredPosition);
         telemetry.addData("Desired Velocity", m_desiredVelocity);
         telemetry.addData("Desired Goal Position", m_goal.position);

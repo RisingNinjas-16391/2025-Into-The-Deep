@@ -16,20 +16,20 @@ import org.firstinspires.ftc.teamcode.helpers.TrapezoidalSubsystemBase;
 public class ElevatorSubsystem extends TrapezoidalSubsystemBase {
     private final Motor m_leftMotor;
     private final Motor m_rightMotor;
-    private final PIDFController m_feedbackController = ElevatorConstants.PIDF_CONTROLLER;
-    private final BetterElevatorFeedforward m_feedforwardController = ElevatorConstants.FEEDFORWARD_CONTROLLER;
+    private final PIDFController m_feedbackController = new PIDFController(ElevatorConstants.kP,ElevatorConstants.kI,ElevatorConstants.kD, 0);
+    private final BetterElevatorFeedforward m_feedforwardController = new BetterElevatorFeedforward(ElevatorConstants.kS, ElevatorConstants.kG, ElevatorConstants.kV, ElevatorConstants.kA);
 
     public ElevatorSubsystem(HardwareMap hardwareMap){
         super(ElevatorConstants.TRAPEZOIDAL_CONSTRAINTS, ElevatorConstants.ERROR_MARGIN);
 
-        m_leftMotor = new Motor(hardwareMap, "leftElevator");
-        m_rightMotor = new Motor(hardwareMap, "rightElevator");
+        m_leftMotor = new Motor(hardwareMap, "liftTop");
+        m_rightMotor = new Motor(hardwareMap, "liftBottom");
 
         m_leftMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         m_rightMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
 
-        m_leftMotor.setInverted(false);
-        m_rightMotor.setInverted(true);
+        m_leftMotor.setInverted(true);
+        m_rightMotor.setInverted(false);
 
         m_leftMotor.stopAndResetEncoder();
         m_rightMotor.stopAndResetEncoder();
@@ -48,8 +48,7 @@ public class ElevatorSubsystem extends TrapezoidalSubsystemBase {
     }
 
     public void updateTelemetry(Telemetry telemetry) {
-        super.updateTelemetry(telemetry);
-        telemetry.addLine("Elevator");
+        super.updateTelemetry(telemetry, "Elevator");
         telemetry.addData("Left Motor Ticks:", m_leftMotor.getCurrentPosition());
         telemetry.addData("Right Motor Ticks:", m_rightMotor.getCurrentPosition());
         telemetry.addData("Position Centimeters:", getExtensionMeters());

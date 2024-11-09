@@ -12,12 +12,12 @@ public class OuttakePivotSubsystem extends SubsystemBase {
     private final SimpleServo m_rightMotor;
 
     public OuttakePivotSubsystem(HardwareMap hwMap) {
-        m_leftMotor = new SimpleServo(hwMap, "leftOuttakePivot", 0,
-                180, AngleUnit.DEGREES);
-        m_rightMotor = new SimpleServo(hwMap, "rightOuttakePivot", 0,
-                180, AngleUnit.DEGREES);
+        m_leftMotor = new SimpleServo(hwMap, "leftDepositPivot", 0,
+                355, AngleUnit.DEGREES);
+        m_rightMotor = new SimpleServo(hwMap, "rightDepositPivot", 0,
+                355, AngleUnit.DEGREES);
 
-        turnToAngle(90);
+        turnToAngle(355);
     }
 
     public void updateTelemetry(Telemetry telemetry) {

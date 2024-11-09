@@ -38,7 +38,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public static double omegaSpeed = 0.5;
     private double m_headingOffset = 0;
 
-
     public DrivetrainSubsystem(HardwareMap hardwareMap, Telemetry telemetry, boolean isFieldCentric) {
         this.telemetry = telemetry;
 
