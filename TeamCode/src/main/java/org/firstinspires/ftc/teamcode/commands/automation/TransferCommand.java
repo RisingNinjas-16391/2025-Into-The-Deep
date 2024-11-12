@@ -27,11 +27,11 @@ public class TransferCommand extends SequentialCommandGroup {
                                 new ClawPositionCommand(intakeClawSubsystem, () -> 180),
                                 new WristPositionCommand(wristSubsystem, () -> 150),
                                 new WaitCommand(300),
-                                new IntakePivotPositionCommand(intakePivotSubsystem, 27),
+                                new IntakePivotPositionCommand(intakePivotSubsystem, 29),
                                 new ExtendoPositionCommand(extendoSubsystem, () -> 0)
                         ),
                         new SequentialCommandGroup(
-                                new ElevatorPositionCommand(elevatorSubsystem, () -> 10),
+                                new ElevatorPositionCommand(elevatorSubsystem, () -> 20),
                                 new OuttakePivotPositionCommand(outtakePivotSubsystem, 160),
                                 new ClawPositionCommand(outtakeClawSubsystem, () -> 90))
                  ),

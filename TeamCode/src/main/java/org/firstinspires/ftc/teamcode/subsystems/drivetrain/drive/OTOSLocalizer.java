@@ -35,7 +35,7 @@ public class OTOSLocalizer implements Localizer {
         myOtos.setLinearUnit(DistanceUnit.INCH);
         myOtos.setAngularUnit(AngleUnit.RADIANS);
 
-        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(0, 0, 0);
+        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(0, 0, Math.toRadians(0));
         myOtos.setOffset(offset);
 
         myOtos.setLinearScalar(1.0);

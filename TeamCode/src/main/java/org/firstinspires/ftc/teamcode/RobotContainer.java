@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.commands.auto.BlueAutoCommand;
+import org.firstinspires.ftc.teamcode.commands.auto.SpecimenPreLoadandPark;
 import org.firstinspires.ftc.teamcode.commands.auto.RedAutoCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.DropDropCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.DropIntakeCommand;
@@ -18,7 +18,6 @@ import org.firstinspires.ftc.teamcode.commands.automation.TopTransferCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.TransferCommand;
 import org.firstinspires.ftc.teamcode.commands.claw.ClawPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.drivetrain.MecanumDriveCommand;
-import org.firstinspires.ftc.teamcode.commands.drivetrain.TeleOpHeadingCommand;
 import org.firstinspires.ftc.teamcode.commands.pivot.IntakePivotPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.pivot.OuttakePivotPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.slide.ElevatorPositionCommand;
@@ -242,10 +241,10 @@ public class RobotContainer {
     private void setAutoCommands(int chooser) {
         switch (chooser) {
             case 1:
-                new BlueAutoCommand(m_driveSubsystem, m_elevatorSubsystem, m_outtakePivotSubsystem, m_outtakeClawSubsystem).schedule();
+                new SpecimenPreLoadandPark(m_driveSubsystem, m_elevatorSubsystem, m_outtakePivotSubsystem, m_outtakeClawSubsystem).schedule();
                 break;
             case 2:
-                new RedAutoCommand(m_driveSubsystem).schedule();
+                new RedAutoCommand(m_driveSubsystem, m_elevatorSubsystem, m_outtakePivotSubsystem, m_outtakeClawSubsystem).schedule();
                 break;
 
 

@@ -4,9 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
-import org.firstinspires.ftc.teamcode.commands.automation.TransferCommand;
 import org.firstinspires.ftc.teamcode.commands.claw.ClawPositionCommand;
-import org.firstinspires.ftc.teamcode.commands.drivetrain.FollowTrajectoryCommand;
 import org.firstinspires.ftc.teamcode.commands.drivetrain.FollowTrajectorySequenceCommand;
 import org.firstinspires.ftc.teamcode.commands.pivot.OuttakePivotPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.slide.ElevatorPositionCommand;
@@ -16,8 +14,8 @@ import org.firstinspires.ftc.teamcode.subsystems.drivetrain.DrivetrainSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.pivot.OuttakePivotSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.slides.elevator.ElevatorSubsystem;
 
-public class BlueAutoCommand extends SequentialCommandGroup {
-    public BlueAutoCommand(DrivetrainSubsystem drive, ElevatorSubsystem elevator, OuttakePivotSubsystem outtakePivot, ClawSubsystem outtakeClaw) {
+public class SpecimenPreLoadandPark extends SequentialCommandGroup {
+    public SpecimenPreLoadandPark(DrivetrainSubsystem drive, ElevatorSubsystem elevator, OuttakePivotSubsystem outtakePivot, ClawSubsystem outtakeClaw) {
         addCommands(
                 new ElevatorPositionCommand(elevator, () -> OperatorPresets.HighBar),
                 new FollowTrajectorySequenceCommand(drive, drive.trajectorySequenceBuilder(new Pose2d(0, 0, 0))

@@ -20,7 +20,6 @@ import org.firstinspires.ftc.teamcode.subsystems.drivetrain.DrivetrainSubsystem;
  * NOTE: this has been refactored to use FTCLib's command-based
  */
 @TeleOp(group = "drive")
-@Disabled
 
 public class LocalizationTest extends CommandOpMode {
 
