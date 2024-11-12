@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands.auto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
@@ -15,8 +14,8 @@ import org.firstinspires.ftc.teamcode.subsystems.drivetrain.DrivetrainSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.pivot.OuttakePivotSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.slides.elevator.ElevatorSubsystem;
 
-public class RedAutoCommand extends SequentialCommandGroup {
-    public RedAutoCommand(DrivetrainSubsystem drive, ElevatorSubsystem elevator, OuttakePivotSubsystem outtakePivot, ClawSubsystem outtakeClaw) {
+public class Specimen2PartnerParkCommand extends SequentialCommandGroup {
+    public Specimen2PartnerParkCommand(DrivetrainSubsystem drive, ElevatorSubsystem elevator, OuttakePivotSubsystem outtakePivot, ClawSubsystem outtakeClaw) {
         addCommands(
                 new ElevatorPositionCommand(elevator, () -> OperatorPresets.HighBar),
                 new FollowTrajectorySequenceCommand(drive, drive.trajectorySequenceBuilder(new Pose2d(0, 0, Math.toRadians(0)))

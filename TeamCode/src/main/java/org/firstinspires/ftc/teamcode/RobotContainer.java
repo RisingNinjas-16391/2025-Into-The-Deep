@@ -10,8 +10,9 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.commands.auto.Specimen2PartnerBackCommand;
 import org.firstinspires.ftc.teamcode.commands.auto.SpecimenPreLoadandPark;
-import org.firstinspires.ftc.teamcode.commands.auto.RedAutoCommand;
+import org.firstinspires.ftc.teamcode.commands.auto.Specimen2PartnerParkCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.DropDropCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.DropIntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.TopTransferCommand;
@@ -146,7 +147,9 @@ public class RobotContainer {
 
         // Score on bar
         new GamepadButton(m_driverController, GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new SequentialCommandGroup(
-                new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> OperatorPresets.ScoreSpecimen)
+                new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> OperatorPresets.ScoreSpecimenBack),
+                new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.HighBarBackScore)
+
         ));
 
         new GamepadButton(m_driverController, GamepadKeys.Button.LEFT_BUMPER).whenPressed(new SequentialCommandGroup(
@@ -244,7 +247,10 @@ public class RobotContainer {
                 new SpecimenPreLoadandPark(m_driveSubsystem, m_elevatorSubsystem, m_outtakePivotSubsystem, m_outtakeClawSubsystem).schedule();
                 break;
             case 2:
-                new RedAutoCommand(m_driveSubsystem, m_elevatorSubsystem, m_outtakePivotSubsystem, m_outtakeClawSubsystem).schedule();
+                new Specimen2PartnerParkCommand(m_driveSubsystem, m_elevatorSubsystem, m_outtakePivotSubsystem, m_outtakeClawSubsystem).schedule();
+                break;
+            case 3:
+                new Specimen2PartnerBackCommand(m_driveSubsystem, m_elevatorSubsystem, m_outtakePivotSubsystem, m_outtakeClawSubsystem).schedule();
                 break;
 
 
