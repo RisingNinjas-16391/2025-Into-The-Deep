@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.commands.auto.SpecimenPreLoadandPark;
 import org.firstinspires.ftc.teamcode.commands.auto.Specimen2PartnerParkCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.DropDropCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.DropIntakeCommand;
+import org.firstinspires.ftc.teamcode.commands.automation.PickUpSPCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.TopTransferCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.TransferCommand;
 import org.firstinspires.ftc.teamcode.commands.claw.ClawPositionCommand;
@@ -135,7 +136,7 @@ public class RobotContainer {
     public void setDefaultCommands(){
         m_driveSubsystem.setDefaultCommand(new MecanumDriveCommand(
                 m_driveSubsystem, m_driverController::getLeftY,
-                m_driverController::getLeftX, m_driverController::getRightX, () -> (1 - m_driverController.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)) * 0.7));
+                m_driverController::getLeftX, m_driverController::getRightX, () -> (.6 + m_driverController.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)) * 1));
 
         m_extendoSubsystem.setDefaultCommand(new ExtendoVelocityCommand(m_extendoSubsystem, () -> 0));
     }
@@ -149,22 +150,30 @@ public class RobotContainer {
         new GamepadButton(m_driverController, GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new SequentialCommandGroup(
                 new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> OperatorPresets.ScoreSpecimenBack),
                 new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.HighBarBackScore)
-
         ));
 
         new GamepadButton(m_driverController, GamepadKeys.Button.LEFT_BUMPER).whenPressed(new SequentialCommandGroup(
-                new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90)
+                new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90).withTimeout(300)
+
         ));
         new GamepadButton(m_driverController, GamepadKeys.Button.B).whenPressed(new SequentialCommandGroup(
-                new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> OperatorPresets.IntakeSpecimen),
-                new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90).withTimeout(800),
-                new ElevatorPositionCommand(m_elevatorSubsystem, () -> 0)
+                new ClawPositionCommand(m_outtakeClawSubsystem, () -> 60).withTimeout(300),
+                new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> OperatorPresets.IntakeSpecimen).withTimeout(800),
+                new ElevatorPositionCommand(m_elevatorSubsystem, () -> 0),
+                new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90)
         ));
 
-        new GamepadButton(m_driverController, GamepadKeys.Button.X).whenPressed(new SequentialCommandGroup(
+        //Old speci Command
+       /*new GamepadButton(m_driverController, GamepadKeys.Button.X).whenPressed(new SequentialCommandGroup(
                 new ClawPositionCommand(m_outtakeClawSubsystem, () -> 65),
                 new WaitCommand(500),
                 new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> 355)
+        ));*/
+        new GamepadButton(m_driverController, GamepadKeys.Button.X).whenPressed(new SequentialCommandGroup(
+                new PickUpSPCommand(
+                        m_outtakeClawSubsystem,
+                        m_elevatorSubsystem,
+                        m_outtakePivotSubsystem)
         ));
 
 //        m_headingN.whenPressed(new TeleOpHeadingCommand(m_driveSubsystem, () -> 0));

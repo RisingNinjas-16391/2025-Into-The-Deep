@@ -23,6 +23,6 @@ public final class ElevatorConstants {
     public static final double LOWER_BOUND = 0.0;
     public static final double UPPER_BOUND = 100;
 
-    public static final double CENTIMETERS_PER_TICK = 85.0 / 2564.0;
+    public static final double CENTIMETERS_PER_TICK = 85.0 / 2564.0*1.6;
 
 }

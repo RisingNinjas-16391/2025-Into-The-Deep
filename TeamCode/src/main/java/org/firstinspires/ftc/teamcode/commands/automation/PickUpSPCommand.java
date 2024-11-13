@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands.automation;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
@@ -13,14 +14,14 @@ import org.firstinspires.ftc.teamcode.subsystems.pivot.OuttakePivotSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.slides.elevator.ElevatorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.slides.extendo.ExtendoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.wrist.WristSubsystem;
-
+@Config
 public class PickUpSPCommand extends SequentialCommandGroup {
-    public PickUpSPCommand(IntakePivotSubsystem intakePivotSubsystem, ClawSubsystem intakeClawSubsystem, WristSubsystem wristSubsystem, ClawSubsystem outtakeClawSubsystem, ElevatorSubsystem elevatorSubsystem, ExtendoSubsystem extendoSubsystem, OuttakePivotSubsystem outtakePivotSubsystem) {
+    public PickUpSPCommand( ClawSubsystem outtakeClawSubsystem, ElevatorSubsystem elevatorSubsystem, OuttakePivotSubsystem outtakePivotSubsystem) {
         addCommands(
                 new ClawPositionCommand(outtakeClawSubsystem, () -> 65),
                 new WaitCommand(300),
                 new ElevatorPositionCommand(elevatorSubsystem, () -> OperatorPresets.HighBarBack),
-                new OuttakePivotPositionCommand(outtakePivotSubsystem, () -> 20)
+                new OuttakePivotPositionCommand(outtakePivotSubsystem, () -> 15)
 
 
         );
