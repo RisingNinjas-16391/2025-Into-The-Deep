@@ -1,8 +1,8 @@
-package org.firstinspires.ftc.teamcode.lib;
+package org.firstinspires.ftc.teamcode.lib.ftclib_command.opmode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import org.firstinspires.ftc.teamcode.lib.wpilib_command.CommandScheduler;
 
 /**
  * As opposed to the general WPILib-style Robot paradigm, FTCLib also offers a command opmode
@@ -16,7 +16,7 @@ public abstract class CommandOpMode extends LinearOpMode {
      * Cancels all previous commands
      */
     public void reset() {
-        CommandScheduler.getInstance().disable();
+        CommandScheduler.getInstance().reset();
     }
 
     /**
@@ -40,5 +40,14 @@ public abstract class CommandOpMode extends LinearOpMode {
     }
 
     public abstract void initialize();
+
+    public static void disable() {
+        Robot.disable();
+    }
+
+    public static void enable() {
+        Robot.enable();
+    }
+
 
 }
