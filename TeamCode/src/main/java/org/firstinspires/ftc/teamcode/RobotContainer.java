@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.DrivetrainSubsystem;
 
+import edu.wpi.first.math.geometry.Pose3d;
+
 public class RobotContainer {
     private final DrivetrainSubsystem m_driveSubsystem;
 
@@ -16,12 +18,11 @@ public class RobotContainer {
 
     public RobotContainer(HardwareMap hwMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2, int autoNum) {
         m_driveSubsystem = new DrivetrainSubsystem(hwMap, telemetry, true);
-
 //        m_driverController = new GamepadEx(gamepad1);
 //        m_operatorController = new GamepadEx(gamepad2);
 //
 //        m_resetHeading = new GamepadButton(m_driverController, GamepadKeys.Button.START);
-
+        var subsystem = m_driveSubsystem;
         if (autoNum == 0) {
             setDefaultCommands();
             configureButtonBindings();
