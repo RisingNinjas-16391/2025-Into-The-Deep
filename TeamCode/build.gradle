@@ -10,6 +10,25 @@
 
 
 // Custom definitions may go here
+plugins {
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id "edu.wpi.first.GradleRIO" version "2024.2.1"
+    id 'edu.wpi.first.WpilibTools' version '1.3.0'
+}
+
+wpilibTools.deps.wpilibVersion = wpi.versions.wpilibVersion.get()
+
+def nativeConfigName = 'wpilibNatives'
+def nativeConfig = configurations.create(nativeConfigName)
+
+def nativeTasks = wpilibTools.createExtractionTasks {
+    configurationName = nativeConfigName
+}
+
+//nativeTasks.addToSourceSetResources(sourceSets.main)
+nativeConfig.dependencies.add wpilibTools.deps.wpilib("wpimath")
+nativeConfig.dependencies.add wpilibTools.deps.wpilib("wpiutil")
+nativeConfig.dependencies.add wpilibTools.deps.wpilib("wpilibNewCommands")
 
 // Include common definitions from above.
 apply from: '../build.common.gradle'
@@ -24,6 +43,10 @@ android {
 }
 
 dependencies {
+    implementation wpilibTools.deps.wpilibJava("wpiutil")
+    implementation wpilibTools.deps.wpilibJava("wpimath")
+    implementation wpilibTools.deps.wpilibJava("wpilibNewCommands")
+
     implementation project(':FtcRobotController')
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
 
