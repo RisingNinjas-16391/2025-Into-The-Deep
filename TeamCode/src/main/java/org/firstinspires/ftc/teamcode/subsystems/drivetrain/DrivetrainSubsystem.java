@@ -41,10 +41,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     /** Constructs a MecanumDrive and resets the gyro. */
     public DrivetrainSubsystem(HardwareMap hwMap, Telemetry telemetry) {
-        m_frontLeftMotor = new MotorEx(hwMap, "frontLeft");
-        m_frontRightMotor = new MotorEx(hwMap, "frontRight");
-        m_backLeftMotor = new MotorEx(hwMap, "rearLeft");
-        m_backRightMotor = new MotorEx(hwMap, "rearRight");
+        m_frontLeftMotor = new MotorEx(hwMap, "FL");
+        m_frontRightMotor = new MotorEx(hwMap, "FR");
+        m_backLeftMotor = new MotorEx(hwMap, "BL");
+        m_backRightMotor = new MotorEx(hwMap, "BR");
 
         m_otos = new OTOS(hwMap, telemetry);
 
