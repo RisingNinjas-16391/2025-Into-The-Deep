@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.lib.ftclib_command.gamepad;
+package org.firstinspires.ftc.teamcode.lib.ftclib.gamepad;
 
 /**
  * An enumerator for the different keys on the gamepad, including bumpers,

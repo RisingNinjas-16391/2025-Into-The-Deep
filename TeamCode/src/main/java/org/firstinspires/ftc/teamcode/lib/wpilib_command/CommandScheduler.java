@@ -6,7 +6,7 @@ package org.firstinspires.ftc.teamcode.lib.wpilib_command;
 
 import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
 
-import org.firstinspires.ftc.teamcode.lib.ftclib_command.opmode.Robot;
+import org.firstinspires.ftc.teamcode.lib.ftclib.opmode.Robot;
 import org.firstinspires.ftc.teamcode.lib.wpilib_command.event.EventLoop;
 import org.firstinspires.ftc.teamcode.lib.wpilib_command.Command.InterruptionBehavior;
 

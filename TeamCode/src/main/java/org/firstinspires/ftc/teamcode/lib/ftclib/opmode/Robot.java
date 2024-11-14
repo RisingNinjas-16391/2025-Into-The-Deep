@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.lib.ftclib_command.opmode;
+package org.firstinspires.ftc.teamcode.lib.ftclib.opmode;
 
 import org.firstinspires.ftc.teamcode.lib.wpilib_command.CommandScheduler;
 

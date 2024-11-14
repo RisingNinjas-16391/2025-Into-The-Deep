@@ -1,10 +1,8 @@
-package org.firstinspires.ftc.teamcode.lib.ftclib_command.gamepad;
+package org.firstinspires.ftc.teamcode.lib.ftclib.gamepad;
 
-import org.firstinspires.ftc.teamcode.lib.ftclib_command.button.GamepadButton;
-import org.firstinspires.ftc.teamcode.lib.ftclib_command.gamepad.GamepadKeys.Button;
+import org.firstinspires.ftc.teamcode.lib.ftclib.button.GamepadButton;
+import org.firstinspires.ftc.teamcode.lib.ftclib.gamepad.GamepadKeys.Button;
 import com.qualcomm.robotcore.hardware.Gamepad;
-
-import org.firstinspires.ftc.teamcode.lib.wpilib_command.button.Trigger;
 
 import java.util.HashMap;
 
