@@ -10,7 +10,7 @@ public class OperatorPresets {
 
     public static double HighBarAuto = 28;
     public static double LowBar = 9.8;
-    public static double HighBucket = 82;
+    public static double HighBucket = 86;
     public static double LowBucket = 40;
 
     public static double IntakeSpecimen = 300;

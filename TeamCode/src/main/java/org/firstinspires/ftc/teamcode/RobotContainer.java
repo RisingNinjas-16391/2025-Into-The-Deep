@@ -156,14 +156,15 @@ public class RobotContainer {
                 new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90).withTimeout(300)
 
         ));
+        /*
         new GamepadButton(m_driverController, GamepadKeys.Button.B).whenPressed(new SequentialCommandGroup(
                 new ClawPositionCommand(m_outtakeClawSubsystem, () -> 60).withTimeout(300),
                 new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> OperatorPresets.IntakeSpecimen).withTimeout(800),
                 new ElevatorPositionCommand(m_elevatorSubsystem, () -> 0),
                 new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90)
-        ));
+        ));*/
 
-        //Old speci Command
+        //Old Claw INtake
        /*new GamepadButton(m_driverController, GamepadKeys.Button.X).whenPressed(new SequentialCommandGroup(
                 new ClawPositionCommand(m_outtakeClawSubsystem, () -> 65),
                 new WaitCommand(500),
@@ -181,6 +182,8 @@ public class RobotContainer {
 //        m_headingE.whenPressed(new TeleOpHeadingCommand(m_driveSubsystem, () -> -90));
 //        m_headingW.whenPressed(new TeleOpHeadingCommand(m_driveSubsystem, () -> 90));
 
+
+        /*
         new GamepadButton(m_driverController, GamepadKeys.Button.DPAD_DOWN).whenPressed(new SequentialCommandGroup(
                 new TransferCommand(
                         m_intakePivotSubsystem,
@@ -190,8 +193,9 @@ public class RobotContainer {
                         m_elevatorSubsystem,
                         m_extendoSubsystem,
                         m_outtakePivotSubsystem)
-        ));
+        ));*/
 
+        /*
         // Rotate Claw
         new GamepadButton(m_driverController, GamepadKeys.Button.DPAD_UP).toggleWhenPressed(
                 new WristPositionCommand(m_wristSubsystem, () -> 355),
@@ -201,15 +205,22 @@ public class RobotContainer {
         new GamepadButton(m_driverController, GamepadKeys.Button.DPAD_RIGHT).whenPressed(new SequentialCommandGroup(
                 new ClawPositionCommand(m_intakeClawSubsystem, () -> 90),
                 new IntakePivotPositionCommand(m_intakePivotSubsystem, 5)
-        ));
+        ));*/
 
         // Get ready to score
+
+        new GamepadButton(m_driverController, GamepadKeys.Button.BACK).or(new GamepadButton(m_operatorController, GamepadKeys.Button.BACK)).whenActive(new TopTransferCommand(m_outtakeClawSubsystem, m_elevatorSubsystem, m_outtakePivotSubsystem));
+
+
+        //Claw
+        /*
+        new GamepadButton(m_driverController, GamepadKeys.Button.Y).whenPressed(new ExtendoPositionCommand(m_extendoSubsystem, () -> 20));
+        new GamepadButton(m_driverController, GamepadKeys.Button.A).whenPressed(new ExtendoPositionCommand(m_extendoSubsystem, () -> 0));
         new GamepadButton(m_driverController, GamepadKeys.Button.DPAD_LEFT).whenPressed(new SequentialCommandGroup(
                 new ExtendoPositionCommand(m_extendoSubsystem, () -> 40
                 )
-        ));
+        ));*/
 
-        new GamepadButton(m_driverController, GamepadKeys.Button.BACK).or(new GamepadButton(m_operatorController, GamepadKeys.Button.BACK)).whenActive(new TopTransferCommand(m_outtakeClawSubsystem, m_elevatorSubsystem, m_outtakePivotSubsystem));
 
 
 
@@ -217,9 +228,6 @@ public class RobotContainer {
 
         //Operator Controls
 
-
-        new GamepadButton(m_driverController, GamepadKeys.Button.Y).whenPressed(new ExtendoPositionCommand(m_extendoSubsystem, () -> 20));
-        new GamepadButton(m_driverController, GamepadKeys.Button.A).whenPressed(new ExtendoPositionCommand(m_extendoSubsystem, () -> 0));
 
         new GamepadButton(m_operatorController, GamepadKeys.Button.Y).whenPressed(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.HighBar));
         new GamepadButton(m_operatorController, GamepadKeys.Button.A).whenPressed(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.LowBar));
