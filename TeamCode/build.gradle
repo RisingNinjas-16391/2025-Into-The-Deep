@@ -62,5 +62,7 @@ dependencies {
 
     api "org.ejml:ejml-simple:0.43.1"
 
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+
     implementation group: "us.hebi.quickbuf", name: "quickbuf-runtime", version: wpi.versions.quickbufVersion.get();
 }

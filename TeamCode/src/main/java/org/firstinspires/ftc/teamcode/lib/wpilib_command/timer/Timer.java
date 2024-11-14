@@ -39,4 +39,8 @@ public class Timer {
     public boolean hasElapsed(double seconds) {
         return get() >= seconds;
     }
+
+    public void reset() {
+        time.reset();
+    }
 }
