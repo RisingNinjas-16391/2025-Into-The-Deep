@@ -12,7 +12,7 @@ public class ColorSubsystem extends SubsystemBase {
     private final ColorSensor m_ColorSensor;
 
     public ColorSubsystem(@NonNull HardwareMap hardwareMap){
-        m_ColorSensor = hardwareMap.get(ColorSensor.class, "color");
+        m_ColorSensor = hardwareMap.get(ColorSensor.class, "sensor_color");
 
     }
 

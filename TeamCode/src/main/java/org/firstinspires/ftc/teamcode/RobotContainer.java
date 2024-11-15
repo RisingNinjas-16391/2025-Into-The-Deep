@@ -27,7 +27,6 @@ import org.firstinspires.ftc.teamcode.commands.slide.ElevatorPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.slide.ElevatorVelocityCommand;
 import org.firstinspires.ftc.teamcode.commands.slide.ExtendoPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.slide.ExtendoVelocityCommand;
-import org.firstinspires.ftc.teamcode.commands.wrist.WristPositionCommand;
 import org.firstinspires.ftc.teamcode.constants.OperatorPresets;
 import org.firstinspires.ftc.teamcode.subsystems.Intake.ColorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.Intake.IntakeSubsystem;
@@ -37,7 +36,6 @@ import org.firstinspires.ftc.teamcode.subsystems.pivot.IntakePivotSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.pivot.OuttakePivotSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.slides.elevator.ElevatorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.slides.extendo.ExtendoSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.wrist.WristSubsystem;
 
 
 public class RobotContainer {
@@ -49,7 +47,6 @@ public class RobotContainer {
     private final ClawSubsystem m_outtakeClawSubsystem;
     private final IntakeSubsystem m_intakesubsystem;
     private final ColorSubsystem m_colorsensor;
-    private final WristSubsystem m_wristSubsystem;
 
     private final GamepadEx m_driverController;
     private final GamepadEx m_operatorController;
@@ -60,8 +57,6 @@ public class RobotContainer {
 //    private final GamepadButton m_headingE;
 //    private final GamepadButton m_headingW;
 
-    private final GamepadButton m_extendoForward;
-    private final GamepadButton m_extendoBack;
 
 
 
@@ -76,9 +71,7 @@ public class RobotContainer {
         m_outtakePivotSubsystem = new OuttakePivotSubsystem(hwMap);
         m_intakesubsystem = new IntakeSubsystem(hwMap);
         m_colorsensor = new ColorSubsystem(hwMap);
-
         m_outtakeClawSubsystem = new ClawSubsystem(hwMap, "depositClaw", 65);
-        m_wristSubsystem = new WristSubsystem(hwMap);
 
         m_driverController = new GamepadEx(gamepad1);
         m_operatorController = new GamepadEx(gamepad2);
@@ -89,10 +82,6 @@ public class RobotContainer {
 //        m_headingS = new GamepadButton(m_driverController, GamepadKeys.Button.B);
 //        m_headingE = new GamepadButton(m_driverController, GamepadKeys.Button.Y);
 //        m_headingW = new GamepadButton(m_driverController, GamepadKeys.Button.A);
-
-        m_extendoForward = new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_RIGHT);
-        m_extendoBack = new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_LEFT);
-
 
         if (autoNum == 0) {
             setDefaultCommands();
@@ -113,7 +102,8 @@ public class RobotContainer {
         //m_extendoSubsystem.updateTelemetry(telemetry);
         //m_elevatorSubsystem.updateTelemetry(telemetry);
         //m_outtakePivotSubsystem.updateTelemetry(telemetry);
-        //m_intakePivotSubsystem.updateTelemetry(telemetry);
+        //m_intakePivotSubsystem.updateTelemetry(telemetry);]
+        m_colorsensor.updateTelemetry(telemetry);
         m_intakesubsystem.updateTelemetry(telemetry);
         telemetry.update();
     }
@@ -173,7 +163,6 @@ public class RobotContainer {
                 new TransferCommand(
                         m_intakePivotSubsystem,
                         m_intakesubsystem,
-                        m_wristSubsystem,
                         m_outtakeClawSubsystem,
                         m_elevatorSubsystem,
                         m_extendoSubsystem,
@@ -212,7 +201,6 @@ public class RobotContainer {
         new GamepadButton(m_operatorController, GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new DropIntakeCommand(
                 m_intakePivotSubsystem,
                 m_intakesubsystem,
-                m_wristSubsystem,
                 m_outtakeClawSubsystem,
                 m_elevatorSubsystem,
                 m_extendoSubsystem,
@@ -221,7 +209,6 @@ public class RobotContainer {
         new GamepadButton(m_operatorController, GamepadKeys.Button.LEFT_BUMPER).whenPressed(new DropDropCommand(
                 m_intakePivotSubsystem,
                 m_intakesubsystem,
-                m_wristSubsystem,
                 m_outtakeClawSubsystem,
                 m_elevatorSubsystem,
                 m_extendoSubsystem,

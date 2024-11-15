@@ -19,13 +19,12 @@ import org.firstinspires.ftc.teamcode.subsystems.slides.extendo.ExtendoSubsystem
 import org.firstinspires.ftc.teamcode.subsystems.wrist.WristSubsystem;
 
 public class TransferCommand extends SequentialCommandGroup {
-    public TransferCommand(IntakePivotSubsystem intakePivotSubsystem, IntakeSubsystem intakeSubsystem, WristSubsystem wristSubsystem, ClawSubsystem outtakeClawSubsystem, ElevatorSubsystem elevatorSubsystem, ExtendoSubsystem extendoSubsystem, OuttakePivotSubsystem outtakePivotSubsystem) {
+    public TransferCommand(IntakePivotSubsystem intakePivotSubsystem, IntakeSubsystem intakeSubsystem, ClawSubsystem outtakeClawSubsystem, ElevatorSubsystem elevatorSubsystem, ExtendoSubsystem extendoSubsystem, OuttakePivotSubsystem outtakePivotSubsystem) {
         addCommands(
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
                                 new IntakePivotPositionCommand(intakePivotSubsystem, 0),
                                 new WaitCommand(300),
-                                new WristPositionCommand(wristSubsystem, () -> 150),
                                 new WaitCommand(300),
                                 new IntakePivotPositionCommand(intakePivotSubsystem, 29),
                                 new ExtendoPositionCommand(extendoSubsystem, () -> 0)

@@ -18,12 +18,11 @@ import org.firstinspires.ftc.teamcode.subsystems.slides.extendo.ExtendoSubsystem
 import org.firstinspires.ftc.teamcode.subsystems.wrist.WristSubsystem;
 
 public class DropDropCommand extends SequentialCommandGroup {
-    public DropDropCommand(IntakePivotSubsystem intakePivotSubsystem, IntakeSubsystem intakeSubsystem, WristSubsystem wristSubsystem, ClawSubsystem outtakeClawSubsystem, ElevatorSubsystem elevatorSubsystem, ExtendoSubsystem extendoSubsystem, OuttakePivotSubsystem outtakePivotSubsystem) {
+    public DropDropCommand(IntakePivotSubsystem intakePivotSubsystem, IntakeSubsystem intakeSubsystem, ClawSubsystem outtakeClawSubsystem, ElevatorSubsystem elevatorSubsystem, ExtendoSubsystem extendoSubsystem, OuttakePivotSubsystem outtakePivotSubsystem) {
         addCommands(
 
                 new IntakePivotPositionCommand(intakePivotSubsystem, 15),
                 new WaitCommand(500),
-                new WristPositionCommand(wristSubsystem, () -> 150),
                 new WaitCommand(500),
                 new IntakePivotPositionCommand(intakePivotSubsystem, 27));
     }
