@@ -46,7 +46,6 @@ public class RobotContainer {
     private final ElevatorSubsystem m_elevatorSubsystem;
     private final IntakePivotSubsystem m_intakePivotSubsystem;
     private final OuttakePivotSubsystem m_outtakePivotSubsystem;
-    private final ClawSubsystem m_intakeClawSubsystem;
     private final ClawSubsystem m_outtakeClawSubsystem;
     private final IntakeSubsystem m_intakesubsystem;
     private final ColorSubsystem m_colorsensor;
@@ -75,7 +74,6 @@ public class RobotContainer {
         m_elevatorSubsystem = new ElevatorSubsystem(hwMap);
         m_intakePivotSubsystem = new IntakePivotSubsystem(hwMap);
         m_outtakePivotSubsystem = new OuttakePivotSubsystem(hwMap);
-        m_intakeClawSubsystem = new ClawSubsystem(hwMap, "intakeClaw", 180);
         m_intakesubsystem = new IntakeSubsystem(hwMap);
         m_colorsensor = new ColorSubsystem(hwMap);
 
@@ -174,7 +172,7 @@ public class RobotContainer {
         new GamepadButton(m_driverController, GamepadKeys.Button.DPAD_DOWN).whenPressed(new SequentialCommandGroup(
                 new TransferCommand(
                         m_intakePivotSubsystem,
-                        m_intakeClawSubsystem,
+                        m_intakesubsystem,
                         m_wristSubsystem,
                         m_outtakeClawSubsystem,
                         m_elevatorSubsystem,
@@ -213,7 +211,7 @@ public class RobotContainer {
 
         new GamepadButton(m_operatorController, GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new DropIntakeCommand(
                 m_intakePivotSubsystem,
-                m_intakeClawSubsystem,
+                m_intakesubsystem,
                 m_wristSubsystem,
                 m_outtakeClawSubsystem,
                 m_elevatorSubsystem,
@@ -222,7 +220,7 @@ public class RobotContainer {
 
         new GamepadButton(m_operatorController, GamepadKeys.Button.LEFT_BUMPER).whenPressed(new DropDropCommand(
                 m_intakePivotSubsystem,
-                m_intakeClawSubsystem,
+                m_intakesubsystem,
                 m_wristSubsystem,
                 m_outtakeClawSubsystem,
                 m_elevatorSubsystem,
