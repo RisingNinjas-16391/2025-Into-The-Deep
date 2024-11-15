@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.commands.automation.TopTransferCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.TransferCommand;
 import org.firstinspires.ftc.teamcode.commands.claw.ClawPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.drivetrain.MecanumDriveCommand;
+import org.firstinspires.ftc.teamcode.commands.intake.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.pivot.IntakePivotPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.pivot.OuttakePivotPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.slide.ElevatorPositionCommand;
@@ -28,6 +29,8 @@ import org.firstinspires.ftc.teamcode.commands.slide.ExtendoPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.slide.ExtendoVelocityCommand;
 import org.firstinspires.ftc.teamcode.commands.wrist.WristPositionCommand;
 import org.firstinspires.ftc.teamcode.constants.OperatorPresets;
+import org.firstinspires.ftc.teamcode.subsystems.Intake.ColorSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.Intake.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.claws.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.DrivetrainSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.pivot.IntakePivotSubsystem;
@@ -45,6 +48,8 @@ public class RobotContainer {
     private final OuttakePivotSubsystem m_outtakePivotSubsystem;
     private final ClawSubsystem m_intakeClawSubsystem;
     private final ClawSubsystem m_outtakeClawSubsystem;
+    private final IntakeSubsystem m_intakesubsystem;
+    private final ColorSubsystem m_colorsensor;
     private final WristSubsystem m_wristSubsystem;
 
     private final GamepadEx m_driverController;
@@ -59,23 +64,10 @@ public class RobotContainer {
     private final GamepadButton m_extendoForward;
     private final GamepadButton m_extendoBack;
 
-    private final GamepadButton m_elevatorUp;
-    private final GamepadButton m_elevatorDown;
-
-    private final GamepadButton m_intakePivotUp;
-    private final GamepadButton m_intakePivotDown;
-
-    private final GamepadButton m_outtakePivotUp;
-    private final GamepadButton m_outtakePivotDown;
-
-//    private final GamepadButton m_intakeClawIn;
-//    private final GamepadButton m_intakeClawOut;
-    private final GamepadButton m_outtakeClawIn;
-    private final GamepadButton m_outtakeClawOut;
 
 
-    private final GamepadButton m_dropfeed;
-    private final GamepadButton m_dropdrop;
+
+
 
     public RobotContainer(HardwareMap hwMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2, int autoNum) {
         m_driveSubsystem = new DrivetrainSubsystem(hwMap, telemetry, true);
@@ -84,6 +76,9 @@ public class RobotContainer {
         m_intakePivotSubsystem = new IntakePivotSubsystem(hwMap);
         m_outtakePivotSubsystem = new OuttakePivotSubsystem(hwMap);
         m_intakeClawSubsystem = new ClawSubsystem(hwMap, "intakeClaw", 180);
+        m_intakesubsystem = new IntakeSubsystem(hwMap);
+        m_colorsensor = new ColorSubsystem(hwMap);
+
         m_outtakeClawSubsystem = new ClawSubsystem(hwMap, "depositClaw", 65);
         m_wristSubsystem = new WristSubsystem(hwMap);
 
@@ -100,37 +95,28 @@ public class RobotContainer {
         m_extendoForward = new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_RIGHT);
         m_extendoBack = new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_LEFT);
 
-        m_elevatorUp = new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_UP);
-        m_elevatorDown = new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_DOWN);
-
-        m_intakePivotUp = new GamepadButton(m_operatorController, GamepadKeys.Button.A);
-        m_intakePivotDown = new GamepadButton(m_operatorController, GamepadKeys.Button.Y);
-
-        m_outtakePivotUp = new GamepadButton(m_operatorController, GamepadKeys.Button.X);
-        m_outtakePivotDown = new GamepadButton(m_operatorController, GamepadKeys.Button.B);
-
-        m_dropfeed = new GamepadButton(m_operatorController, GamepadKeys.Button.RIGHT_BUMPER);
-        m_dropdrop = new GamepadButton(m_operatorController, GamepadKeys.Button.LEFT_BUMPER);
-
-//        m_intakeClawIn = new GamepadButton(m_driverController, GamepadKeys.Button.A);
-//        m_intakeClawOut = new GamepadButton(m_driverController, GamepadKeys.Button.Y);
-
-        m_outtakeClawIn = new GamepadButton(m_driverController, GamepadKeys.Button.X);
-        m_outtakeClawOut = new GamepadButton(m_driverController, GamepadKeys.Button.B);
 
         if (autoNum == 0) {
             setDefaultCommands();
             configureButtonBindings();
-        } else {
+            //red
+        }
+        if (autoNum ==10){
+            setDefaultCommands();
+            configureButtonBindings();
+            //blue
+        }
+        else {
             setAutoCommands(autoNum);
         }
     }
 
     public void updateTelemetry(Telemetry telemetry) {
-        m_extendoSubsystem.updateTelemetry(telemetry);
-        m_elevatorSubsystem.updateTelemetry(telemetry);
-        m_outtakePivotSubsystem.updateTelemetry(telemetry);
-        m_intakePivotSubsystem.updateTelemetry(telemetry);
+        //m_extendoSubsystem.updateTelemetry(telemetry);
+        //m_elevatorSubsystem.updateTelemetry(telemetry);
+        //m_outtakePivotSubsystem.updateTelemetry(telemetry);
+        //m_intakePivotSubsystem.updateTelemetry(telemetry);
+        m_intakesubsystem.updateTelemetry(telemetry);
         telemetry.update();
     }
     public void setDefaultCommands(){
@@ -139,6 +125,8 @@ public class RobotContainer {
                 m_driverController::getLeftX, m_driverController::getRightX, () -> (.6 + m_driverController.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)) * 1));
 
         m_extendoSubsystem.setDefaultCommand(new ExtendoVelocityCommand(m_extendoSubsystem, () -> 0));
+
+        m_intakesubsystem.setDefaultCommand(new IntakeCommand(m_intakesubsystem, () -> m_driverController.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) - m_driverController.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)-.2 ));
     }
 
     public void configureButtonBindings() {
@@ -156,13 +144,13 @@ public class RobotContainer {
                 new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90).withTimeout(300)
 
         ));
-        /*
+
         new GamepadButton(m_driverController, GamepadKeys.Button.B).whenPressed(new SequentialCommandGroup(
                 new ClawPositionCommand(m_outtakeClawSubsystem, () -> 60).withTimeout(300),
                 new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> OperatorPresets.IntakeSpecimen).withTimeout(800),
                 new ElevatorPositionCommand(m_elevatorSubsystem, () -> 0),
                 new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90)
-        ));*/
+        ));
 
         //Old Claw INtake
        /*new GamepadButton(m_driverController, GamepadKeys.Button.X).whenPressed(new SequentialCommandGroup(
@@ -183,7 +171,6 @@ public class RobotContainer {
 //        m_headingW.whenPressed(new TeleOpHeadingCommand(m_driveSubsystem, () -> 90));
 
 
-        /*
         new GamepadButton(m_driverController, GamepadKeys.Button.DPAD_DOWN).whenPressed(new SequentialCommandGroup(
                 new TransferCommand(
                         m_intakePivotSubsystem,
@@ -193,19 +180,7 @@ public class RobotContainer {
                         m_elevatorSubsystem,
                         m_extendoSubsystem,
                         m_outtakePivotSubsystem)
-        ));*/
-
-        /*
-        // Rotate Claw
-        new GamepadButton(m_driverController, GamepadKeys.Button.DPAD_UP).toggleWhenPressed(
-                new WristPositionCommand(m_wristSubsystem, () -> 355),
-                new WristPositionCommand(m_wristSubsystem, () -> 150));
-
-        // Get ready to intake
-        new GamepadButton(m_driverController, GamepadKeys.Button.DPAD_RIGHT).whenPressed(new SequentialCommandGroup(
-                new ClawPositionCommand(m_intakeClawSubsystem, () -> 90),
-                new IntakePivotPositionCommand(m_intakePivotSubsystem, 5)
-        ));*/
+        ));
 
         // Get ready to score
 
@@ -213,13 +188,13 @@ public class RobotContainer {
 
 
         //Claw
-        /*
+
         new GamepadButton(m_driverController, GamepadKeys.Button.Y).whenPressed(new ExtendoPositionCommand(m_extendoSubsystem, () -> 20));
         new GamepadButton(m_driverController, GamepadKeys.Button.A).whenPressed(new ExtendoPositionCommand(m_extendoSubsystem, () -> 0));
         new GamepadButton(m_driverController, GamepadKeys.Button.DPAD_LEFT).whenPressed(new SequentialCommandGroup(
                 new ExtendoPositionCommand(m_extendoSubsystem, () -> 40
                 )
-        ));*/
+        ));
 
 
 
