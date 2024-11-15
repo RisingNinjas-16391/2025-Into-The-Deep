@@ -8,9 +8,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.lib.ftclib.hardware.motors.MotorEx;
+import org.firstinspires.ftc.teamcode.lib.pathplannerlib.auto.AutoBuilder;
 import org.firstinspires.ftc.teamcode.lib.wpilib_command.SubsystemBase;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
@@ -27,10 +29,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private final MotorEx m_backRightMotor;
     private final OTOS m_otos;
 
-    private final Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381);
-    private final Translation2d m_frontRightLocation = new Translation2d(0.381, -0.381);
-    private final Translation2d m_backLeftLocation = new Translation2d(-0.381, 0.381);
-    private final Translation2d m_backRightLocation = new Translation2d(-0.381, -0.381);
+    private final Translation2d m_frontLeftLocation = new Translation2d(0.195, 0.240);
+    private final Translation2d m_frontRightLocation = new Translation2d(0.195, -0.240);
+    private final Translation2d m_backLeftLocation = new Translation2d(-0.195, 0.240);
+    private final Translation2d m_backRightLocation = new Translation2d(-0.195, -0.240);
+
+    private ChassisSpeeds robotRelativeSpeeds = new ChassisSpeeds();
 
     private final MecanumDriveKinematics m_kinematics =
             new MecanumDriveKinematics(
@@ -53,6 +57,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
         // gearbox is constructed, you might have to invert the left side instead.
         m_frontRightMotor.setInverted(true);
         m_backRightMotor.setInverted(true);
+
+        AutoBuilder.configureHolonomic(
+                this::getPose,
+                this::forceOdometry,
+                this::getRobotRelativeSpeeds,
+                (ChassisSpeeds speeds) -> {
+                    drive(speeds, false);
+                },
+                DriveConstants.CONFIG,
+                () -> false
+                ,
+                this);
     }
 
     @Override
@@ -85,11 +101,25 @@ public class DrivetrainSubsystem extends SubsystemBase {
      */
     public void drive(
             ChassisSpeeds speeds, boolean fieldRelative) {
+        robotRelativeSpeeds = fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(speeds, m_otos.getRotation2d()) : speeds;
+
         var mecanumDriveWheelSpeeds =
                 m_kinematics.toWheelSpeeds(
                         fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(speeds, m_otos.getRotation2d()) : speeds);
 
         mecanumDriveWheelSpeeds.desaturate(kMaxSpeed);
         setSpeeds(mecanumDriveWheelSpeeds);
+    }
+
+    public Pose2d getPose() {
+        return m_otos.getPose();
+    }
+
+    public void forceOdometry(Pose2d pose) {
+        m_otos.setPosition(pose);
+    }
+
+    public ChassisSpeeds getRobotRelativeSpeeds() {
+        return robotRelativeSpeeds;
     }
 }

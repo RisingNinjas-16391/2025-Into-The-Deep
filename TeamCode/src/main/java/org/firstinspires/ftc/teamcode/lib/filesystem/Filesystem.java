@@ -49,6 +49,6 @@ public final class Filesystem {
      */
     public static File getDeployDirectory() {
         return new File(
-                getOperatingDirectory(), "src" + File.separator + "main" + File.separator + "res" + File.separator + "raw");
+                getOperatingDirectory(), "src" + File.separator + "main" + File.separator + "assets");
     }
 }

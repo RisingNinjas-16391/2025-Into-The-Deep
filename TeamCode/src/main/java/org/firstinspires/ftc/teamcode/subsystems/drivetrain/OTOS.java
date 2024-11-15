@@ -9,14 +9,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 
 public class OTOS {
-    Telemetry telemetry;
-    SparkFunOTOS myOtos;
-    Pose2d pose = new Pose2d();
-    Pose2d poseVel = new Pose2d();
+    private Telemetry telemetry;
+    private SparkFunOTOS myOtos;
+    private Pose2d pose = new Pose2d();
+    private Pose2d poseVel = new Pose2d();
 
-    Pose2d offset = new Pose2d(0, 0, Rotation2d.fromDegrees(90));
+    private Transform2d offset = new Transform2d(0, 0, Rotation2d.fromDegrees(90));
 
     public OTOS(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -37,7 +38,6 @@ public class OTOS {
 
         myOtos.setLinearScalar(1.0);
         myOtos.setAngularScalar(1.0);
-
 
         myOtos.calibrateImu();
 
@@ -68,11 +68,19 @@ public class OTOS {
         return pose.getRotation();
     }
     public void update() {
-        pose = OTOSPose2dtoPose2d(myOtos.getPosition());
-        poseVel = OTOSPose2dtoPose2d(myOtos.getVelocity());
+        pose = OTOSPose2dtoPose2d(myOtos.getPosition()).transformBy(offset);
+        poseVel = OTOSPose2dtoPose2d(myOtos.getVelocity()).transformBy(offset);
+    }
+
+    public void setPosition(Pose2d pose) {
+        myOtos.setPosition(Pose2dtoOTOSPose2d(pose));
     }
 
     public static Pose2d OTOSPose2dtoPose2d(SparkFunOTOS.Pose2D otosPose) {
         return new Pose2d(otosPose.x, otosPose.y, new Rotation2d(otosPose.h));
+    }
+
+    public static SparkFunOTOS.Pose2D Pose2dtoOTOSPose2d(Pose2d pose) {
+        return new SparkFunOTOS.Pose2D(pose.getX(), pose.getY(), pose.getRotation().getRadians());
     }
 }
