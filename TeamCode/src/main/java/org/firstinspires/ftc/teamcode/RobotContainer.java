@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.lib.ftclib.button.GamepadButton;
 import org.firstinspires.ftc.teamcode.lib.ftclib.gamepad.GamepadEx;
 import org.firstinspires.ftc.teamcode.lib.ftclib.gamepad.GamepadKeys;
 import org.firstinspires.ftc.teamcode.lib.pathplannerlib.commands.PathPlannerAuto;
+import org.firstinspires.ftc.teamcode.lib.pathplannerlib.path.PathPlannerPath;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.DrivetrainSubsystem;
 
 import edu.wpi.first.math.MathUtil;
@@ -60,6 +61,7 @@ public class RobotContainer {
     private void setAutoCommands(int chooser) {
         switch (chooser) {
             case 1:
+                PathPlannerPath.fromPathFile("Sample Path");
                 break;
             case 2:
                 break;
