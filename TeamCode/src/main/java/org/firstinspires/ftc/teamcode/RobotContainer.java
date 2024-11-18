@@ -86,7 +86,7 @@ public class RobotContainer {
         if (autoNum == 0) {
             setDefaultCommands();
             configureButtonBindings();
-            //red
+            //new OperatorPresets.IsRed==true;
         }
         if (autoNum ==10){
             setDefaultCommands();
@@ -128,6 +128,7 @@ public class RobotContainer {
                 new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.HighBarBackScore)
         ));
 
+        //Release Specimen/Sample
         new GamepadButton(m_driverController, GamepadKeys.Button.LEFT_BUMPER).whenPressed(new SequentialCommandGroup(
                 new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90).withTimeout(300)
 
@@ -182,11 +183,6 @@ public class RobotContainer {
                 new ExtendoPositionCommand(m_extendoSubsystem, () -> 40
                 )
         ));
-
-
-
-
-
 
         //Operator Controls
 

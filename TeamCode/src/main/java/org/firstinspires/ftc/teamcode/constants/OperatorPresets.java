@@ -4,6 +4,8 @@ import com.acmerobotics.dashboard.config.Config;
 
 @Config
 public class OperatorPresets {
+
+    public static boolean IsRed = true;
     public static double HighBar = 27;
     public static double HighBarBack = 32;
     public static double HighBarBackScore = 42;
