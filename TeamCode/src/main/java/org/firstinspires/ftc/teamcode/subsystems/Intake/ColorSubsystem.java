@@ -23,7 +23,7 @@ public class ColorSubsystem extends SubsystemBase {
     }
 
 
-    public boolean hasCube() {
+    public boolean hasCorrectColor() {
         return m_ColorSensor.blue()+m_ColorSensor.red() > 500;
     }
 
