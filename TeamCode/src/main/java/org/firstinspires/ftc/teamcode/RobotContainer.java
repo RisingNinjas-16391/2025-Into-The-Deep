@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.arcrobotics.ftclib.command.InstantCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
@@ -114,13 +115,44 @@ public class RobotContainer {
 
         m_extendoSubsystem.setDefaultCommand(new ExtendoVelocityCommand(m_extendoSubsystem, () -> 0));
 
-        m_intakesubsystem.setDefaultCommand(new IntakeCommand(m_intakesubsystem, () -> m_driverController.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) - m_driverController.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)-.2 ));
+        m_intakesubsystem.setDefaultCommand(new IntakeCommand(m_intakesubsystem, () -> m_driverController.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) - m_driverController.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)-.1 ));
     }
 
     public void configureButtonBindings() {
 
+
+
+
+
+
         //Driver Controls
         m_resetHeading.whenPressed(new InstantCommand(m_driveSubsystem::resetHeading));
+
+
+        //Feeding Controls
+        new GamepadButton(m_driverController, GamepadKeys.Button.A).whenPressed(new ParallelCommandGroup(
+                new ExtendoPositionCommand(m_extendoSubsystem, () -> 5),
+                new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Feeding)
+
+        ));
+        new GamepadButton(m_driverController, GamepadKeys.Button.Y).whenPressed(new ParallelCommandGroup(
+                new ExtendoPositionCommand(m_extendoSubsystem, () -> 40),
+                new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Feeding)
+
+        ));
+
+
+
+        //Transfer Back
+        new GamepadButton(m_driverController, GamepadKeys.Button.DPAD_DOWN).whenPressed(new SequentialCommandGroup(
+                new TransferCommand(
+                        m_intakePivotSubsystem,
+                        m_intakesubsystem,
+                        m_outtakeClawSubsystem,
+                        m_elevatorSubsystem,
+                        m_extendoSubsystem,
+                        m_outtakePivotSubsystem)
+        ));
 
         // Score on bar
         new GamepadButton(m_driverController, GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new SequentialCommandGroup(
@@ -140,12 +172,6 @@ public class RobotContainer {
                 new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90)
         ));
 
-        //Old Claw INtake
-       /*new GamepadButton(m_driverController, GamepadKeys.Button.X).whenPressed(new SequentialCommandGroup(
-                new ClawPositionCommand(m_outtakeClawSubsystem, () -> 65),
-                new WaitCommand(500),
-                new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> 355)
-        ));*/
         new GamepadButton(m_driverController, GamepadKeys.Button.X).whenPressed(new SequentialCommandGroup(
                 new PickUpSPCommand(
                         m_outtakeClawSubsystem,
@@ -159,33 +185,9 @@ public class RobotContainer {
 //        m_headingW.whenPressed(new TeleOpHeadingCommand(m_driveSubsystem, () -> 90));
 
 
-        new GamepadButton(m_driverController, GamepadKeys.Button.DPAD_DOWN).whenPressed(new SequentialCommandGroup(
-                new TransferCommand(
-                        m_intakePivotSubsystem,
-                        m_intakesubsystem,
-                        m_outtakeClawSubsystem,
-                        m_elevatorSubsystem,
-                        m_extendoSubsystem,
-                        m_outtakePivotSubsystem)
-        ));
-
         // Get ready to score
 
         new GamepadButton(m_driverController, GamepadKeys.Button.BACK).or(new GamepadButton(m_operatorController, GamepadKeys.Button.BACK)).whenActive(new TopTransferCommand(m_outtakeClawSubsystem, m_elevatorSubsystem, m_outtakePivotSubsystem));
-
-
-        //Claw
-
-        new GamepadButton(m_driverController, GamepadKeys.Button.Y).whenPressed(new ExtendoPositionCommand(m_extendoSubsystem, () -> 20));
-        new GamepadButton(m_driverController, GamepadKeys.Button.A).whenPressed(new ExtendoPositionCommand(m_extendoSubsystem, () -> 0));
-        new GamepadButton(m_driverController, GamepadKeys.Button.DPAD_LEFT).whenPressed(new SequentialCommandGroup(
-                new ExtendoPositionCommand(m_extendoSubsystem, () -> 40
-                )
-        ));
-
-
-
-
 
 
         //Operator Controls

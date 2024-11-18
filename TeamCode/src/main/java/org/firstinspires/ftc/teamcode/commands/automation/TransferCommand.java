@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands.automation;
 
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.teamcode.commands.pivot.OuttakePivotPositionCommand
 import org.firstinspires.ftc.teamcode.commands.slide.ElevatorPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.slide.ExtendoPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.wrist.WristPositionCommand;
+import org.firstinspires.ftc.teamcode.constants.OperatorPresets;
 import org.firstinspires.ftc.teamcode.subsystems.Intake.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.claws.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.pivot.IntakePivotSubsystem;
@@ -21,28 +23,22 @@ import org.firstinspires.ftc.teamcode.subsystems.wrist.WristSubsystem;
 public class TransferCommand extends SequentialCommandGroup {
     public TransferCommand(IntakePivotSubsystem intakePivotSubsystem, IntakeSubsystem intakeSubsystem, ClawSubsystem outtakeClawSubsystem, ElevatorSubsystem elevatorSubsystem, ExtendoSubsystem extendoSubsystem, OuttakePivotSubsystem outtakePivotSubsystem) {
         addCommands(
-                new ParallelCommandGroup(
+                new ParallelDeadlineGroup(
                         new SequentialCommandGroup(
-                                new IntakePivotPositionCommand(intakePivotSubsystem, 0),
+                                new IntakePivotPositionCommand(intakePivotSubsystem, OperatorPresets.Transfer),
                                 new WaitCommand(300),
-                                new WaitCommand(300),
-                                new IntakePivotPositionCommand(intakePivotSubsystem, 29),
                                 new ExtendoPositionCommand(extendoSubsystem, () -> 0)
                         ),
                         new SequentialCommandGroup(
                                 new ElevatorPositionCommand(elevatorSubsystem, () -> 20),
-                                new OuttakePivotPositionCommand(outtakePivotSubsystem, 160),
+                                new OuttakePivotPositionCommand(outtakePivotSubsystem, 158),
                                 new ClawPositionCommand(outtakeClawSubsystem, () -> 90))
-                 ),
-                new WaitCommand(300),
-                new WaitCommand(300),
-                new IntakePivotPositionCommand(intakePivotSubsystem, 20),
-                new WaitCommand(300),
+                 ).withTimeout(6000),
 
-                new ElevatorPositionCommand(elevatorSubsystem, () -> 1),
+                new ElevatorPositionCommand(elevatorSubsystem, () -> 0),
                 new ClawPositionCommand(outtakeClawSubsystem, () -> 65),
                 new WaitCommand(600),
-                new ElevatorPositionCommand(elevatorSubsystem, () -> 10),
+                new ElevatorPositionCommand(elevatorSubsystem, () -> 15),
                 new OuttakePivotPositionCommand(outtakePivotSubsystem, 355));
     }
 }

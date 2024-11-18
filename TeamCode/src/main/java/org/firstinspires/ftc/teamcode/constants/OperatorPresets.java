@@ -4,6 +4,16 @@ import com.acmerobotics.dashboard.config.Config;
 
 @Config
 public class OperatorPresets {
+
+
+
+    //feeder Pivot Presets
+    public static double Feeding = 0;
+    public static double Transfer =350;
+    public static double Vertical= 200;
+
+
+
     public static double HighBar = 27;
     public static double HighBarBack = 32;
     public static double HighBarBackScore = 42;

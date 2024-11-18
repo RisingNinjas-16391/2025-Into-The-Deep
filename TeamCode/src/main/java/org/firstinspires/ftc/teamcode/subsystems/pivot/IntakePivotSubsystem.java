@@ -13,11 +13,11 @@ public class IntakePivotSubsystem extends SubsystemBase {
 
     public IntakePivotSubsystem(HardwareMap hwMap) {
         m_leftMotor = new SimpleServo(hwMap, "leftIntakePivot", 0,
-                70, AngleUnit.DEGREES);
+                355, AngleUnit.DEGREES);
         m_rightMotor = new SimpleServo(hwMap, "rightIntakePivot", 0,
-                70, AngleUnit.DEGREES);
+                355, AngleUnit.DEGREES);
 
-        turnToAngle(20);
+        turnToAngle(150);
     }
 
     public void updateTelemetry(Telemetry telemetry) {
