@@ -17,6 +17,8 @@ public class DriveCommand extends Command {
         m_drivetrain = drive;
         m_moveSupply = speedsSupplier;
         m_fieldRelative = fieldRelativeSupplier;
+
+        addRequirements(drive);
     }
 
     @Override
