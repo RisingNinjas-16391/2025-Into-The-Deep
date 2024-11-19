@@ -4,9 +4,13 @@
 
 package org.firstinspires.ftc.teamcode.subsystems.drivetrain;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.canvas.Canvas;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.lib.dashboard.DashboardUtil;
 import org.firstinspires.ftc.teamcode.lib.ftclib.hardware.motors.MotorEx;
 import org.firstinspires.ftc.teamcode.lib.pathplannerlib.auto.AutoBuilder;
 import org.firstinspires.ftc.teamcode.lib.wpilib_command.SubsystemBase;
@@ -74,6 +78,18 @@ public class DrivetrainSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         m_otos.update();
+
+        TelemetryPacket packet = new TelemetryPacket();
+        Canvas fieldOverlay = packet.fieldOverlay();
+
+        fieldOverlay.setStroke("#3F51B5");
+        DashboardUtil.drawRobot(fieldOverlay, getPose());
+
+        packet.put("x", getPose().getX());
+        packet.put("y", getPose().getY());
+        packet.put("heading (deg)", getPose().getRotation().getDegrees());
+
+        FtcDashboard.getInstance().sendTelemetryPacket(packet);
     }
 
     /**
