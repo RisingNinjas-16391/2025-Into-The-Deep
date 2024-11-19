@@ -28,7 +28,7 @@ public class OTOS {
     }
 
     private void configureOtos() {
-        telemetry.addLine("Configuring OTOS...");
+//        telemetry.addLine("Configuring OTOS...");
 
         myOtos.setLinearUnit(DistanceUnit.METER);
         myOtos.setAngularUnit(AngleUnit.RADIANS);
@@ -46,14 +46,14 @@ public class OTOS {
         SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(0, 0, 0);
         myOtos.setPosition(currentPosition);
 
-        SparkFunOTOS.Version hwVersion = new SparkFunOTOS.Version();
-        SparkFunOTOS.Version fwVersion = new SparkFunOTOS.Version();
-        myOtos.getVersionInfo(hwVersion, fwVersion);
+//        SparkFunOTOS.Version hwVersion = new SparkFunOTOS.Version();
+//        SparkFunOTOS.Version fwVersion = new SparkFunOTOS.Version();
+//        myOtos.getVersionInfo(hwVersion, fwVersion);
 
-        telemetry.addLine("OTOS configured! Press start to get position data!");
-        telemetry.addLine();
-        telemetry.addLine(String.format("OTOS Hardware Version: v%d.%d", hwVersion.major, hwVersion.minor));
-        telemetry.addLine(String.format("OTOS Firmware Version: v%d.%d", fwVersion.major, fwVersion.minor));
+//        telemetry.addLine("OTOS configured! Press start to get position data!");
+//        telemetry.addLine();
+//        telemetry.addLine(String.format("OTOS Hardware Version: v%d.%d", hwVersion.major, hwVersion.minor));
+//        telemetry.addLine(String.format("OTOS Firmware Version: v%d.%d", fwVersion.major, fwVersion.minor));
     }
 
     public Pose2d getPose() {
