@@ -21,10 +21,14 @@ import org.firstinspires.ftc.teamcode.subsystems.slides.elevator.ElevatorSubsyst
 import org.firstinspires.ftc.teamcode.subsystems.slides.extendo.ExtendoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.wrist.WristSubsystem;
 
+import com.acmerobotics.dashboard.config.Config;
+
+@Config
+
 public class TransferCommand extends SequentialCommandGroup {
     public TransferCommand(IntakePivotSubsystem intakePivotSubsystem, IntakeSubsystem intakeSubsystem, ClawSubsystem outtakeClawSubsystem, ElevatorSubsystem elevatorSubsystem, ExtendoSubsystem extendoSubsystem, OuttakePivotSubsystem outtakePivotSubsystem) {
         addCommands(
-                new ParallelDeadlineGroup(
+                new ParallelCommandGroup(
                         new SequentialCommandGroup(
                                 new IntakePivotPositionCommand(intakePivotSubsystem, OperatorPresets.Transfer),
                                 new WaitCommand(300),
@@ -35,7 +39,7 @@ public class TransferCommand extends SequentialCommandGroup {
                                 new ElevatorPositionCommand(elevatorSubsystem, () -> 20),
                                 new OuttakePivotPositionCommand(outtakePivotSubsystem, 158),
                                 new ClawPositionCommand(outtakeClawSubsystem, () -> 90))
-                 ).withTimeout(2000),
+                 ).withTimeout(6000),
 
                 new ElevatorPositionCommand(elevatorSubsystem, () -> 0).withTimeout(500),
                 new OuttakePivotPositionCommand(outtakePivotSubsystem, 160).withTimeout(200),
