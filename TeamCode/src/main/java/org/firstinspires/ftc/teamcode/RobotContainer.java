@@ -89,11 +89,6 @@ public class RobotContainer {
             configureButtonBindings();
             //red
         }
-        if (autoNum ==10){
-            setDefaultCommands();
-            configureButtonBindings();
-            //blue
-        }
         else {
             setAutoCommands(autoNum);
         }
@@ -103,7 +98,7 @@ public class RobotContainer {
         //m_extendoSubsystem.updateTelemetry(telemetry);
         //m_elevatorSubsystem.updateTelemetry(telemetry);
         //m_outtakePivotSubsystem.updateTelemetry(telemetry);
-        //m_intakePivotSubsystem.updateTelemetry(telemetry);]
+        //m_intakePivotSubsystem.updateTelemetry(telemetry);
         m_colorsensor.updateTelemetry(telemetry);
         m_intakesubsystem.updateTelemetry(telemetry);
         telemetry.update();
@@ -115,15 +110,10 @@ public class RobotContainer {
 
         m_extendoSubsystem.setDefaultCommand(new ExtendoVelocityCommand(m_extendoSubsystem, () -> 0));
 
-        m_intakesubsystem.setDefaultCommand(new IntakeCommand(m_intakesubsystem, () -> m_driverController.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) - m_driverController.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)-.1 ));
+        m_intakesubsystem.setDefaultCommand(new IntakeCommand(m_intakesubsystem, () -> m_driverController.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) - m_driverController.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)-.2 ));
     }
 
     public void configureButtonBindings() {
-
-
-
-
-
 
         //Driver Controls
         m_resetHeading.whenPressed(new InstantCommand(m_driveSubsystem::resetHeading));

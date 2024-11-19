@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.RobotContainer;
+import org.firstinspires.ftc.teamcode.constants.OperatorPresets;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "REDTeleOp", group = "Teleop")
 public class RedTeleOp extends CommandOpMode {
@@ -19,6 +20,8 @@ public class RedTeleOp extends CommandOpMode {
 
         waitForStart();
 
+        OperatorPresets.IsRed = true;
+
     }
 
     @Override
@@ -26,5 +29,7 @@ public class RedTeleOp extends CommandOpMode {
         super.run();
         m_container.updateTelemetry(m_telemetry);
     }
+
+
 
 }

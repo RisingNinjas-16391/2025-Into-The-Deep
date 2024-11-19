@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.command.CommandOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.RobotContainer;
+import org.firstinspires.ftc.teamcode.constants.OperatorPresets;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "BLUETeleOp", group = "Teleop")
 public class BlueTeleOp extends CommandOpMode {
@@ -15,9 +16,11 @@ public class BlueTeleOp extends CommandOpMode {
     public void initialize() {
         m_telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        m_container = new RobotContainer(hardwareMap, m_telemetry, gamepad1, gamepad2, 10); //Uses heavily modified untested hardware
+        m_container = new RobotContainer(hardwareMap, m_telemetry, gamepad1, gamepad2, 0); //Uses heavily modified untested hardware
 
         waitForStart();
+
+        OperatorPresets.IsRed = false;
 
     }
 
