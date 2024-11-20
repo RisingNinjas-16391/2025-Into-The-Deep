@@ -1,9 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.ConditionalCommand;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.ParallelDeadlineGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -29,6 +33,7 @@ import org.firstinspires.ftc.teamcode.commands.slide.ElevatorVelocityCommand;
 import org.firstinspires.ftc.teamcode.commands.slide.ExtendoPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.slide.ExtendoVelocityCommand;
 import org.firstinspires.ftc.teamcode.constants.OperatorPresets;
+import org.firstinspires.ftc.teamcode.helpers.DeferredCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Intake.ColorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.Intake.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.claws.ClawSubsystem;
@@ -37,6 +42,8 @@ import org.firstinspires.ftc.teamcode.subsystems.pivot.IntakePivotSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.pivot.OuttakePivotSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.slides.elevator.ElevatorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.slides.extendo.ExtendoSubsystem;
+
+import java.util.Set;
 
 
 public class RobotContainer {
@@ -121,8 +128,8 @@ public class RobotContainer {
         ));
         new GamepadButton(m_driverController, GamepadKeys.Button.Y).whenPressed(new ParallelCommandGroup(
                 new ExtendoPositionCommand(m_extendoSubsystem, () -> 40),
-                new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Feeding)
-
+                new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Feeding),
+                getAutoIntake()
         ));
 
 
@@ -217,5 +224,28 @@ public class RobotContainer {
                 break;
         }
 
+    }
+
+    private Command getAutoIntake() {
+        return new SequentialCommandGroup(
+                new ParallelDeadlineGroup(
+                        new WaitUntilCommand(m_colorsensor::sampleDetected),
+                        new IntakeCommand(m_intakesubsystem, () -> -1)
+                ),
+                new ConditionalCommand(
+                    new TransferCommand(
+                            m_intakePivotSubsystem,
+                            m_intakesubsystem,
+                            m_outtakeClawSubsystem,
+                            m_elevatorSubsystem,
+                            m_extendoSubsystem,
+                            m_outtakePivotSubsystem),
+                    new SequentialCommandGroup(
+                            new IntakeCommand(m_intakesubsystem, () -> 1).withTimeout(500),
+                            new DeferredCommand(this::getAutoIntake, Set.of())
+                    ),
+                    m_colorsensor::hasCorrectColor
+                )
+        );
     }
 }
