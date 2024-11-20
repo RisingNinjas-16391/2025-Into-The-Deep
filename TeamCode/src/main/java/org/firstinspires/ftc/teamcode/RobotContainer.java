@@ -106,7 +106,7 @@ public class RobotContainer {
     public void setDefaultCommands(){
         m_driveSubsystem.setDefaultCommand(new MecanumDriveCommand(
                 m_driveSubsystem, m_driverController::getLeftY,
-                m_driverController::getLeftX, m_driverController::getRightX, () -> (.6 + m_driverController.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)) * 1));
+                m_driverController::getLeftX, m_driverController::getRightX, () -> (.6 + m_operatorController.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)) * 1));
 
         m_extendoSubsystem.setDefaultCommand(new ExtendoVelocityCommand(m_extendoSubsystem, () -> 0));
 
