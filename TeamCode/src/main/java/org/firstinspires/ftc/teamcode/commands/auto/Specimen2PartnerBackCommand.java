@@ -13,13 +13,16 @@ import org.firstinspires.ftc.teamcode.commands.drivetrain.FollowTrajectorySequen
 import org.firstinspires.ftc.teamcode.commands.pivot.OuttakePivotPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.slide.ElevatorPositionCommand;
 import org.firstinspires.ftc.teamcode.constants.OperatorPresets;
+import org.firstinspires.ftc.teamcode.subsystems.Intake.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.claws.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.DrivetrainSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.pivot.IntakePivotSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.pivot.OuttakePivotSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.slides.elevator.ElevatorSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.slides.extendo.ExtendoSubsystem;
 
 public class Specimen2PartnerBackCommand extends SequentialCommandGroup {
-    public Specimen2PartnerBackCommand(DrivetrainSubsystem drive, ElevatorSubsystem elevator, OuttakePivotSubsystem outtakePivot, ClawSubsystem outtakeClaw) {
+    public Specimen2PartnerBackCommand(DrivetrainSubsystem drive, ElevatorSubsystem elevator, OuttakePivotSubsystem outtakePivot, ClawSubsystem outtakeClaw, ExtendoSubsystem extendo, IntakeSubsystem intake, IntakePivotSubsystem intakepivot) {
         addCommands(
 
                 //Drives to Score while getting Elevator and DepoPivotReady

@@ -111,7 +111,7 @@ public class RobotContainer {
 
         m_extendoSubsystem.setDefaultCommand(new ExtendoVelocityCommand(m_extendoSubsystem, () -> 0));
 
-        m_intakesubsystem.setDefaultCommand(new IntakeCommand(m_intakesubsystem, () -> m_driverController.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) - m_driverController.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)-.2 ));
+        m_intakesubsystem.setDefaultCommand(new IntakeCommand(m_intakesubsystem, () -> m_operatorController.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) - m_operatorController.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)-.2 ));
     }
 
     public void configureButtonBindings() {
@@ -123,7 +123,8 @@ public class RobotContainer {
         //Feeding Controls
         new GamepadButton(m_driverController, GamepadKeys.Button.A).whenPressed(new ParallelCommandGroup(
                 new ExtendoPositionCommand(m_extendoSubsystem, () -> 5),
-                new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Feeding)
+                new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Feeding),
+                getAutoIntake()
 
         ));
         new GamepadButton(m_driverController, GamepadKeys.Button.Y).whenPressed(new ParallelCommandGroup(
@@ -184,8 +185,8 @@ public class RobotContainer {
         //Operator Controls
 
 
-        new GamepadButton(m_operatorController, GamepadKeys.Button.Y).whenPressed(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.HighBar));
-        new GamepadButton(m_operatorController, GamepadKeys.Button.A).whenPressed(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.LowBar));
+        //new GamepadButton(m_operatorController, GamepadKeys.Button.Y).whenPressed(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.HighBar));
+        //new GamepadButton(m_operatorController, GamepadKeys.Button.A).whenPressed(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.LowBar));
 
         new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_UP).whenPressed(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.HighBucket));
         new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_DOWN).whenPressed(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.LowBucket));
@@ -214,13 +215,13 @@ public class RobotContainer {
     private void setAutoCommands(int chooser) {
         switch (chooser) {
             case 1:
-                new SpecimenPreLoadandPark(m_driveSubsystem, m_elevatorSubsystem, m_outtakePivotSubsystem, m_outtakeClawSubsystem).schedule();
+                new SpecimenPreLoadandPark(m_driveSubsystem, m_elevatorSubsystem, m_outtakePivotSubsystem, m_outtakeClawSubsystem,m_extendoSubsystem,m_intakesubsystem,m_intakePivotSubsystem).schedule();
                 break;
             case 2:
-                new Specimen2PartnerParkCommand(m_driveSubsystem, m_elevatorSubsystem, m_outtakePivotSubsystem, m_outtakeClawSubsystem).schedule();
+                new Specimen2PartnerParkCommand(m_driveSubsystem, m_elevatorSubsystem, m_outtakePivotSubsystem, m_outtakeClawSubsystem,m_extendoSubsystem,m_intakesubsystem,m_intakePivotSubsystem).schedule();
                 break;
             case 3:
-                new Specimen2PartnerBackCommand(m_driveSubsystem, m_elevatorSubsystem, m_outtakePivotSubsystem, m_outtakeClawSubsystem).schedule();
+                new Specimen2PartnerBackCommand(m_driveSubsystem, m_elevatorSubsystem, m_outtakePivotSubsystem, m_outtakeClawSubsystem,m_extendoSubsystem,m_intakesubsystem,m_intakePivotSubsystem).schedule();
                 break;
         }
 

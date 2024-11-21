@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.constants.OperatorPresets;
 
 
 public class ColorSubsystem extends SubsystemBase {
@@ -24,7 +25,19 @@ public class ColorSubsystem extends SubsystemBase {
 
 
     public boolean hasCorrectColor() {
-        return m_ColorSensor.blue() > m_ColorSensor.red();
+        //I might need to make = into ==
+        if (OperatorPresets.IsRed = true) {
+            return m_ColorSensor.red() > m_ColorSensor.blue();
+                    //||m_ColorSensor.red()+m_ColorSensor.green() > m_ColorSensor.blue()*2;
+                    //||m_ColorSensor.green() > m_ColorSensor.red();
+        }
+        else {
+            return m_ColorSensor.blue() > m_ColorSensor.red();
+                    //||m_ColorSensor.red()+m_ColorSensor.green() > m_ColorSensor.blue()*2;2;
+            //                    //||m_ColorSensor.green() > m_ColorSensor.red();
+        }
+
+        //return m_ColorSensor.blue() > m_ColorSensor.red();
     }
 
     public boolean sampleDetected() {
