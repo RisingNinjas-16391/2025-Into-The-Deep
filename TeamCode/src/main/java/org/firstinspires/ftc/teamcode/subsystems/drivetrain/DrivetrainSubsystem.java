@@ -16,11 +16,16 @@ import org.firstinspires.ftc.teamcode.lib.ftclib.hardware.motors.MotorEx;
 import org.firstinspires.ftc.teamcode.lib.pathplannerlib.auto.AutoBuilder;
 import org.firstinspires.ftc.teamcode.lib.wpilib_command.SubsystemBase;
 
+import java.util.Optional;
+
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
+import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 
 /** Represents a mecanum drive style drivetrain. */
@@ -41,9 +46,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     private ChassisSpeeds robotRelativeSpeeds = new ChassisSpeeds();
 
-    private final MecanumDriveKinematics m_kinematics =
-            new MecanumDriveKinematics(
-                    m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
+    private final MecanumDriveKinematics m_kinematics;
+
+    private final MecanumDrivePoseEstimator m_poseEstimator;
+
+    private final MecanumDriveWheelPositions m_wheelPositions;
 
     // Gains are for example purposes only - must be determined for your own robot!
     private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.01, 6);
@@ -70,6 +77,21 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_backLeftMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         m_backRightMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
 
+        m_frontRightMotor.stopAndResetEncoder();
+        m_frontLeftMotor.stopAndResetEncoder();
+        m_backRightMotor.stopAndResetEncoder();
+        m_backLeftMotor.stopAndResetEncoder();
+
+        m_kinematics = new MecanumDriveKinematics(
+                m_frontLeftLocation,
+                m_frontRightLocation,
+                m_backLeftLocation,
+                m_backRightLocation);
+
+        m_poseEstimator = new MecanumDrivePoseEstimator(m_kinematics, getHeading(), getWheelPositions(), new Pose2d());
+
+        m_wheelPositions = new MecanumDriveWheelPositions();
+
         AutoBuilder.configureHolonomic(
                 this::getPose,
                 this::forceOdometry,
@@ -82,6 +104,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 ,
                 this,
                 hwMap);
+
         dashboard = FtcDashboard.getInstance();
 
         dashboard.setTelemetryTransmissionInterval(25);
@@ -90,6 +113,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         m_otos.update();
+
+        updateWheelPositions();
+
+        m_poseEstimator.update(getHeading(), m_wheelPositions);
+
+        m_poseEstimator.addVisionMeasurement(m_otos.getPose(), 0.02);
 
         TelemetryPacket packet = new TelemetryPacket();
         Canvas fieldOverlay = packet.fieldOverlay();
@@ -127,8 +156,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * @param speeds Chassis Speeds
      * @param fieldRelative Whether the provided x and y speeds are relative to the field.
      */
-    public void drive(
-            ChassisSpeeds speeds, boolean fieldRelative) {
+    public void drive(ChassisSpeeds speeds, boolean fieldRelative) {
         robotRelativeSpeeds = fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(speeds, m_otos.getRotation2d()) : speeds;
 
         var mecanumDriveWheelSpeeds =
@@ -140,7 +168,22 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public Pose2d getPose() {
-        return m_otos.getPose();
+        return m_poseEstimator.getEstimatedPosition();
+    }
+
+    public Rotation2d getHeading() {
+        return m_otos.getRotation2d();
+    }
+
+    public MecanumDriveWheelPositions getWheelPositions() {
+        return m_wheelPositions;
+    }
+
+    public void updateWheelPositions() {
+        m_wheelPositions.frontLeftMeters = m_frontLeftMotor.getCurrentPosition();
+        m_wheelPositions.frontRightMeters = m_frontRightMotor.getCurrentPosition();
+        m_wheelPositions.rearLeftMeters = m_backLeftMotor.getCurrentPosition();
+        m_wheelPositions.rearRightMeters = m_backRightMotor.getCurrentPosition();
     }
 
     public void forceOdometry(Pose2d pose) {
