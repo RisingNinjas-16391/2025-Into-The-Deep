@@ -19,6 +19,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 public class RobotContainer {
+    private HardwareMap m_hwMap;
     private final DrivetrainSubsystem m_driveSubsystem;
 
     private final GamepadEx m_driverController;
@@ -27,6 +28,7 @@ public class RobotContainer {
     private final GamepadButton m_resetHeading;
 
     public RobotContainer(HardwareMap hwMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2, int autoNum) {
+        m_hwMap = hwMap;
         m_driveSubsystem = new DrivetrainSubsystem(hwMap, telemetry);
         m_driverController = new GamepadEx(gamepad1);
         m_operatorController = new GamepadEx(gamepad2);
@@ -49,7 +51,7 @@ public class RobotContainer {
                 () -> new ChassisSpeeds(
                 MathUtil.applyDeadband(m_driverController.getLeftY(),
                         .1),
-                MathUtil.applyDeadband(m_driverController.getLeftX(),
+                -MathUtil.applyDeadband(m_driverController.getLeftX(),
                         .1),
                 Math.toRadians(100 * MathUtil
                         .applyDeadband(m_driverController.getRightX(), 0.1))),
@@ -62,7 +64,7 @@ public class RobotContainer {
     private void setAutoCommands(int chooser) {
         switch (chooser) {
             case 1:
-                AutoBuilder.followPath(PathPlannerPath.fromPathFile("Sample Path")).schedule();
+                AutoBuilder.buildAuto("ScoreCenter").schedule();
                 break;
             case 2:
                 break;

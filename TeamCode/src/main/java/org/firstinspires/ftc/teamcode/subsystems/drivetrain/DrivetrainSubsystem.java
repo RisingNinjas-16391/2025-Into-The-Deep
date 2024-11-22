@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.lib.dashboard.DashboardUtil;
+import org.firstinspires.ftc.teamcode.lib.ftclib.hardware.motors.Motor;
 import org.firstinspires.ftc.teamcode.lib.ftclib.hardware.motors.MotorEx;
 import org.firstinspires.ftc.teamcode.lib.pathplannerlib.auto.AutoBuilder;
 import org.firstinspires.ftc.teamcode.lib.wpilib_command.SubsystemBase;
@@ -45,7 +46,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
                     m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
     // Gains are for example purposes only - must be determined for your own robot!
-    private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(1, 3);
+    private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.01, 6);
+
+    private final FtcDashboard dashboard;
 
     /** Constructs a MecanumDrive and resets the gyro. */
     public DrivetrainSubsystem(HardwareMap hwMap, Telemetry telemetry) {
@@ -62,6 +65,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_frontRightMotor.setInverted(true);
         m_backRightMotor.setInverted(true);
 
+        m_frontRightMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        m_frontLeftMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        m_backLeftMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        m_backRightMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+
         AutoBuilder.configureHolonomic(
                 this::getPose,
                 this::forceOdometry,
@@ -72,7 +80,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 DriveConstants.CONFIG,
                 () -> false
                 ,
-                this);
+                this,
+                hwMap);
+        dashboard = FtcDashboard.getInstance();
+
+        dashboard.setTelemetryTransmissionInterval(25);
     }
 
     @Override
@@ -85,11 +97,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
         fieldOverlay.setStroke("#3F51B5");
         DashboardUtil.drawRobot(fieldOverlay, getPose());
 
-        packet.put("x", getPose().getX());
-        packet.put("y", getPose().getY());
+        packet.put("x", getPose().getX() * 39.37);
+        packet.put("y", getPose().getY() * 39.37);
         packet.put("heading (deg)", getPose().getRotation().getDegrees());
 
-        FtcDashboard.getInstance().sendTelemetryPacket(packet);
+        dashboard.sendTelemetryPacket(packet);
     }
 
     /**

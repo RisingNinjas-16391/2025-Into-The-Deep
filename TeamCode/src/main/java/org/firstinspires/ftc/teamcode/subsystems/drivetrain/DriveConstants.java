@@ -9,9 +9,9 @@ import edu.wpi.first.math.util.Units;
 
 public class DriveConstants {
     public final static HolonomicPathFollowerConfig CONFIG = new HolonomicPathFollowerConfig(
-            new PIDConstants(5, 0, 0),
-            new PIDConstants(4, 0, 0),
-            4,
+            new PIDConstants(1, 0, 0),
+            new PIDConstants(0.5, 0, 0),
+            2,
             0.5,
             new ReplanningConfig());
 

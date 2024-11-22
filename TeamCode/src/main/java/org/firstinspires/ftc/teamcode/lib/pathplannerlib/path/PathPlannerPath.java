@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.lib.pathplannerlib.path;
 
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -9,16 +11,20 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import org.firstinspires.ftc.teamcode.lib.filesystem.Filesystem;
+import org.firstinspires.ftc.teamcode.lib.pathplannerlib.auto.AutoBuilder;
 import org.firstinspires.ftc.teamcode.lib.pathplannerlib.auto.CommandUtil;
 import org.firstinspires.ftc.teamcode.lib.pathplannerlib.util.GeometryUtil;
 import org.firstinspires.ftc.teamcode.lib.wpilib_command.Command;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /** A PathPlanner path. NOTE: This is not a trajectory and isn't directly followed. */
 public class PathPlannerPath {
@@ -282,9 +288,8 @@ public class PathPlannerPath {
   public static PathPlannerPath fromPathFile(String pathName) {
     try (BufferedReader br =
         new BufferedReader(
-            new FileReader(
-                new File(
-                    Filesystem.getDeployDirectory(), "pathplanner/paths/" + pathName + ".path")))) {
+                new InputStreamReader(
+                        AutoBuilder.hwMap.appContext.getAssets().open("pathplanner" + "/paths/" + pathName + ".path")))) {
       StringBuilder fileContentBuilder = new StringBuilder();
       String line;
       while ((line = br.readLine()) != null) {
@@ -296,8 +301,8 @@ public class PathPlannerPath {
 
       PathPlannerPath path = PathPlannerPath.fromJson(json);
       return path;
-    } catch (Exception e) {
-      throw new RuntimeException(e);
+    } catch (IOException | ParseException e) {
+        throw new RuntimeException(e);
     }
   }
 

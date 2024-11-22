@@ -17,7 +17,7 @@ public class OTOS {
     private Pose2d pose = new Pose2d();
     private Pose2d poseVel = new Pose2d();
 
-    private Transform2d offset = new Transform2d(0, 0, Rotation2d.fromDegrees(90));
+    private Transform2d offset = new Transform2d(0, 0, Rotation2d.fromDegrees(0));
 
     public OTOS(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -33,7 +33,7 @@ public class OTOS {
         myOtos.setLinearUnit(DistanceUnit.METER);
         myOtos.setAngularUnit(AngleUnit.RADIANS);
 
-        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(0, 0, Math.toRadians(0));
+        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(-0.120, 0.060, Math.toRadians(90));
         myOtos.setOffset(offset);
 
         myOtos.setLinearScalar(1.0);
@@ -73,7 +73,8 @@ public class OTOS {
     }
 
     public void setPosition(Pose2d pose) {
-        myOtos.setPosition(Pose2dtoOTOSPose2d(pose));
+        offset = new Transform2d(getPose(), pose);
+//        myOtos.setPosition(Pose2dtoOTOSPose2d(pose));
     }
 
     public static Pose2d OTOSPose2dtoPose2d(SparkFunOTOS.Pose2D otosPose) {

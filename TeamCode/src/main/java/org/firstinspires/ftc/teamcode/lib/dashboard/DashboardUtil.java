@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.lib.dashboard;
 
 import com.acmerobotics.dashboard.canvas.Canvas;
 
+import org.firstinspires.ftc.teamcode.RobotContainer;
 import org.firstinspires.ftc.teamcode.lib.pathplannerlib.path.PathPlannerPath;
 
 import java.util.List;
@@ -46,10 +47,12 @@ public class DashboardUtil {
 //    }
 
     public static void drawRobot(Canvas canvas, Pose2d pose) {
+        pose = new Pose2d(pose.getTranslation().times(39.37), pose.getRotation());
+
         canvas.strokeCircle(pose.getX(), pose.getY(), ROBOT_RADIUS);
         Rotation2d rot = pose.getRotation();
-        double x1 = pose.getX() + rot.getCos() / 2, y1 = pose.getY() + rot.getSin() / 2;
-        double x2 = pose.getX() + rot.getCos(), y2 = pose.getY() + rot.getSin();
+        double x1 = pose.getX() + (rot.getCos() * ROBOT_RADIUS) / 2, y1 = pose.getY() + (rot.getSin() * ROBOT_RADIUS) / 2;
+        double x2 = pose.getX() + (rot.getCos() * ROBOT_RADIUS), y2 = pose.getY() + (rot.getSin() * ROBOT_RADIUS);
         canvas.strokeLine(x1, y1, x2, y2);
     }
 }

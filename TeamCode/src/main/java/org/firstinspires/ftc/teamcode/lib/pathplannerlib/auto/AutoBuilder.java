@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.lib.pathplannerlib.auto;
 
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -9,6 +11,7 @@ import edu.wpi.first.math.numbers.N3;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BooleanSupplier;
@@ -55,6 +58,8 @@ public class AutoBuilder {
   private static TriFunction<PathPlannerPath, PathConstraints, Double, Command>
       pathfindThenFollowPathCommandBuilder;
 
+  public static HardwareMap hwMap;
+
   /**
    * Configures the AutoBuilder for a holonomic drivetrain.
    *
@@ -76,7 +81,8 @@ public class AutoBuilder {
       Consumer<ChassisSpeeds> robotRelativeOutput,
       HolonomicPathFollowerConfig config,
       BooleanSupplier shouldFlipPath,
-      Subsystem driveSubsystem) {
+      Subsystem driveSubsystem,
+      HardwareMap hwMap) {
     if (configured) {
 //      DriverStation.reportError(
 //          "Auto builder has already been configured. This is likely in error.", true);
@@ -122,6 +128,8 @@ public class AutoBuilder {
                 shouldFlipPath,
                 driveSubsystem);
     AutoBuilder.pathfindingConfigured = true;
+
+    AutoBuilder.hwMap = hwMap;
   }
 
   /**
@@ -686,9 +694,7 @@ public class AutoBuilder {
   public static Command buildAuto(String autoName) {
     try (BufferedReader br =
         new BufferedReader(
-            new FileReader(
-                new File(
-                    Filesystem.getDeployDirectory(), "pathplanner/autos/" + autoName + ".auto")))) {
+                new InputStreamReader(AutoBuilder.hwMap.appContext.getAssets().open("pathplanner" + "/autos/" + autoName + ".auto")))) {
       StringBuilder fileContentBuilder = new StringBuilder();
       String line;
       while ((line = br.readLine()) != null) {
