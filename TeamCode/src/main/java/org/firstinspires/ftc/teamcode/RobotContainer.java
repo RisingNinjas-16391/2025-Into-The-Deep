@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.content.res.loader.AssetsProvider;
-
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -10,9 +9,6 @@ import org.firstinspires.ftc.teamcode.commands.drivetrain.DriveCommand;
 import org.firstinspires.ftc.teamcode.lib.ftclib.button.GamepadButton;
 import org.firstinspires.ftc.teamcode.lib.ftclib.gamepad.GamepadEx;
 import org.firstinspires.ftc.teamcode.lib.ftclib.gamepad.GamepadKeys;
-import org.firstinspires.ftc.teamcode.lib.pathplannerlib.auto.AutoBuilder;
-import org.firstinspires.ftc.teamcode.lib.pathplannerlib.commands.PathPlannerAuto;
-import org.firstinspires.ftc.teamcode.lib.pathplannerlib.path.PathPlannerPath;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.DrivetrainSubsystem;
 
 import edu.wpi.first.math.MathUtil;

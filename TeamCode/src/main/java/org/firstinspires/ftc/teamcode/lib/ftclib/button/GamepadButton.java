@@ -6,7 +6,8 @@ import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.lib.ftclib.gamepad.GamepadEx;
 import org.firstinspires.ftc.teamcode.lib.ftclib.gamepad.GamepadKeys;
-import org.firstinspires.ftc.teamcode.lib.wpilib_command.button.Trigger;
+
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * A {@link Trigger} that gets its state from a {@link org.firstinspires.ftc.teamcode.lib.ftclib.gamepad.GamepadEx}.

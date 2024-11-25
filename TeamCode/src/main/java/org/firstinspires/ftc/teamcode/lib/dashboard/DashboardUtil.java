@@ -1,9 +1,7 @@
 package org.firstinspires.ftc.teamcode.lib.dashboard;
 
 import com.acmerobotics.dashboard.canvas.Canvas;
-
-import org.firstinspires.ftc.teamcode.RobotContainer;
-import org.firstinspires.ftc.teamcode.lib.pathplannerlib.path.PathPlannerPath;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import java.util.List;
 
