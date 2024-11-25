@@ -15,7 +15,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
 public class RobotContainer {
-    private HardwareMap m_hwMap;
     private final DrivetrainSubsystem m_driveSubsystem;
 
     private final GamepadEx m_driverController;
@@ -24,7 +23,6 @@ public class RobotContainer {
     private final GamepadButton m_resetHeading;
 
     public RobotContainer(HardwareMap hwMap, Telemetry telemetry, Gamepad gamepad1, Gamepad gamepad2, int autoNum) {
-        m_hwMap = hwMap;
         m_driveSubsystem = new DrivetrainSubsystem(hwMap, telemetry);
         m_driverController = new GamepadEx(gamepad1);
         m_operatorController = new GamepadEx(gamepad2);
