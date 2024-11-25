@@ -55,6 +55,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     private final FtcDashboard dashboard;
 
+    private final Telemetry telemetry;
+
     /** Constructs a MecanumDrive and resets the gyro. */
     public DrivetrainSubsystem(HardwareMap hwMap, Telemetry telemetry) {
         m_frontLeftMotor = new MotorEx(hwMap, "FL");
@@ -62,7 +64,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_backLeftMotor = new MotorEx(hwMap, "BL");
         m_backRightMotor = new MotorEx(hwMap, "BR");
 
-        m_otos = new OTOS(hwMap, telemetry);
+        m_otos = new OTOS(hwMap);
 
         // We need to invert one side of the drivetrain so that positive voltages
         // result in both sides moving forward. Depending on how your robot's
@@ -106,6 +108,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
         dashboard = FtcDashboard.getInstance();
 
         dashboard.setTelemetryTransmissionInterval(25);
+
+        this.telemetry = telemetry;
     }
 
     @Override
@@ -129,6 +133,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
         packet.put("heading (deg)", getPose().getRotation().getDegrees());
 
         dashboard.sendTelemetryPacket(packet);
+
+        telemetry.addLine("Drivetrain");
+        telemetry.addData("Pose", getPose().toString());
     }
 
     /**

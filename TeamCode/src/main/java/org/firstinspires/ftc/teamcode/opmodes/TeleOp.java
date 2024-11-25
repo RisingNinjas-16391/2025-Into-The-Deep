@@ -10,21 +10,18 @@ import org.firstinspires.ftc.teamcode.lib.ftclib.opmode.CommandOpMode;
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp", group = "Teleop")
 public class TeleOp extends CommandOpMode {
     private Telemetry m_telemetry;
-    private RobotContainer m_container;
+
     @Override
-    public void initialize() {
+    public void robotInit() {
         m_telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        m_container = new RobotContainer(hardwareMap, m_telemetry, gamepad1, gamepad2, 0); //Uses heavily modified untested hardware
-
-        waitForStart();
-
+        new RobotContainer(hardwareMap, m_telemetry, gamepad1, gamepad2, 0); //Uses heavily modified untested hardware
     }
 
     @Override
-    public void run() {
-        super.run();
-        m_container.updateTelemetry(m_telemetry);
+    public void robotPeriodic() {
+        super.robotPeriodic();
+        m_telemetry.update();
     }
 
 }

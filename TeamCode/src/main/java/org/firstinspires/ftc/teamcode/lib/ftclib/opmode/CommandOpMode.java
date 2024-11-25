@@ -11,44 +11,30 @@ import edu.wpi.first.wpilibj2.command.robot.Robot;
  *
  * @author Jackson
  */
-public abstract class CommandOpMode extends LinearOpMode {
+public class CommandOpMode extends TimedRobotOpMode {
 
-    /**
-     * Cancels all previous commands
-     */
-    public void reset() {
-        CommandScheduler.getInstance().reset();
+    @Override
+    public void robotInit() {
+
     }
 
-    /**
-     * Runs the {@link CommandScheduler} instance
-     */
-    public void run() {
+    @Override
+    public void robotPeriodic() {
         CommandScheduler.getInstance().run();
     }
 
     @Override
-    public void runOpMode() throws InterruptedException {
-        initialize();
+    public void enabledInit() {
 
-        waitForStart();
-
-        // run the scheduler
-        while (!isStopRequested() && opModeIsActive()) {
-            run();
-        }
-        reset();
     }
 
-    public abstract void initialize();
+    @Override
+    public void enabledPeriodic() {
 
-    public static void disable() {
-        Robot.disable();
     }
 
-    public static void enable() {
-        Robot.enable();
+    @Override
+    public void disabledInit() {
+        CommandScheduler.getInstance().reset();
     }
-
-
 }
