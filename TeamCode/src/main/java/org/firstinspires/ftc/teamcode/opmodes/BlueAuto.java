@@ -8,6 +8,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 import org.firstinspires.ftc.teamcode.lib.ftclib.opmode.CommandOpMode;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
+
 @Autonomous(name = "BlueAuto", group = "Auto")
 public class BlueAuto extends CommandOpMode {
     private Telemetry m_telemetry;
@@ -15,7 +17,6 @@ public class BlueAuto extends CommandOpMode {
     @Override
     public void robotInit() {
         m_telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-
         new RobotContainer(hardwareMap, m_telemetry, gamepad1, gamepad2, 1); //Uses heavily modified untested hardware
     }
 
