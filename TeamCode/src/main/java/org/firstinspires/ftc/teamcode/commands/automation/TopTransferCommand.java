@@ -15,13 +15,20 @@ import org.firstinspires.ftc.teamcode.subsystems.wrist.WristSubsystem;
 
 public class TopTransferCommand extends SequentialCommandGroup {
     public TopTransferCommand(ClawSubsystem outtakeClawSubsystem, ElevatorSubsystem elevatorSubsystem, OuttakePivotSubsystem outtakePivotSubsystem) {
-        addCommands(new ElevatorPositionCommand(elevatorSubsystem, () -> 10),
-                new OuttakePivotPositionCommand(outtakePivotSubsystem, 160),
+        addCommands(
+
+                new ElevatorPositionCommand(elevatorSubsystem, () -> 14),
+                new OuttakePivotPositionCommand(outtakePivotSubsystem, 149),
                 new ClawPositionCommand(outtakeClawSubsystem, () -> 90),
-                new ElevatorPositionCommand(elevatorSubsystem, () -> 1),
-                new ClawPositionCommand(outtakeClawSubsystem, () -> 65),
-                new WaitCommand(900),
+                new ElevatorPositionCommand(elevatorSubsystem, () -> 0).withTimeout(500),
+                new ClawPositionCommand(outtakeClawSubsystem, () -> 45),
+                new WaitCommand(400),
                 new ElevatorPositionCommand(elevatorSubsystem, () -> 10),
-                new OuttakePivotPositionCommand(outtakePivotSubsystem, 355));
+                new OuttakePivotPositionCommand(outtakePivotSubsystem, 355)
+
+
+
+
+        );
     }
 }

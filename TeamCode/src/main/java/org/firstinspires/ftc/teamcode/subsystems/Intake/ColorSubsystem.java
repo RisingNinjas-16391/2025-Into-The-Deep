@@ -25,8 +25,7 @@ public class ColorSubsystem extends SubsystemBase {
 
 
     public boolean hasCorrectColor() {
-        //I might need to make = into ==
-        if (OperatorPresets.IsRed = true) {
+        if (OperatorPresets.IsRed == true) {
             return m_ColorSensor.red() > m_ColorSensor.blue();
                     //||m_ColorSensor.red()+m_ColorSensor.green() > m_ColorSensor.blue()*2;
                     //||m_ColorSensor.green() > m_ColorSensor.red();

@@ -25,6 +25,7 @@ import org.firstinspires.ftc.teamcode.commands.automation.TopTransferCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.TransferCommand;
 import org.firstinspires.ftc.teamcode.commands.claw.ClawPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.drivetrain.MecanumDriveCommand;
+import org.firstinspires.ftc.teamcode.commands.intake.FullRecursiveIntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.pivot.IntakePivotPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.pivot.OuttakePivotPositionCommand;
@@ -124,13 +125,27 @@ public class RobotContainer {
         new GamepadButton(m_driverController, GamepadKeys.Button.A).whenPressed(new ParallelCommandGroup(
                 new ExtendoPositionCommand(m_extendoSubsystem, () -> 5),
                 new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Feeding),
-                getAutoIntake()
+                new FullRecursiveIntakeCommand(
+                        m_intakePivotSubsystem,
+                        m_intakesubsystem,
+                        m_outtakeClawSubsystem,
+                        m_elevatorSubsystem,
+                        m_extendoSubsystem,
+                        m_outtakePivotSubsystem,
+                        m_colorsensor)
 
         ));
         new GamepadButton(m_driverController, GamepadKeys.Button.Y).whenPressed(new ParallelCommandGroup(
                 new ExtendoPositionCommand(m_extendoSubsystem, () -> 40),
                 new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Feeding),
-                getAutoIntake()
+                new FullRecursiveIntakeCommand(
+                        m_intakePivotSubsystem,
+                        m_intakesubsystem,
+                        m_outtakeClawSubsystem,
+                        m_elevatorSubsystem,
+                        m_extendoSubsystem,
+                        m_outtakePivotSubsystem,
+                        m_colorsensor)
         ));
 
 
@@ -225,28 +240,5 @@ public class RobotContainer {
                 break;
         }
 
-    }
-
-    private Command getAutoIntake() {
-        return new SequentialCommandGroup(
-                new ParallelDeadlineGroup(
-                        new WaitUntilCommand(m_colorsensor::sampleDetected),
-                        new IntakeCommand(m_intakesubsystem, () -> -1)
-                ),
-                new ConditionalCommand(
-                    new TransferCommand(
-                            m_intakePivotSubsystem,
-                            m_intakesubsystem,
-                            m_outtakeClawSubsystem,
-                            m_elevatorSubsystem,
-                            m_extendoSubsystem,
-                            m_outtakePivotSubsystem),
-                    new SequentialCommandGroup(
-                            new IntakeCommand(m_intakesubsystem, () -> 1).withTimeout(500),
-                            new DeferredCommand(this::getAutoIntake, Set.of())
-                    ),
-                    m_colorsensor::hasCorrectColor
-                )
-        );
     }
 }
