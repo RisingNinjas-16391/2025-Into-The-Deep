@@ -30,13 +30,14 @@ public class OTOS {
 
         SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(0.120, -0.060, Math.toRadians(270));
         myOtos.setOffset(offset);
-
-        myOtos.setLinearScalar(1.0);
+//        48.0 / 44.88
+//        48.0 / 42.91
+//        43.7
+//        43.7
+        myOtos.setLinearScalar(48.0 / 43.7);
         myOtos.setAngularScalar(1.0);
 
         myOtos.calibrateImu();
-
-        myOtos.resetTracking();
 
         SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(0, 0, 0);
         myOtos.setPosition(currentPosition);
@@ -54,13 +55,14 @@ public class OTOS {
         return pose.getRotation();
     }
     public void update() {
-        pose = OTOSPose2dtoPose2d(myOtos.getPosition()).transformBy(offset);
-        poseVel = OTOSPose2dtoPose2d(myOtos.getVelocity()).transformBy(offset);
+        pose = OTOSPose2dtoPose2d(myOtos.getPosition());
+        poseVel = OTOSPose2dtoPose2d(myOtos.getVelocity());
     }
 
     public void setPosition(Pose2d pose) {
-        offset = new Transform2d(getPose(), pose);
-//        myOtos.setPosition(Pose2dtoOTOSPose2d(pose));
+        myOtos.resetTracking();
+//        offset = new Transform2d(getPose(), pose);
+        myOtos.setPosition(Pose2dtoOTOSPose2d(pose));
     }
 
     public static Pose2d OTOSPose2dtoPose2d(SparkFunOTOS.Pose2D otosPose) {

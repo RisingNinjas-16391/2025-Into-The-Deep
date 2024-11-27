@@ -51,7 +51,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private final Translation2d m_backLeftLocation = new Translation2d(-robotLength, robotWidth);
     private final Translation2d m_backRightLocation = new Translation2d(-robotLength, -robotWidth);
 
-    private final double m_gearRatio = 1.0 / 1152.006;
+//    private final double m_gearRatio = 1.0 / 1152.006;
+    private final double m_gearRatio = 1.22 / 1362.0;
 
     private ChassisSpeeds robotRelativeSpeeds = new ChassisSpeeds();
 
@@ -63,7 +64,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private final MecanumDriveWheelSpeeds m_wheelSpeeds;
 
     // Gains are for example purposes only - must be determined for your own robot!
-    private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.01, 6);
+    private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.01, 3.5);
 
     private final PIDController m_frontLeftPIDController = new PIDController(1, 0, 0);
     private final PIDController m_frontRightPIDController = new PIDController(1, 0, 0);
@@ -151,9 +152,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
         fieldOverlay.setStroke("#3F51B5");
         DashboardUtil.drawRobot(fieldOverlay, getPose());
 
-        packet.put("x", getPose().getY() * 39.37);
-        packet.put("y", getPose().getX() * 39.37);
-        packet.put("heading (deg)", getPose().getRotation().getDegrees() + 90);
+        packet.put("x", getPose().getX());
+        packet.put("y", getPose().getY());
+        packet.put("heading (deg)", getPose().getRotation().getDegrees());
 
         dashboard.sendTelemetryPacket(packet);
 
@@ -212,6 +213,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public Pose2d getPose() {
         return m_poseEstimator.getEstimatedPosition();
+//        return m_otos.getPose();
     }
 
     public Rotation2d getHeading() {

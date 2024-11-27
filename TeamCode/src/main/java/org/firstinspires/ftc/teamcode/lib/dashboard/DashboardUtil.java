@@ -7,13 +7,14 @@ import java.util.List;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 
 /**
  * Set of helper functions for drawing Road Runner paths and trajectories on dashboard canvases.
  */
 public class DashboardUtil {
     private static final double DEFAULT_RESOLUTION = 2.0; // distance units; presumed inches
-    private static final double ROBOT_RADIUS = 9; // in
+    private static final double ROBOT_RADIUS = 6; // in
 
 
     public static void drawPoseHistory(Canvas canvas, List<Pose2d> poseHistory) {
@@ -45,7 +46,7 @@ public class DashboardUtil {
 //    }
 
     public static void drawRobot(Canvas canvas, Pose2d pose) {
-        pose = new Pose2d(pose.getTranslation().times(39.37), pose.getRotation());
+        pose = new Pose2d(new Translation2d(-pose.getY() * 39.37 + 72, pose.getX() * 39.37 - 72), pose.getRotation().rotateBy(Rotation2d.fromDegrees(90)));
 
         canvas.strokeCircle(pose.getX(), pose.getY(), ROBOT_RADIUS);
         Rotation2d rot = pose.getRotation();
