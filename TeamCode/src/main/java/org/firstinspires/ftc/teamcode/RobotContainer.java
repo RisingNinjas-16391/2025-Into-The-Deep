@@ -33,6 +33,7 @@ import org.firstinspires.ftc.teamcode.commands.slide.ElevatorPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.slide.ElevatorVelocityCommand;
 import org.firstinspires.ftc.teamcode.commands.slide.ExtendoPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.slide.ExtendoVelocityCommand;
+import org.firstinspires.ftc.teamcode.commands.wrist.WristPositionCommand;
 import org.firstinspires.ftc.teamcode.constants.OperatorPresets;
 import org.firstinspires.ftc.teamcode.helpers.DeferredCommand;
 import org.firstinspires.ftc.teamcode.subsystems.Intake.ColorSubsystem;
@@ -43,6 +44,7 @@ import org.firstinspires.ftc.teamcode.subsystems.pivot.IntakePivotSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.pivot.OuttakePivotSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.slides.elevator.ElevatorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.slides.extendo.ExtendoSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.wrist.WristSubsystem;
 
 import java.util.Set;
 
@@ -53,6 +55,7 @@ public class RobotContainer {
     private final ElevatorSubsystem m_elevatorSubsystem;
     private final IntakePivotSubsystem m_intakePivotSubsystem;
     private final OuttakePivotSubsystem m_outtakePivotSubsystem;
+    private final WristSubsystem m_outtakeWristSubsystem;
     private final ClawSubsystem m_outtakeClawSubsystem;
     private final IntakeSubsystem m_intakesubsystem;
     private final ColorSubsystem m_colorsensor;
@@ -72,6 +75,7 @@ public class RobotContainer {
         m_elevatorSubsystem = new ElevatorSubsystem(hwMap);
         m_intakePivotSubsystem = new IntakePivotSubsystem(hwMap);
         m_outtakePivotSubsystem = new OuttakePivotSubsystem(hwMap);
+        m_outtakeWristSubsystem = new WristSubsystem(hwMap);
         m_intakesubsystem = new IntakeSubsystem(hwMap);
         m_colorsensor = new ColorSubsystem(hwMap);
         m_outtakeClawSubsystem = new ClawSubsystem(hwMap, "depositClaw", 65);
@@ -101,6 +105,7 @@ public class RobotContainer {
         //m_elevatorSubsystem.updateTelemetry(telemetry);
         //m_outtakePivotSubsystem.updateTelemetry(telemetry);
         //m_intakePivotSubsystem.updateTelemetry(telemetry);
+        m_outtakeWristSubsystem.updateTelemetry(telemetry);
         m_colorsensor.updateTelemetry(telemetry);
         m_intakesubsystem.updateTelemetry(telemetry);
         telemetry.update();
@@ -200,13 +205,18 @@ public class RobotContainer {
         //Operator Controls
 
 
-        //new GamepadButton(m_operatorController, GamepadKeys.Button.Y).whenPressed(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.HighBar));
-        //new GamepadButton(m_operatorController, GamepadKeys.Button.A).whenPressed(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.LowBar));
-
         new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_UP).whenPressed(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.HighBucket));
-        new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_DOWN).whenPressed(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.LowBucket));
+        new GamepadButton(m_driverController, GamepadKeys.Button.DPAD_RIGHT).whenPressed(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.LowBucket));
+
+        new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_RIGHT).whenPressed(new SequentialCommandGroup(
+                new WristPositionCommand(m_outtakeWristSubsystem,()-> 90)
+        ));
+        new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_LEFT).whenPressed(new SequentialCommandGroup(
+                new WristPositionCommand(m_outtakeWristSubsystem,()-> 180)
+        ));
 
 
+        /*
         new GamepadButton(m_operatorController, GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new DropIntakeCommand(
                 m_intakePivotSubsystem,
                 m_intakesubsystem,
@@ -222,10 +232,10 @@ public class RobotContainer {
                 m_elevatorSubsystem,
                 m_extendoSubsystem,
                 m_outtakePivotSubsystem));
-
+        */
 
         new GamepadButton(m_operatorController, GamepadKeys.Button.START).whenHeld(new ElevatorVelocityCommand(m_elevatorSubsystem, () -> -50).whenFinished(m_elevatorSubsystem::resetPosition));
-        new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_LEFT).whenPressed(new ExtendoVelocityCommand(m_extendoSubsystem, () -> -50).whenFinished(m_extendoSubsystem::resetPosition));
+        //new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_LEFT).whenPressed(new ExtendoVelocityCommand(m_extendoSubsystem, () -> -50).whenFinished(m_extendoSubsystem::resetPosition));
     }
     private void setAutoCommands(int chooser) {
         switch (chooser) {
