@@ -28,7 +28,7 @@ public class OTOS {
         myOtos.setLinearUnit(DistanceUnit.METER);
         myOtos.setAngularUnit(AngleUnit.RADIANS);
 
-        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(-0.120, 0.060, Math.toRadians(90));
+        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(0.120, -0.060, Math.toRadians(270));
         myOtos.setOffset(offset);
 
         myOtos.setLinearScalar(1.0);

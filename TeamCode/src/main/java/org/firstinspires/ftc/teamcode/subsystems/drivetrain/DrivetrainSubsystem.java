@@ -4,6 +4,8 @@
 
 package org.firstinspires.ftc.teamcode.subsystems.drivetrain;
 
+import static edu.wpi.first.units.Units.Volts;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
@@ -14,9 +16,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.lib.dashboard.DashboardUtil;
 import org.firstinspires.ftc.teamcode.lib.ftclib.hardware.motors.Motor;
 import org.firstinspires.ftc.teamcode.lib.ftclib.hardware.motors.MotorEx;
+import org.firstinspires.ftc.teamcode.lib.wpilib.MecanumDrivePoseEstimator;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -24,6 +27,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /** Represents a mecanum drive style drivetrain. */
@@ -35,12 +41,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private final MotorEx m_frontRightMotor;
     private final MotorEx m_backLeftMotor;
     private final MotorEx m_backRightMotor;
+
     private final OTOS m_otos;
 
-    private final Translation2d m_frontLeftLocation = new Translation2d(0.195, 0.240);
-    private final Translation2d m_frontRightLocation = new Translation2d(0.195, -0.240);
-    private final Translation2d m_backLeftLocation = new Translation2d(-0.195, 0.240);
-    private final Translation2d m_backRightLocation = new Translation2d(-0.195, -0.240);
+    private final double robotLength = 0.240;
+    private final double robotWidth = 0.195;
+    private final Translation2d m_frontLeftLocation = new Translation2d(robotLength, robotWidth);
+    private final Translation2d m_frontRightLocation = new Translation2d(robotLength, -robotWidth);
+    private final Translation2d m_backLeftLocation = new Translation2d(-robotLength, robotWidth);
+    private final Translation2d m_backRightLocation = new Translation2d(-robotLength, -robotWidth);
+
+    private final double m_gearRatio = 1.0 / 1152.006;
 
     private ChassisSpeeds robotRelativeSpeeds = new ChassisSpeeds();
 
@@ -49,13 +60,21 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private final MecanumDrivePoseEstimator m_poseEstimator;
 
     private final MecanumDriveWheelPositions m_wheelPositions;
+    private final MecanumDriveWheelSpeeds m_wheelSpeeds;
 
     // Gains are for example purposes only - must be determined for your own robot!
     private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.01, 6);
 
+    private final PIDController m_frontLeftPIDController = new PIDController(1, 0, 0);
+    private final PIDController m_frontRightPIDController = new PIDController(1, 0, 0);
+    private final PIDController m_backLeftPIDController = new PIDController(1, 0, 0);
+    private final PIDController m_backRightPIDController = new PIDController(1, 0, 0);
+
     private final FtcDashboard dashboard;
 
     private final Telemetry telemetry;
+
+    private final Timer m_timer;
 
     /** Constructs a MecanumDrive and resets the gyro. */
     public DrivetrainSubsystem(HardwareMap hwMap, Telemetry telemetry) {
@@ -69,8 +88,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
         // We need to invert one side of the drivetrain so that positive voltages
         // result in both sides moving forward. Depending on how your robot's
         // gearbox is constructed, you might have to invert the left side instead.
-        m_frontRightMotor.setInverted(true);
-        m_backRightMotor.setInverted(true);
+        m_frontLeftMotor.setInverted(true);
+        m_backLeftMotor.setInverted(true);
 
         m_frontRightMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         m_frontLeftMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
@@ -88,9 +107,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 m_backLeftLocation,
                 m_backRightLocation);
 
-        m_poseEstimator = new MecanumDrivePoseEstimator(m_kinematics, getHeading(), getWheelPositions(), new Pose2d());
-
         m_wheelPositions = new MecanumDriveWheelPositions();
+        m_wheelSpeeds = new MecanumDriveWheelSpeeds();
+
+        m_poseEstimator = new MecanumDrivePoseEstimator(m_kinematics, getHeading(), getWheelPositions(), new Pose2d());
 
         AutoBuilder.configureHolonomic(
                 this::getPose,
@@ -100,8 +120,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
                     drive(speeds, false);
                 },
                 DriveConstants.CONFIG,
-                () -> false
-                ,
+                () -> false,
                 this,
                 hwMap);
 
@@ -110,6 +129,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
         dashboard.setTelemetryTransmissionInterval(25);
 
         this.telemetry = telemetry;
+
+        m_timer = new Timer();
+        m_timer.start();
     }
 
     @Override
@@ -117,10 +139,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_otos.update();
 
         updateWheelPositions();
+        updateWheelSpeeds();
 
-        m_poseEstimator.update(getHeading(), m_wheelPositions);
+        m_poseEstimator.updateWithTime(m_timer.get(), getHeading(), m_wheelPositions);
 
-        m_poseEstimator.addVisionMeasurement(m_otos.getPose(), 0.02);
+        m_poseEstimator.addVisionMeasurement(m_otos.getPose(), m_timer.get());
 
         TelemetryPacket packet = new TelemetryPacket();
         Canvas fieldOverlay = packet.fieldOverlay();
@@ -128,14 +151,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
         fieldOverlay.setStroke("#3F51B5");
         DashboardUtil.drawRobot(fieldOverlay, getPose());
 
-        packet.put("x", getPose().getX() * 39.37);
-        packet.put("y", getPose().getY() * 39.37);
-        packet.put("heading (deg)", getPose().getRotation().getDegrees());
+        packet.put("x", getPose().getY() * 39.37);
+        packet.put("y", getPose().getX() * 39.37);
+        packet.put("heading (deg)", getPose().getRotation().getDegrees() + 90);
 
         dashboard.sendTelemetryPacket(packet);
 
         telemetry.addLine("Drivetrain");
         telemetry.addData("Pose", getPose().toString());
+        telemetry.addData("Wheel Positions", getWheelPositions().toString());
+        telemetry.addData("Wheel Speeds", getWheelSpeeds().toString());
     }
 
     /**
@@ -149,10 +174,23 @@ public class DrivetrainSubsystem extends SubsystemBase {
         final double backLeftFeedforward = m_feedforward.calculate(speeds.rearLeftMetersPerSecond);
         final double backRightFeedforward = m_feedforward.calculate(speeds.rearRightMetersPerSecond);
 
-        m_frontLeftMotor.setVoltage(frontLeftFeedforward);
-        m_frontRightMotor.setVoltage(frontRightFeedforward);
-        m_backLeftMotor.setVoltage(backLeftFeedforward);
-        m_backRightMotor.setVoltage(backRightFeedforward);
+        final double frontLeftOutput =
+                m_frontLeftPIDController.calculate(
+                        getWheelSpeeds().frontLeftMetersPerSecond, speeds.frontLeftMetersPerSecond);
+        final double frontRightOutput =
+                m_frontRightPIDController.calculate(
+                        getWheelSpeeds().frontRightMetersPerSecond, speeds.frontRightMetersPerSecond);
+        final double backLeftOutput =
+                m_backLeftPIDController.calculate(
+                        getWheelSpeeds().rearLeftMetersPerSecond, speeds.rearLeftMetersPerSecond);
+        final double backRightOutput =
+                m_backRightPIDController.calculate(
+                        getWheelSpeeds().rearRightMetersPerSecond, speeds.rearRightMetersPerSecond);
+
+        m_frontLeftMotor.setVoltage(frontLeftFeedforward + frontLeftOutput);
+        m_frontRightMotor.setVoltage(frontRightFeedforward + frontRightOutput);
+        m_backLeftMotor.setVoltage(backLeftFeedforward + backLeftOutput);
+        m_backRightMotor.setVoltage(backRightFeedforward + backRightOutput);
     }
 
     /**
@@ -183,19 +221,41 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public MecanumDriveWheelPositions getWheelPositions() {
         return m_wheelPositions;
     }
+    public MecanumDriveWheelSpeeds getWheelSpeeds() {
+        return m_wheelSpeeds;
+    }
 
     public void updateWheelPositions() {
-        m_wheelPositions.frontLeftMeters = m_frontLeftMotor.getCurrentPosition();
-        m_wheelPositions.frontRightMeters = m_frontRightMotor.getCurrentPosition();
-        m_wheelPositions.rearLeftMeters = m_backLeftMotor.getCurrentPosition();
-        m_wheelPositions.rearRightMeters = m_backRightMotor.getCurrentPosition();
+        m_wheelPositions.frontLeftMeters = m_frontLeftMotor.getCurrentPosition() * m_gearRatio;
+        m_wheelPositions.frontRightMeters = m_frontRightMotor.getCurrentPosition() * m_gearRatio;
+        m_wheelPositions.rearLeftMeters = m_backLeftMotor.getCurrentPosition() * m_gearRatio;
+        m_wheelPositions.rearRightMeters = m_backRightMotor.getCurrentPosition() * m_gearRatio;
+    }
+
+    public void updateWheelSpeeds() {
+        m_wheelSpeeds.frontLeftMetersPerSecond = m_frontLeftMotor.getVelocity() * m_gearRatio;
+        m_wheelSpeeds.frontRightMetersPerSecond = m_frontRightMotor.getVelocity() * m_gearRatio;
+        m_wheelSpeeds.rearLeftMetersPerSecond = m_backLeftMotor.getVelocity() * m_gearRatio;
+        m_wheelSpeeds.rearRightMetersPerSecond = m_backRightMotor.getVelocity() * m_gearRatio;
     }
 
     public void forceOdometry(Pose2d pose) {
+        m_poseEstimator.resetPosition(getHeading(), getWheelPositions(), pose);
         m_otos.setPosition(pose);
     }
 
     public ChassisSpeeds getRobotRelativeSpeeds() {
         return robotRelativeSpeeds;
+    }
+
+    public MotorEx[] getMotors() {
+        return new MotorEx[]{m_frontLeftMotor, m_frontRightMotor, m_backLeftMotor, m_backRightMotor};
+    }
+
+    public void setMotorVoltage(Measure<Voltage> volts) {
+        m_frontLeftMotor.setVoltage(volts.in(Volts));
+        m_frontRightMotor.setVoltage(volts.in(Volts));
+        m_backLeftMotor.setVoltage(volts.in(Volts));
+        m_backRightMotor.setVoltage(volts.in(Volts));
     }
 }

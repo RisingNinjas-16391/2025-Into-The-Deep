@@ -449,6 +449,9 @@ public class Motor implements HardwareDevice {
         return motor.getPower();
     }
 
+    public double getVoltage() {
+        return motor.getPower() * 12;
+    }
     /**
      * Sets the target position for the motor to the desired target.
      * Once {@link #set(double)} is called, the motor will attempt to move in the direction

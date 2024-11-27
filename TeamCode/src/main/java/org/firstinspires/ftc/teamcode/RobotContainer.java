@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.drivetrain.DriveCommand;
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.teamcode.subsystems.drivetrain.DrivetrainSubsystem;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj2.command.Command;
 
 public class RobotContainer {
     private final DrivetrainSubsystem m_driveSubsystem;
@@ -32,14 +34,9 @@ public class RobotContainer {
         if (autoNum == 0) {
             setDefaultCommands();
             configureButtonBindings();
-        } else {
-            setAutoCommands(autoNum);
         }
     }
 
-    public void updateTelemetry(Telemetry telemetry) {
-        telemetry.update();
-    }
     public void setDefaultCommands(){
         m_driveSubsystem.setDefaultCommand(new DriveCommand(m_driveSubsystem,
                 () -> new ChassisSpeeds(
@@ -47,7 +44,7 @@ public class RobotContainer {
                         .1),
                 -MathUtil.applyDeadband(m_driverController.getLeftX(),
                         .1),
-                Math.toRadians(100 * MathUtil
+                -Math.toRadians(100 * MathUtil
                         .applyDeadband(m_driverController.getRightX(), 0.1))),
                 () -> true));
     }
@@ -55,16 +52,16 @@ public class RobotContainer {
     public void configureButtonBindings() {
 
     }
-    private void setAutoCommands(int chooser) {
+
+    public Command getAutoCommand(int chooser) {
         switch (chooser) {
             case 1:
-                AutoBuilder.buildAuto("ScoreCenter").schedule();
-                break;
+                return AutoBuilder.buildAuto("ScoreCenter");
             case 2:
-                break;
+                return null;
             case 3:
-                break;
+                return null;
         }
-
+        return null;
     }
 }

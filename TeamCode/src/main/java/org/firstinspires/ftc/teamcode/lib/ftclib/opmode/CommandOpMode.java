@@ -2,6 +2,13 @@ package org.firstinspires.ftc.teamcode.lib.ftclib.opmode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import java.io.IOException;
+
+import edu.wpi.first.cscore.CameraServerJNI;
+import edu.wpi.first.math.WPIMathJNI;
+import edu.wpi.first.networktables.NetworkTablesJNI;
+import edu.wpi.first.util.CombinedRuntimeLoader;
+import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.robot.Robot;
 
@@ -15,7 +22,6 @@ public class CommandOpMode extends TimedRobotOpMode {
 
     @Override
     public void robotInit() {
-
     }
 
     @Override
