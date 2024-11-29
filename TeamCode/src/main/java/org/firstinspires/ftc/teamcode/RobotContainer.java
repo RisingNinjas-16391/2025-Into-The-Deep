@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.commands.automation.TopTransferCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.TransferCommand;
 import org.firstinspires.ftc.teamcode.commands.claw.ClawPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.drivetrain.DriveCommand;
+import org.firstinspires.ftc.teamcode.commands.drivetrain.DrivetrainSysIDCommand;
 import org.firstinspires.ftc.teamcode.commands.drivetrain.TurnCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.FullRecursiveIntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.IntakeCommand;
@@ -48,6 +49,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class RobotContainer {
     private final DrivetrainSubsystem m_driveSubsystem;
@@ -86,7 +88,7 @@ public class RobotContainer {
             configureButtonBindings();
         }
 
-        registerAutoNamedCommands();
+//        registerAutoNamedCommands();
     }
 
     public void setDefaultCommands(){

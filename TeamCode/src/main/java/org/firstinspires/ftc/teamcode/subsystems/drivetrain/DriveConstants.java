@@ -10,18 +10,25 @@ import edu.wpi.first.math.util.Units;
 
 @Config
 public class DriveConstants {
-    public static double kP = 2.0;
+    public static double kP = 0.0;
     public static double kI = 0.0;
     public static double kD = 0.0;
 
-    public static double kS = 0.0;
-    public static double kV = 2.0;
+    public static double kS = 0.5;
+    public static double kV = 5.0;
     public static double kA = 0.0;
 
     public static double HEADING_P = 0.1;
     public static double HEADING_I = 0.0;
     public static double HEADING_D = 0.0;
 
+    public static double TRANSLATION_P = 0.0;
+    public static double TRANSLATION_I = 0.0;
+    public static double TRANSLATION_D = 0.0;
+
+    public static double AUTO_HEADING_P = 0.0;
+    public static double AUTO_HEADING_I = 0.0;
+    public static double AUTO_HEADING_D = 0.0;
 
     public static double GEAR_RATIO = 1.0 / 1152.006;
 //    1.0 / 1152.006
@@ -30,8 +37,8 @@ public class DriveConstants {
     public static double LINEAR_SCALAR = 1.127;
     public static double ANGULAR_SCALAR = 1.0;
 
-    public final static HolonomicPathFollowerConfig CONFIG = new HolonomicPathFollowerConfig(
-            new PIDConstants(5, 0, 0),
+    public static HolonomicPathFollowerConfig CONFIG = new HolonomicPathFollowerConfig(
+            new PIDConstants(TRANSLATION_P, TRANSLATION_I, TRANSLATION_D),
             new PIDConstants(5, 0, 0),
             2,
             0.3,

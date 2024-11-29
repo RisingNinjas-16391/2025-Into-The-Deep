@@ -12,6 +12,8 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Volts;
 
+import com.qualcomm.robotcore.util.RobotLog;
+
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
 import edu.wpi.first.units.Angle;
@@ -101,9 +103,9 @@ public class SysIdRoutineLog {
       var entry = motorEntries.get(name);
 
       if (entry == null) {
-        var log = new DataLog(AppUtil.LOG_FOLDER.getPath(), m_logName + ".wpilog");
+//        var log = new DataLog(AppUtil.LOG_FOLDER.getPath(), m_logName + ".wpilog");
 
-        entry = new DoubleLogEntry(log, name + "-" + m_motorName + "-" + m_logName, unit);
+//        entry = new DoubleLogEntry(log, name + "-" + m_motorName + "-" + m_logName, unit);
         motorEntries.put(name, entry);
       }
 
@@ -223,8 +225,8 @@ public class SysIdRoutineLog {
    */
   public void recordState(State state) {
     if (m_state == null) {
-      m_state = new StringLogEntry(
-              new DataLog(AppUtil.LOG_FOLDER.getPath(), m_logName + ".wpilog"), "sysid-test-state-" + m_logName);
+//      m_state = new StringLogEntry(
+//              new DataLog(AppUtil.LOG_FOLDER.getPath(), m_logName + ".wpilog"), "sysid-test-state-" + m_logName);
     }
     m_state.append(state.toString());
   }

@@ -4,12 +4,16 @@
 
 package org.firstinspires.ftc.teamcode.subsystems.drivetrain;
 
+import static org.firstinspires.ftc.teamcode.subsystems.drivetrain.DriveConstants.TRANSLATION_P;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -44,14 +48,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     private final OTOS m_otos;
 
-//    private final double robotLength = 0.240;
+//    private final double robotLength = 0.195;
 //    private final double robotWidth = 0.195;
 
-//    private final double robotLength = 0.195;
-//    private final double robotWidth = 0.240;
-
-    private final double robotLength = 0.240;
-    private final double robotWidth = 0.240;
+    private final double robotLength = 0.240 / 2.0;
+    private final double robotWidth = 0.195 / 2.0;
 
     private final Translation2d m_frontLeftLocation = new Translation2d(robotLength, robotWidth);
     private final Translation2d m_frontRightLocation = new Translation2d(robotLength, -robotWidth);
@@ -130,10 +131,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 this::getPose,
                 this::forceOdometry,
                 this::getRobotRelativeSpeeds,
-                (ChassisSpeeds speeds) -> {
-                    drive(speeds, false);
-                },
-                DriveConstants.CONFIG,
+                (ChassisSpeeds speeds) -> {drive(speeds, false);},
+                new HolonomicPathFollowerConfig(
+                        new PIDConstants(DriveConstants.TRANSLATION_P, DriveConstants.TRANSLATION_I, DriveConstants.TRANSLATION_D),
+                        new PIDConstants(DriveConstants.AUTO_HEADING_P, DriveConstants.AUTO_HEADING_I, DriveConstants.AUTO_HEADING_D),
+                        2,
+                        0.3,
+                        new ReplanningConfig()),
                 () -> false,
                 this,
                 hwMap);

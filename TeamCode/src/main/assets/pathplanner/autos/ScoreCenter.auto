@@ -41,12 +41,6 @@
           "data": {
             "name": "RecursiveFeed"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Turn-130"
-          }
         }
       ]
     }
