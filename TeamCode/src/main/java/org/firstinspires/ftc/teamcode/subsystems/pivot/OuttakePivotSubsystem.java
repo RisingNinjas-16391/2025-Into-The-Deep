@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.constants.OperatorPresets;
 import org.firstinspires.ftc.teamcode.lib.ftclib.hardware.SimpleServo;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -22,7 +23,7 @@ public class OuttakePivotSubsystem extends SubsystemBase {
 
         m_telemetry = telemetry;
 
-        turnToAngle(355);
+        turnToAngle(OperatorPresets.ScoreSpecimenBack);
     }
 
     @Override

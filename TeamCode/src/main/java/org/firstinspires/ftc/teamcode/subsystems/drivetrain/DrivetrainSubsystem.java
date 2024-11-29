@@ -34,7 +34,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /** Represents a mecanum drive style drivetrain. */
 public class DrivetrainSubsystem extends SubsystemBase {
-    public static final double kMaxSpeed = 3.0; // 3 meters per second
+    public static final double kMaxSpeed = 1.5; // 3 meters per second
     public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
 
     private final MotorEx m_frontLeftMotor;
@@ -44,15 +44,19 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     private final OTOS m_otos;
 
+//    private final double robotLength = 0.240;
+//    private final double robotWidth = 0.195;
+
+//    private final double robotLength = 0.195;
+//    private final double robotWidth = 0.240;
+
     private final double robotLength = 0.240;
-    private final double robotWidth = 0.195;
+    private final double robotWidth = 0.240;
+
     private final Translation2d m_frontLeftLocation = new Translation2d(robotLength, robotWidth);
     private final Translation2d m_frontRightLocation = new Translation2d(robotLength, -robotWidth);
     private final Translation2d m_backLeftLocation = new Translation2d(-robotLength, robotWidth);
     private final Translation2d m_backRightLocation = new Translation2d(-robotLength, -robotWidth);
-
-//    private final double m_gearRatio = 1.0 / 1152.006;
-    private final double m_gearRatio = 1.22 / 1362.0;
 
     private ChassisSpeeds robotRelativeSpeeds = new ChassisSpeeds();
 
@@ -62,14 +66,21 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     private final MecanumDriveWheelPositions m_wheelPositions;
     private final MecanumDriveWheelSpeeds m_wheelSpeeds;
+    private MecanumDriveWheelSpeeds m_desiredWheelSpeeds;
+
+    private ChassisSpeeds m_desiredChassisSpeeds;
 
     // Gains are for example purposes only - must be determined for your own robot!
-    private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(0.01, 3.5);
+    private SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(DriveConstants.kS, DriveConstants.kV, DriveConstants.kA);
 
-    private final PIDController m_frontLeftPIDController = new PIDController(1, 0, 0);
-    private final PIDController m_frontRightPIDController = new PIDController(1, 0, 0);
-    private final PIDController m_backLeftPIDController = new PIDController(1, 0, 0);
-    private final PIDController m_backRightPIDController = new PIDController(1, 0, 0);
+    private final PIDController m_frontLeftPIDController = new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
+    private final PIDController m_frontRightPIDController = new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
+    private final PIDController m_backLeftPIDController = new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
+    private final PIDController m_backRightPIDController = new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
+
+    private final PIDController m_turnPIDController = new PIDController(DriveConstants.HEADING_P, DriveConstants.HEADING_I, DriveConstants.HEADING_D);
+    private Rotation2d desiredHeading;
+    private boolean m_turnControllerActive = false;
 
     private final FtcDashboard dashboard;
 
@@ -110,7 +121,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         m_wheelPositions = new MecanumDriveWheelPositions();
         m_wheelSpeeds = new MecanumDriveWheelSpeeds();
+        m_desiredWheelSpeeds = new MecanumDriveWheelSpeeds();
 
+        m_desiredChassisSpeeds = new ChassisSpeeds();
         m_poseEstimator = new MecanumDrivePoseEstimator(m_kinematics, getHeading(), getWheelPositions(), new Pose2d());
 
         AutoBuilder.configureHolonomic(
@@ -133,6 +146,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         m_timer = new Timer();
         m_timer.start();
+
+        forceOdometry(new Pose2d(new Translation2d(0.15, 1.66), new Rotation2d()));
+
+        m_turnPIDController.enableContinuousInput(-180, 180);
+        m_turnPIDController.setTolerance(10);
+        desiredHeading = getHeading();
     }
 
     @Override
@@ -152,9 +171,21 @@ public class DrivetrainSubsystem extends SubsystemBase {
         fieldOverlay.setStroke("#3F51B5");
         DashboardUtil.drawRobot(fieldOverlay, getPose());
 
+        DashboardUtil.drawRobot(fieldOverlay, m_otos.getPose());
+
         packet.put("x", getPose().getX());
         packet.put("y", getPose().getY());
         packet.put("heading (deg)", getPose().getRotation().getDegrees());
+
+        packet.put("Front Left Speed", getWheelSpeeds().frontLeftMetersPerSecond);
+        packet.put("Front Right Speed", getWheelSpeeds().frontRightMetersPerSecond);
+        packet.put("Rear Left Speed", getWheelSpeeds().rearLeftMetersPerSecond);
+        packet.put("Rear Right Speed", getWheelSpeeds().rearRightMetersPerSecond);
+
+        packet.put("Desired Front Left Speed", m_desiredWheelSpeeds.frontLeftMetersPerSecond);
+        packet.put("Desired Front Right Speed", m_desiredWheelSpeeds.frontRightMetersPerSecond);
+        packet.put("Desired Rear Left Speed", m_desiredWheelSpeeds.rearLeftMetersPerSecond);
+        packet.put("Desired Rear Right Speed", m_desiredWheelSpeeds.rearRightMetersPerSecond);
 
         dashboard.sendTelemetryPacket(packet);
 
@@ -162,6 +193,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
         telemetry.addData("Pose", getPose().toString());
         telemetry.addData("Wheel Positions", getWheelPositions().toString());
         telemetry.addData("Wheel Speeds", getWheelSpeeds().toString());
+        telemetry.addData("Desired Heading", desiredHeading.getDegrees());
+
+        setSpeeds(m_desiredChassisSpeeds);
+        updateGains();
+        m_otos.updateScalars();
+
+
     }
 
     /**
@@ -169,24 +207,28 @@ public class DrivetrainSubsystem extends SubsystemBase {
      *
      * @param speeds The desired wheel speeds.
      */
-    public void setSpeeds(MecanumDriveWheelSpeeds speeds) {
-        final double frontLeftFeedforward = m_feedforward.calculate(speeds.frontLeftMetersPerSecond);
-        final double frontRightFeedforward = m_feedforward.calculate(speeds.frontRightMetersPerSecond);
-        final double backLeftFeedforward = m_feedforward.calculate(speeds.rearLeftMetersPerSecond);
-        final double backRightFeedforward = m_feedforward.calculate(speeds.rearRightMetersPerSecond);
+    public void setSpeeds(ChassisSpeeds speeds) {
+        m_desiredWheelSpeeds = m_kinematics.toWheelSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getHeading()));
+
+        m_desiredWheelSpeeds.desaturate(kMaxSpeed);
+
+        final double frontLeftFeedforward = m_feedforward.calculate(m_desiredWheelSpeeds.frontLeftMetersPerSecond);
+        final double frontRightFeedforward = m_feedforward.calculate(m_desiredWheelSpeeds.frontRightMetersPerSecond);
+        final double backLeftFeedforward = m_feedforward.calculate(m_desiredWheelSpeeds.rearLeftMetersPerSecond);
+        final double backRightFeedforward = m_feedforward.calculate(m_desiredWheelSpeeds.rearRightMetersPerSecond);
 
         final double frontLeftOutput =
                 m_frontLeftPIDController.calculate(
-                        getWheelSpeeds().frontLeftMetersPerSecond, speeds.frontLeftMetersPerSecond);
+                        getWheelSpeeds().frontLeftMetersPerSecond, m_desiredWheelSpeeds.frontLeftMetersPerSecond);
         final double frontRightOutput =
                 m_frontRightPIDController.calculate(
-                        getWheelSpeeds().frontRightMetersPerSecond, speeds.frontRightMetersPerSecond);
+                        getWheelSpeeds().frontRightMetersPerSecond, m_desiredWheelSpeeds.frontRightMetersPerSecond);
         final double backLeftOutput =
                 m_backLeftPIDController.calculate(
-                        getWheelSpeeds().rearLeftMetersPerSecond, speeds.rearLeftMetersPerSecond);
+                        getWheelSpeeds().rearLeftMetersPerSecond, m_desiredWheelSpeeds.rearLeftMetersPerSecond);
         final double backRightOutput =
                 m_backRightPIDController.calculate(
-                        getWheelSpeeds().rearRightMetersPerSecond, speeds.rearRightMetersPerSecond);
+                        getWheelSpeeds().rearRightMetersPerSecond, m_desiredWheelSpeeds.rearRightMetersPerSecond);
 
         m_frontLeftMotor.setVoltage(frontLeftFeedforward + frontLeftOutput);
         m_frontRightMotor.setVoltage(frontRightFeedforward + frontRightOutput);
@@ -203,12 +245,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void drive(ChassisSpeeds speeds, boolean fieldRelative) {
         robotRelativeSpeeds = fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(speeds, m_otos.getRotation2d()) : speeds;
 
-        var mecanumDriveWheelSpeeds =
-                m_kinematics.toWheelSpeeds(
-                        fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(speeds, m_otos.getRotation2d()) : speeds);
-
-        mecanumDriveWheelSpeeds.desaturate(kMaxSpeed);
-        setSpeeds(mecanumDriveWheelSpeeds);
+        m_desiredChassisSpeeds = speeds;
     }
 
     public Pose2d getPose() {
@@ -228,17 +265,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public void updateWheelPositions() {
-        m_wheelPositions.frontLeftMeters = m_frontLeftMotor.getCurrentPosition() * m_gearRatio;
-        m_wheelPositions.frontRightMeters = m_frontRightMotor.getCurrentPosition() * m_gearRatio;
-        m_wheelPositions.rearLeftMeters = m_backLeftMotor.getCurrentPosition() * m_gearRatio;
-        m_wheelPositions.rearRightMeters = m_backRightMotor.getCurrentPosition() * m_gearRatio;
+        m_wheelPositions.frontLeftMeters = m_frontLeftMotor.getCurrentPosition() * DriveConstants.GEAR_RATIO;
+        m_wheelPositions.frontRightMeters = m_frontRightMotor.getCurrentPosition() * DriveConstants.GEAR_RATIO;
+        m_wheelPositions.rearLeftMeters = m_backLeftMotor.getCurrentPosition() * DriveConstants.GEAR_RATIO;
+        m_wheelPositions.rearRightMeters = m_backRightMotor.getCurrentPosition() * DriveConstants.GEAR_RATIO;
     }
 
     public void updateWheelSpeeds() {
-        m_wheelSpeeds.frontLeftMetersPerSecond = m_frontLeftMotor.getVelocity() * m_gearRatio;
-        m_wheelSpeeds.frontRightMetersPerSecond = m_frontRightMotor.getVelocity() * m_gearRatio;
-        m_wheelSpeeds.rearLeftMetersPerSecond = m_backLeftMotor.getVelocity() * m_gearRatio;
-        m_wheelSpeeds.rearRightMetersPerSecond = m_backRightMotor.getVelocity() * m_gearRatio;
+        m_wheelSpeeds.frontLeftMetersPerSecond = m_frontLeftMotor.getVelocity() * DriveConstants.GEAR_RATIO;
+        m_wheelSpeeds.frontRightMetersPerSecond = m_frontRightMotor.getVelocity() * DriveConstants.GEAR_RATIO;
+        m_wheelSpeeds.rearLeftMetersPerSecond = m_backLeftMotor.getVelocity() * DriveConstants.GEAR_RATIO;
+        m_wheelSpeeds.rearRightMetersPerSecond = m_backRightMotor.getVelocity() * DriveConstants.GEAR_RATIO;
     }
 
     public void forceOdometry(Pose2d pose) {
@@ -259,5 +296,30 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_frontRightMotor.setVoltage(volts.in(Volts));
         m_backLeftMotor.setVoltage(volts.in(Volts));
         m_backRightMotor.setVoltage(volts.in(Volts));
+    }
+
+    private void updateGains() {
+        m_frontLeftPIDController.setPID(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
+        m_frontRightPIDController.setPID(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
+        m_backLeftPIDController.setPID(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
+        m_backRightPIDController.setPID(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
+
+        m_turnPIDController.setPID(DriveConstants.HEADING_P, DriveConstants.HEADING_I, DriveConstants.HEADING_D);
+
+        if (m_feedforward.ks != DriveConstants.kS || m_feedforward.kv != DriveConstants.kV || m_feedforward.ka != DriveConstants.kA) {
+            m_feedforward = new SimpleMotorFeedforward(DriveConstants.kS, DriveConstants.kV, DriveConstants.kS);
+        }
+    }
+
+    public void setHeading(double heading) {
+        m_turnControllerActive = true;
+        desiredHeading = Rotation2d.fromDegrees(heading);
+    }
+
+    public boolean headingIsFinished() {
+        if (m_turnPIDController.atSetpoint()) {
+            m_turnControllerActive = false;
+        }
+        return m_turnPIDController.atSetpoint();
     }
 }

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.12799430804973325,
+      "x": 0.15,
       "y": 1.6747729799049826
     },
-    "rotation": 0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -18,9 +18,34 @@
           }
         },
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "HighBarBack"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "DriveTo1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RecursiveFeed"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Turn-130"
           }
         }
       ]

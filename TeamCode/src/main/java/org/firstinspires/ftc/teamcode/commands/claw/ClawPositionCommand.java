@@ -13,6 +13,8 @@ public class ClawPositionCommand extends Command {
     public ClawPositionCommand(ClawSubsystem claw, DoubleSupplier position) {
         m_claw = claw;
         m_position = position;
+
+        addRequirements(claw);
     }
 
     @Override

@@ -11,6 +11,8 @@ public class IntakePivotPositionCommand extends Command {
     public IntakePivotPositionCommand(IntakePivotSubsystem pivot, double position) {
         m_intakePivot = pivot;
         m_position = position;
+
+//        addRequirements(pivot);
     }
 
     @Override

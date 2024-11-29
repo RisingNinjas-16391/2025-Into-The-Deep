@@ -4,7 +4,6 @@
         <LynxModule name="Control Hub" port="173">
 
             <Servo name="rightIntakePivot" port="1"/>
-            <Servo name="wrist" port="2"/>
             <Servo name="leftIntakePivot" port="0"/>
 
             <goBILDA5202SeriesMotor name="extension" port="0"/>-->
@@ -22,14 +21,14 @@
             <goBILDA5202SeriesMotor name="FR" port="2"/>
             <goBILDA5202SeriesMotor name="BR" port="3"/>
 
-
             <SparkFunOTOS name="sensor_otos" port="3" bus="3"/>
             <RevColorSensorV3 name="sensor_color" port="1" bus="1"/>
 
             <Servo name="rightDepositPivot" port="1"/>
-            <Servo name="leftDepositPivot" port="4"/>
+            <Servo name="leftDepositPivot" port="3"/>
             <Servo name="depositClaw" port="5"/>
-            <Servo name="intakeClaw" port="2"/>
+            <Servo name="wrist" port="2"/>
+            <Servo name="intakeClaw" port="0"/>
 
 
         </LynxModule>

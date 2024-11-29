@@ -21,7 +21,7 @@ public class IntakePivotSubsystem extends SubsystemBase {
 
         m_telemetry = telemetry;
 
-        turnToAngle(150);
+//        turnToAngle(150);
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.lib.dashboard.DashboardUtil;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -34,13 +35,13 @@ public class OTOS {
 //        48.0 / 42.91
 //        43.7
 //        43.7
-        myOtos.setLinearScalar(48.0 / 43.7);
-        myOtos.setAngularScalar(1.0);
+        myOtos.setLinearScalar(DriveConstants.LINEAR_SCALAR);
+        myOtos.setAngularScalar(DriveConstants.ANGULAR_SCALAR);
 
         myOtos.calibrateImu();
 
-        SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(0, 0, 0);
-        myOtos.setPosition(currentPosition);
+//        SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(0, 0, 0);
+//        myOtos.setPosition(currentPosition);
     }
 
     public Pose2d getPose() {
@@ -60,9 +61,16 @@ public class OTOS {
     }
 
     public void setPosition(Pose2d pose) {
-        myOtos.resetTracking();
+//        myOtos.resetTracking();
 //        offset = new Transform2d(getPose(), pose);
         myOtos.setPosition(Pose2dtoOTOSPose2d(pose));
+    }
+
+    public void updateScalars() {
+        if (myOtos.getLinearScalar() != DriveConstants.LINEAR_SCALAR || myOtos.getAngularScalar() != DriveConstants.ANGULAR_SCALAR) {
+            myOtos.setLinearScalar(DriveConstants.LINEAR_SCALAR);
+            myOtos.setAngularScalar(DriveConstants.ANGULAR_SCALAR);
+        }
     }
 
     public static Pose2d OTOSPose2dtoPose2d(SparkFunOTOS.Pose2D otosPose) {

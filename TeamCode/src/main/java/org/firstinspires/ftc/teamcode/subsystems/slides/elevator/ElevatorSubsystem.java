@@ -110,6 +110,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public boolean isFinished() {
-        return Math.abs(goal.position - getState().position) < 2;
+        return Math.abs(goal.position - getState().position) < 5.0;
     }
 }

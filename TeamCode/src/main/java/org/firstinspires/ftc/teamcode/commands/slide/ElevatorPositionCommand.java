@@ -14,6 +14,8 @@ public class ElevatorPositionCommand extends Command {
     public ElevatorPositionCommand(ElevatorSubsystem elevator, DoubleSupplier position) {
         m_elevator = elevator;
         m_positionSupplier = position;
+
+        addRequirements(elevator);
     }
 
     @Override

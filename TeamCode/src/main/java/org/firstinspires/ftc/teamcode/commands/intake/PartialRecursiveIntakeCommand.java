@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.commands.intake;
 
+import org.firstinspires.ftc.teamcode.commands.automation.PartialTransferCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.TransferCommand;
+import org.firstinspires.ftc.teamcode.commands.pivot.IntakePivotPositionCommand;
+import org.firstinspires.ftc.teamcode.commands.slide.ExtendoPositionCommand;
+import org.firstinspires.ftc.teamcode.constants.OperatorPresets;
 import org.firstinspires.ftc.teamcode.subsystems.claws.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.intake.ColorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.intake.IntakeSubsystem;
@@ -14,11 +18,12 @@ import java.util.Set;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 
-public class FullRecursiveIntakeCommand extends SequentialCommandGroup {
-    public FullRecursiveIntakeCommand(
+public class PartialRecursiveIntakeCommand extends SequentialCommandGroup {
+    public PartialRecursiveIntakeCommand(
             IntakePivotSubsystem intakePivotSubsystem,
             IntakeSubsystem intakeSubsystem,
             ClawSubsystem outtakeClawSubsystem,
@@ -29,10 +34,15 @@ public class FullRecursiveIntakeCommand extends SequentialCommandGroup {
         addCommands(
                 new ParallelDeadlineGroup(
                         new WaitUntilCommand(colorSensor::sampleDetected),
-                        new IntakeCommand(intakeSubsystem, () -> -1)
+                        new IntakeCommand(intakeSubsystem, () -> -1),
+                        new IntakePivotPositionCommand(intakePivotSubsystem, OperatorPresets.Feeding),
+                        new RepeatCommand(
+                                new SequentialCommandGroup(
+                                    new ExtendoPositionCommand(extendoSubsystem, () -> 20).withTimeout(0.5),
+                                    new ExtendoPositionCommand(extendoSubsystem, () -> 40).withTimeout(0.5)))
                 ),
                 new ConditionalCommand(
-                        new TransferCommand(
+                        new PartialTransferCommand(
                                 intakePivotSubsystem,
                                 intakeSubsystem,
                                 outtakeClawSubsystem,
@@ -41,7 +51,7 @@ public class FullRecursiveIntakeCommand extends SequentialCommandGroup {
                                 outtakePivotSubsystem),
                         new SequentialCommandGroup(
                                 new IntakeCommand(intakeSubsystem, () -> 1).withTimeout(0.5),
-                                new DeferredCommand(() -> new FullRecursiveIntakeCommand(
+                                new DeferredCommand(() -> new PartialRecursiveIntakeCommand(
                                         intakePivotSubsystem,
                                         intakeSubsystem,
                                         outtakeClawSubsystem,

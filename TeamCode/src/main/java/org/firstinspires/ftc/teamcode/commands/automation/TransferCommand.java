@@ -28,18 +28,18 @@ public class TransferCommand extends SequentialCommandGroup {
                         new SequentialCommandGroup(
                                 new IntakePivotPositionCommand(intakePivotSubsystem, OperatorPresets.Transfer),
                                 new WaitCommand(0.3),
-                                new ExtendoPositionCommand(extendoSubsystem, () -> 0)
+                                new ExtendoPositionCommand(extendoSubsystem, () -> 0).withTimeout(0.5)
                         ),
                         new SequentialCommandGroup(
-                                new ElevatorPositionCommand(elevatorSubsystem, () -> 14),
+                                new ElevatorPositionCommand(elevatorSubsystem, () -> 14).withTimeout(0.5),
                                 new OuttakePivotPositionCommand(outtakePivotSubsystem, 149),
                                 new ClawPositionCommand(outtakeClawSubsystem, () -> 90))
-                 ).withTimeout(6000),
+                 ).withTimeout(6),
 
-                new ElevatorPositionCommand(elevatorSubsystem, () -> 0).withTimeout(500),
+                new ElevatorPositionCommand(elevatorSubsystem, () -> 0).withTimeout(0.5),
                 new ClawPositionCommand(outtakeClawSubsystem, () -> 45),
-                new WaitCommand(400),
-                new ElevatorPositionCommand(elevatorSubsystem, () -> 10),
+                new WaitCommand(0.4),
+                new ElevatorPositionCommand(elevatorSubsystem, () -> 20).withTimeout(0.5),
                 new OuttakePivotPositionCommand(outtakePivotSubsystem, 355));
     }
 }

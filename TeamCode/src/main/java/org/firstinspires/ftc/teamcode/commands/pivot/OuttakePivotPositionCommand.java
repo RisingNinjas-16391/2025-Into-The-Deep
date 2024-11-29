@@ -13,11 +13,15 @@ public class OuttakePivotPositionCommand extends Command {
     public OuttakePivotPositionCommand(OuttakePivotSubsystem pivot, double position) {
         m_outtakePivot = pivot;
         m_position = () -> position;
+
+        addRequirements(m_outtakePivot);
     }
 
     public OuttakePivotPositionCommand(OuttakePivotSubsystem pivot, DoubleSupplier position) {
         m_outtakePivot = pivot;
         m_position = position;
+
+        addRequirements(m_outtakePivot);
     }
 
     @Override

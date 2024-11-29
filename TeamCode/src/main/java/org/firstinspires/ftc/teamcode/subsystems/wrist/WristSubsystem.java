@@ -14,7 +14,7 @@ public class WristSubsystem extends SubsystemBase {
 
     public WristSubsystem(HardwareMap hwMap, Telemetry telemetry) {
         m_claw = new SimpleServo(hwMap, "wrist", 0,
-                355, AngleUnit.DEGREES);
+                180, AngleUnit.DEGREES);
 
         m_telemetry = telemetry;
         turnToAngle(90);

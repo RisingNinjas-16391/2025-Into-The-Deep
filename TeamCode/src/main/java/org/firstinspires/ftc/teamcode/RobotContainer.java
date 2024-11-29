@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.RobotLog;
@@ -8,13 +9,16 @@ import com.qualcomm.robotcore.util.RobotLog;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.automation.DropDropCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.DropIntakeCommand;
+import org.firstinspires.ftc.teamcode.commands.automation.OuttakePieceCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.PickUpSPCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.TopTransferCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.TransferCommand;
 import org.firstinspires.ftc.teamcode.commands.claw.ClawPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.drivetrain.DriveCommand;
+import org.firstinspires.ftc.teamcode.commands.drivetrain.TurnCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.FullRecursiveIntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.IntakeCommand;
+import org.firstinspires.ftc.teamcode.commands.intake.PartialRecursiveIntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.pivot.IntakePivotPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.pivot.OuttakePivotPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.slide.ElevatorPositionCommand;
@@ -41,7 +45,9 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class RobotContainer {
     private final DrivetrainSubsystem m_driveSubsystem;
@@ -68,7 +74,7 @@ public class RobotContainer {
         m_outtakeWristSubsystem = new WristSubsystem(hwMap, telemetry);
         m_intakesubsystem = new IntakeSubsystem(hwMap, telemetry);
         m_colorsensor = new ColorSubsystem(hwMap, telemetry);
-        m_outtakeClawSubsystem = new ClawSubsystem(hwMap, telemetry, "depositClaw", 65);
+        m_outtakeClawSubsystem = new ClawSubsystem(hwMap, telemetry, "depositClaw", 50);
 
         m_driverController = new GamepadEx(gamepad1);
         m_operatorController = new GamepadEx(gamepad2);
@@ -79,6 +85,8 @@ public class RobotContainer {
             setDefaultCommands();
             configureButtonBindings();
         }
+
+        registerAutoNamedCommands();
     }
 
     public void setDefaultCommands(){
@@ -210,8 +218,48 @@ public class RobotContainer {
 
         new GamepadButton(m_operatorController, GamepadKeys.Button.START).whileTrue(new ElevatorVelocityCommand(m_elevatorSubsystem, () -> -50).andThen(m_elevatorSubsystem::resetPosition));
 //        new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_LEFT).whileTrue(new ExtendoVelocityCommand(m_extendoSubsystem, () -> -50).andThen(m_extendoSubsystem::resetPosition));
+
+        m_resetHeading.onTrue(new TurnCommand(m_driveSubsystem, () -> 90));
     }
 
+    private void registerAutoNamedCommands() {
+        NamedCommands.registerCommand("LowerFeeder",
+                new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Vertical));
+
+        NamedCommands.registerCommand("DeployFeeder",
+                new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Feeding));
+
+        NamedCommands.registerCommand("RecursiveFeed",
+                new ParallelCommandGroup(
+                        new ExtendoPositionCommand(m_extendoSubsystem, () -> 40),
+                        new PartialRecursiveIntakeCommand(
+                                m_intakePivotSubsystem,
+                                m_intakesubsystem,
+                                m_outtakeClawSubsystem,
+                                m_elevatorSubsystem,
+                                m_extendoSubsystem,
+                                m_outtakePivotSubsystem,
+                                m_colorsensor)
+                ));
+
+        NamedCommands.registerCommand("HighBar",
+                new SequentialCommandGroup(
+                        new ClawPositionCommand(m_outtakeClawSubsystem, () -> 50),
+                        new ElevatorPositionCommand(m_elevatorSubsystem, () -> 50).withTimeout(0.5),
+                        new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> OperatorPresets.ScoreSpecimenBack)));
+
+        NamedCommands.registerCommand("HighBarBack", new SequentialCommandGroup(
+                new ElevatorPositionCommand(m_elevatorSubsystem, () -> 10).withTimeout(0.5),
+                new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90)));
+
+
+        NamedCommands.registerCommand("OuttakePiece",
+                new OuttakePieceCommand(m_extendoSubsystem, m_intakePivotSubsystem, m_intakesubsystem));
+
+        NamedCommands.registerCommand("Turn-130",
+                new TurnCommand(m_driveSubsystem, () -> -130));
+
+    }
     public Command getAutoCommand(int chooser) {
         switch (chooser) {
             case 1:

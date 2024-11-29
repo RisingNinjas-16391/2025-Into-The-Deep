@@ -14,6 +14,8 @@ public class ExtendoPositionCommand extends Command {
     public ExtendoPositionCommand(ExtendoSubsystem extendo, DoubleSupplier position) {
         m_extendo = extendo;
         m_positionSupplier = position;
+
+//        addRequirements(extendo);
     }
 
     @Override
