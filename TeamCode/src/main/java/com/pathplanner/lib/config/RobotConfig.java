@@ -3,6 +3,7 @@ package com.pathplanner.lib.config;
 import static edu.wpi.first.units.Units.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -237,11 +238,11 @@ public class RobotConfig {
    * @throws IOException if an I/O error occurs
    * @throws ParseException if a JSON parsing error occurs
    */
-  public static RobotConfig fromGUISettings() throws IOException, ParseException {
+  public static RobotConfig fromGUISettings(HardwareMap hwMap) throws IOException, ParseException {
     BufferedReader br =
         new BufferedReader(
                 new InputStreamReader(
-                        AutoBuilder.getHardwareMap().appContext
+                        hwMap.appContext
                                 .getAssets()
                                 .open("pathplanner/settings.json")));
 

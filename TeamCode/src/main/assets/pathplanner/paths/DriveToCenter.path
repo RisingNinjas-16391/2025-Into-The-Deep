@@ -1,5 +1,5 @@
 {
-  "version": 1.0,
+  "version": "2025.0",
   "waypoints": [
     {
       "anchor": {
@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.42000000000000015,
-        "y": 1.6747729799049826
+        "x": 0.4199999972097187,
+        "y": 1.6747356283235058
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.08,
+        "x": 1.0695117437701533,
         "y": 1.6747729799049826
       },
       "prevControl": {
-        "x": 0.8300000000000001,
-        "y": 1.6747729799049826
+        "x": 0.81951190216873,
+        "y": 1.67505440354162
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,10 +30,12 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
+  "pointTowardsZones": [],
   "eventMarkers": [
     {
       "name": "New Event Marker",
       "waypointRelativePos": 0.05,
+      "endWaypointRelativePos": null,
       "command": {
         "type": "parallel",
         "data": {
@@ -53,24 +55,36 @@
           ]
         }
       }
+    },
+    {
+      "name": "",
+      "waypointRelativePos": 0.99,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "HighBarBack"
+        }
+      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 0.5,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
-    "rotateFast": false
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": null,
-  "previewStartingState": {
-    "rotation": 0.0,
-    "velocity": 0
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

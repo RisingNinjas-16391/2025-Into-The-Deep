@@ -115,6 +115,10 @@ public final class CommandScheduler implements Sendable, AutoCloseable {
 //    m_watchdog.setTimeout(period);
   }
 
+  public synchronized void reset() {
+    instance = null;
+  }
+
   @Override
   public void close() {
     SendableRegistry.remove(this);

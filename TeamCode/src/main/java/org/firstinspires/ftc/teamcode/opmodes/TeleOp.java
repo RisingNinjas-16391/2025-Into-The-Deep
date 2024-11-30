@@ -18,11 +18,6 @@ public class TeleOp extends CommandOpMode {
     public void robotInit() {
         m_telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         new RobotContainer(hardwareMap, m_telemetry, gamepad1, gamepad2, 0); //Uses heavily modified untested hardware
-
-
-        NetworkTableInstance.getDefault().startServer();
-
-        NetworkTableInstance.getDefault().getEntry("topic").setBoolean(true);
     }
 
     @Override

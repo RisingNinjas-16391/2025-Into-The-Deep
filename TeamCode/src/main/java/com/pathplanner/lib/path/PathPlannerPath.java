@@ -1,5 +1,7 @@
 package com.pathplanner.lib.path;
 
+import static java.util.Arrays.asList;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.CommandUtil;
 import com.pathplanner.lib.config.RobotConfig;
@@ -21,6 +23,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -84,14 +88,16 @@ public class PathPlannerPath {
       GoalEndState goalEndState,
       boolean reversed) {
     this.waypoints = waypoints;
-    this.rotationTargets =
-        Arrays.asList((RotationTarget[]) holonomicRotations.stream()
+    this.rotationTargets = holonomicRotations
+            .stream()
             .sorted(Comparator.comparingDouble(RotationTarget::position))
-            .toArray());
+            .collect(Collectors.toList());
     this.pointTowardsZones = pointTowardsZones;
     this.constraintZones = constraintZones;
-    this.eventMarkers =
-        Arrays.asList((EventMarker[]) eventMarkers.stream().sorted(Comparator.comparingDouble(EventMarker::position)).toArray());
+    this.eventMarkers = eventMarkers
+            .stream()
+            .sorted(Comparator.comparingDouble(EventMarker::position))
+            .collect(Collectors.toList());
     this.globalConstraints = globalConstraints;
     this.idealStartingState = idealStartingState;
     this.goalEndState = goalEndState;
@@ -195,7 +201,7 @@ public class PathPlannerPath {
    * @return Bezier curve waypoints
    */
   public static List<Waypoint> waypointsFromPoses(Pose2d... poses) {
-    return waypointsFromPoses(Arrays.asList(poses));
+    return waypointsFromPoses(asList(poses));
   }
 
   /**
@@ -1130,9 +1136,9 @@ public class PathPlannerPath {
     }
 
     PathPlannerPath path = new PathPlannerPath();
-    path.waypoints = Arrays.asList((Waypoint[]) waypoints.stream().map(Waypoint::flip).toArray());
-    path.rotationTargets = Arrays.asList((RotationTarget[]) rotationTargets.stream().map(RotationTarget::flip).toArray());
-    path.pointTowardsZones = Arrays.asList((PointTowardsZone[]) pointTowardsZones.stream().map(PointTowardsZone::flip).toArray());
+    path.waypoints = waypoints.stream().map(Waypoint::flip).collect(Collectors.toList());
+    path.rotationTargets = rotationTargets.stream().map(RotationTarget::flip).collect(Collectors.toList());
+    path.pointTowardsZones = pointTowardsZones.stream().map(PointTowardsZone::flip).collect(Collectors.toList());
     path.constraintZones = constraintZones;
     path.eventMarkers = eventMarkers;
     path.globalConstraints = globalConstraints;
@@ -1142,7 +1148,7 @@ public class PathPlannerPath {
       path.idealStartingState = null;
     }
     path.goalEndState = goalEndState.flip();
-    path.allPoints = Arrays.asList((PathPoint[]) allPoints.stream().map(PathPoint::flip).toArray());
+    path.allPoints = allPoints.stream().map(PathPoint::flip).collect(Collectors.toList());
     path.reversed = reversed;
     path.isChoreoPath = isChoreoPath;
     path.idealTrajectory = flippedTraj;

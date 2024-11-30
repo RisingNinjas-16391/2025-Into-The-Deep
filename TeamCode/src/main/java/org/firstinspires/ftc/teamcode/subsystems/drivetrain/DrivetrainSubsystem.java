@@ -13,6 +13,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.AutoBuilderException;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
@@ -24,6 +25,8 @@ import org.firstinspires.ftc.teamcode.lib.dashboard.DashboardUtil;
 import org.firstinspires.ftc.teamcode.lib.ftclib.hardware.motors.Motor;
 import org.firstinspires.ftc.teamcode.lib.ftclib.hardware.motors.MotorEx;
 import org.firstinspires.ftc.teamcode.lib.wpilib.MecanumDrivePoseEstimator;
+
+import java.util.Arrays;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -123,7 +126,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_poseEstimator = new MecanumDrivePoseEstimator(m_kinematics, getHeading(), getWheelPositions(), new Pose2d());
 
         try{
-            RobotConfig config = RobotConfig.fromGUISettings();
+            RobotConfig config = RobotConfig.fromGUISettings(hwMap);
 
             // Configure AutoBuilder
             AutoBuilder.configure(
@@ -152,7 +155,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
                     this
             );
         }catch(Exception e){
-            RobotLog.e("Failed to load PathPlanner config and configure AutoBuilder", e.getStackTrace());
+            throw new AutoBuilderException(e.toString() + Arrays.toString(e.getStackTrace()));
         }
 
         dashboard = FtcDashboard.getInstance();
@@ -206,7 +209,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         telemetry.addData("Pose", getPose().toString());
         telemetry.addData("Wheel Positions", getWheelPositions().toString());
         telemetry.addData("Wheel Speeds", getWheelSpeeds().toString());
-        telemetry.addData("Desired Heading", desiredHeading.getDegrees());
 
         updateGains();
         m_otos.updateScalars();

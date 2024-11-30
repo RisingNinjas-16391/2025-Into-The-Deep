@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.lib.ftclib.opmode;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 /**
@@ -31,6 +32,6 @@ public class CommandOpMode extends TimedRobotOpMode {
 
     @Override
     public void disabledInit() {
-//        CommandScheduler.getInstance().reset();
+        CommandScheduler.getInstance().reset();
     }
 }
