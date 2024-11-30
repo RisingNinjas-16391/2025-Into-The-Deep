@@ -35,11 +35,11 @@ public class PartialRecursiveIntakeCommand extends SequentialCommandGroup {
                 new ParallelDeadlineGroup(
                         new WaitUntilCommand(colorSensor::sampleDetected),
                         new IntakeCommand(intakeSubsystem, () -> -1),
-                        new IntakePivotPositionCommand(intakePivotSubsystem, OperatorPresets.Feeding),
-                        new RepeatCommand(
-                                new SequentialCommandGroup(
-                                    new ExtendoPositionCommand(extendoSubsystem, () -> 20).withTimeout(0.5),
-                                    new ExtendoPositionCommand(extendoSubsystem, () -> 40).withTimeout(0.5)))
+                        new IntakePivotPositionCommand(intakePivotSubsystem, OperatorPresets.Feeding)
+//                        new RepeatCommand(
+//                                new SequentialCommandGroup(
+//                                    new ExtendoPositionCommand(extendoSubsystem, () -> 20).withTimeout(0.5),
+//                                    new ExtendoPositionCommand(extendoSubsystem, () -> 40).withTimeout(0.5)))
                 ),
                 new ConditionalCommand(
                         new PartialTransferCommand(

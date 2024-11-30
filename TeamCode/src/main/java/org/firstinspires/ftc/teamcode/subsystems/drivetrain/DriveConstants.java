@@ -14,7 +14,7 @@ public class DriveConstants {
     public static double kV = 2.0;
     public static double kA = 0.0;
 
-    public static double HEADING_P = 0.1;
+    public static double HEADING_P = 5.0;
     public static double HEADING_I = 0.0;
     public static double HEADING_D = 0.0;
 
