@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.lib.ftclib.opmode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.robot.Robot;
 
 /**
  * As opposed to the general WPILib-style Robot paradigm, FTCLib also offers a command opmode
@@ -17,7 +16,7 @@ public abstract class OldCommandOpMode extends LinearOpMode {
      * Cancels all previous commands
      */
     public void reset() {
-        CommandScheduler.getInstance().reset();
+//        CommandScheduler.getInstance().reset();
     }
 
     /**

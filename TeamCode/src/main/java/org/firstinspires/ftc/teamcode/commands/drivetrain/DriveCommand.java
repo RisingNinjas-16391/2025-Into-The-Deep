@@ -25,9 +25,8 @@ public class DriveCommand extends Command {
     public void execute() {
         ChassisSpeeds move = m_moveSupply.get();
 
-        m_drivetrain.drive(
-                move,
-                m_fieldRelative.getAsBoolean());
+        m_drivetrain.driveFieldRelative(
+                move);
     }
 
     @Override
