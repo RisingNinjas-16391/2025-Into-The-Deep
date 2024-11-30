@@ -3,15 +3,15 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.0474291128438746,
+        "x": 1.08,
         "y": 1.6747729799049826
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.7197574385050155,
+        "x": 0.7523283256611409,
         "y": 1.512330804640889
       },
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "ScoreCenter"
     },
     {
@@ -24,7 +24,7 @@
         "y": 1.3330915981649316
       },
       "nextControl": null,
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": null
     }
   ],

@@ -88,7 +88,7 @@ public class RobotContainer {
             configureButtonBindings();
         }
 
-//        registerAutoNamedCommands();
+        registerAutoNamedCommands();
     }
 
     public void setDefaultCommands(){
