@@ -19,11 +19,12 @@ public class TurnCommand extends Command {
 
     @Override
     public void initialize() {
-        m_drive.setHeading(m_heading.getAsDouble());
+//        m_drive.setHeading(m_heading.getAsDouble());
     }
 
     @Override
     public boolean isFinished() {
-        return m_drive.headingIsFinished();
+//        return m_drive.headingIsFinished();
+        return false;
     }
 }

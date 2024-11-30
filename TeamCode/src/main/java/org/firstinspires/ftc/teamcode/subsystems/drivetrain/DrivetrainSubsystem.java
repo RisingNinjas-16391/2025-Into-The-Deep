@@ -5,17 +5,19 @@
 package org.firstinspires.ftc.teamcode.subsystems.drivetrain;
 
 import static org.firstinspires.ftc.teamcode.subsystems.drivetrain.DriveConstants.TRANSLATION_P;
+import static edu.wpi.first.units.Units.Meter;
+import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.lib.dashboard.DashboardUtil;
@@ -33,6 +35,9 @@ import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.PerUnit;
+import edu.wpi.first.units.Unit;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -48,14 +53,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private final MotorEx m_backRightMotor;
 
     private final OTOS m_otos;
-
-    private final double robotLength = 0.195 / 2.0;
-    private final double robotWidth = 0.240 / 2.0;
-
-    private final Translation2d m_frontLeftLocation = new Translation2d(robotLength, robotWidth);
-    private final Translation2d m_frontRightLocation = new Translation2d(robotLength, -robotWidth);
-    private final Translation2d m_backLeftLocation = new Translation2d(-robotLength, robotWidth);
-    private final Translation2d m_backRightLocation = new Translation2d(-robotLength, -robotWidth);
 
     private ChassisSpeeds robotRelativeSpeeds = new ChassisSpeeds();
 
@@ -113,10 +110,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_backLeftMotor.stopAndResetEncoder();
 
         m_kinematics = new MecanumDriveKinematics(
-                m_frontLeftLocation,
-                m_frontRightLocation,
-                m_backLeftLocation,
-                m_backRightLocation);
+                DriveConstants.FRONT_LEFT_LOCATION,
+                DriveConstants.FRONT_RIGHT_LOCATION,
+                DriveConstants.REAR_LEFT_LOCATION,
+                DriveConstants.REAR_RIGHT_LOCATION);
 
         m_wheelPositions = new MecanumDriveWheelPositions();
         m_wheelSpeeds = new MecanumDriveWheelSpeeds();
@@ -125,20 +122,38 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_desiredChassisSpeeds = new ChassisSpeeds();
         m_poseEstimator = new MecanumDrivePoseEstimator(m_kinematics, getHeading(), getWheelPositions(), new Pose2d());
 
-        AutoBuilder.configureHolonomic(
-                this::getPose,
-                this::forceOdometry,
-                this::getRobotRelativeSpeeds,
-                (ChassisSpeeds speeds) -> {drive(speeds, false);},
-                new HolonomicPathFollowerConfig(
-                        new PIDConstants(DriveConstants.TRANSLATION_P, DriveConstants.TRANSLATION_I, DriveConstants.TRANSLATION_D),
-                        new PIDConstants(DriveConstants.AUTO_HEADING_P, DriveConstants.AUTO_HEADING_I, DriveConstants.AUTO_HEADING_D),
-                        1.0,
-                        0.3,
-                        new ReplanningConfig()),
-                () -> false,
-                this,
-                hwMap);
+        try{
+            RobotConfig config = RobotConfig.fromGUISettings();
+
+            // Configure AutoBuilder
+            AutoBuilder.configure(
+                    this::getPose,
+                    this::forceOdometry,
+                    this::getRobotRelativeSpeeds,
+                    this::driveRobotRelative,
+                    new PPHolonomicDriveController(
+                            new PIDConstants(DriveConstants.TRANSLATION_P, DriveConstants.TRANSLATION_I, DriveConstants.TRANSLATION_D),
+                            new PIDConstants(DriveConstants.HEADING_P, DriveConstants.HEADING_I, DriveConstants.HEADING_D)
+                    ),
+                    config,
+                    () -> {
+//                        // Boolean supplier that controls when the path will be mirrored for the red alliance
+//                        // This will flip the path being followed to the red side of the field.
+//                        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+//
+//                        var alliance = DriverStation.getAlliance();
+//                        if (alliance.isPresent()) {
+//                            return alliance.get() == DriverStation.Alliance.Red;
+//                        }
+//                        return false;
+                        return false;
+                    },
+                    hwMap,
+                    this
+            );
+        }catch(Exception e){
+            RobotLog.e("Failed to load PathPlanner config and configure AutoBuilder", e.getStackTrace());
+        }
 
         dashboard = FtcDashboard.getInstance();
 
@@ -150,10 +165,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_timer.start();
 
         forceOdometry(new Pose2d(new Translation2d(0.15, 1.66), new Rotation2d()));
-
-        m_turnPIDController.enableContinuousInput(-180, 180);
-        m_turnPIDController.setTolerance(10);
-        desiredHeading = getHeading();
     }
 
     @Override
@@ -197,27 +208,21 @@ public class DrivetrainSubsystem extends SubsystemBase {
         telemetry.addData("Wheel Speeds", getWheelSpeeds().toString());
         telemetry.addData("Desired Heading", desiredHeading.getDegrees());
 
-        setSpeeds(m_desiredChassisSpeeds);
         updateGains();
         m_otos.updateScalars();
-
-
     }
 
-    /**
-     * Set the desired speeds for each wheel.
-     *
-     * @param speeds The desired wheel speeds.
-     */
-    public void setSpeeds(ChassisSpeeds speeds) {
-        m_desiredWheelSpeeds = m_kinematics.toWheelSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getHeading()));
+    public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
+        this.robotRelativeSpeeds = robotRelativeSpeeds;
+
+        m_desiredWheelSpeeds = m_kinematics.toWheelSpeeds(robotRelativeSpeeds);
 
 //        m_desiredWheelSpeeds.desaturate(kMaxSpeed);
 
-        final double frontLeftFeedforward = m_feedforward.calculate(m_desiredWheelSpeeds.frontLeftMetersPerSecond);
-        final double frontRightFeedforward = m_feedforward.calculate(m_desiredWheelSpeeds.frontRightMetersPerSecond);
-        final double backLeftFeedforward = m_feedforward.calculate(m_desiredWheelSpeeds.rearLeftMetersPerSecond);
-        final double backRightFeedforward = m_feedforward.calculate(m_desiredWheelSpeeds.rearRightMetersPerSecond);
+        final Voltage frontLeftFeedforward = m_feedforward.calculate(MetersPerSecond.of(m_desiredWheelSpeeds.frontLeftMetersPerSecond));
+        final Voltage frontRightFeedforward = m_feedforward.calculate(MetersPerSecond.of(m_desiredWheelSpeeds.frontRightMetersPerSecond));
+        final Voltage backLeftFeedforward = m_feedforward.calculate(MetersPerSecond.of(m_desiredWheelSpeeds.rearLeftMetersPerSecond));
+        final Voltage backRightFeedforward = m_feedforward.calculate(MetersPerSecond.of(m_desiredWheelSpeeds.rearRightMetersPerSecond));
 
         final double frontLeftOutput =
                 m_frontLeftPIDController.calculate(
@@ -232,22 +237,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 m_backRightPIDController.calculate(
                         getWheelSpeeds().rearRightMetersPerSecond, m_desiredWheelSpeeds.rearRightMetersPerSecond);
 
-        m_frontLeftMotor.setVoltage(frontLeftFeedforward + frontLeftOutput);
-        m_frontRightMotor.setVoltage(frontRightFeedforward + frontRightOutput);
-        m_backLeftMotor.setVoltage(backLeftFeedforward + backLeftOutput);
-        m_backRightMotor.setVoltage(backRightFeedforward + backRightOutput);
+        m_frontLeftMotor.setVoltage(frontLeftFeedforward.magnitude() + frontLeftOutput);
+        m_frontRightMotor.setVoltage(frontRightFeedforward.magnitude() + frontRightOutput);
+        m_backLeftMotor.setVoltage(backLeftFeedforward.magnitude() + backLeftOutput);
+        m_backRightMotor.setVoltage(backRightFeedforward.magnitude() + backRightOutput);
     }
 
-    /**
-     * Method to drive the robot using joystick info.
-     *
-     * @param speeds Chassis Speeds
-     * @param fieldRelative Whether the provided x and y speeds are relative to the field.
-     */
-    public void drive(ChassisSpeeds speeds, boolean fieldRelative) {
-        robotRelativeSpeeds = fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(speeds, m_otos.getRotation2d()) : speeds;
-
-        m_desiredChassisSpeeds = speeds;
+    public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
+        fieldRelativeSpeeds.toRobotRelativeSpeeds(getHeading());
+        driveRobotRelative(fieldRelativeSpeeds);
     }
 
     public Pose2d getPose() {
@@ -311,17 +309,5 @@ public class DrivetrainSubsystem extends SubsystemBase {
         if (m_feedforward.getKs() != DriveConstants.kS || m_feedforward.getKv() != DriveConstants.kV || m_feedforward.getKa() != DriveConstants.kA) {
             m_feedforward = new SimpleMotorFeedforward(DriveConstants.kS, DriveConstants.kV, DriveConstants.kS);
         }
-    }
-
-    public void setHeading(double heading) {
-        m_turnControllerActive = true;
-        desiredHeading = Rotation2d.fromDegrees(heading);
-    }
-
-    public boolean headingIsFinished() {
-        if (m_turnPIDController.atSetpoint()) {
-            m_turnControllerActive = false;
-        }
-        return m_turnPIDController.atSetpoint();
     }
 }

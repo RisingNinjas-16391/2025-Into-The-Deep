@@ -1,12 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystems.drivetrain;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
 
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.geometry.Translation2d;
 
 @Config
 public class DriveConstants {
@@ -31,20 +27,15 @@ public class DriveConstants {
     public static double AUTO_HEADING_D = 0.0;
 
     public static double GEAR_RATIO = 1.0 / 1152.006;
-//    1.0 / 1152.006
-//    1.0 / 2351.033
-//1.12888
+
     public static double LINEAR_SCALAR = 1.127;
     public static double ANGULAR_SCALAR = 1.0;
 
-    public static HolonomicPathFollowerConfig CONFIG = new HolonomicPathFollowerConfig(
-            new PIDConstants(TRANSLATION_P, TRANSLATION_I, TRANSLATION_D),
-            new PIDConstants(5, 0, 0),
-            2,
-            0.3,
-            new ReplanningConfig());
+    public static double ROBOT_LENGTH = 0.195;
+    public static double ROBOT_WIDTH = 0.240;
 
-    public final static PathConstraints AUTO_CONSTRAINTS = new PathConstraints(
-            1, 1,
-            Units.degreesToRadians(180), Units.degreesToRadians(180));
+    public static final Translation2d FRONT_LEFT_LOCATION = new Translation2d(ROBOT_LENGTH / 2.0, ROBOT_WIDTH / 2.0);
+    public static final Translation2d FRONT_RIGHT_LOCATION = new Translation2d(ROBOT_LENGTH / 2.0, -ROBOT_WIDTH / 2.0);
+    public static final Translation2d REAR_LEFT_LOCATION = new Translation2d(-ROBOT_LENGTH / 2.0, ROBOT_WIDTH / 2.0);
+    public static final Translation2d REAR_RIGHT_LOCATION = new Translation2d(-ROBOT_LENGTH / 2.0, -ROBOT_WIDTH / 2.0);
 }
