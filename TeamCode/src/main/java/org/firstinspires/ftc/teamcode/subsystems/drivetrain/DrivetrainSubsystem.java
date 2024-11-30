@@ -11,6 +11,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -48,11 +49,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     private final OTOS m_otos;
 
-//    private final double robotLength = 0.195;
-//    private final double robotWidth = 0.195;
-
-    private final double robotLength = 0.240 / 2.0;
-    private final double robotWidth = 0.195 / 2.0;
+    private final double robotLength = 0.195 / 2.0;
+    private final double robotWidth = 0.240 / 2.0;
 
     private final Translation2d m_frontLeftLocation = new Translation2d(robotLength, robotWidth);
     private final Translation2d m_frontRightLocation = new Translation2d(robotLength, -robotWidth);
@@ -135,7 +133,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 new HolonomicPathFollowerConfig(
                         new PIDConstants(DriveConstants.TRANSLATION_P, DriveConstants.TRANSLATION_I, DriveConstants.TRANSLATION_D),
                         new PIDConstants(DriveConstants.AUTO_HEADING_P, DriveConstants.AUTO_HEADING_I, DriveConstants.AUTO_HEADING_D),
-                        2,
+                        1.0,
                         0.3,
                         new ReplanningConfig()),
                 () -> false,
@@ -214,7 +212,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void setSpeeds(ChassisSpeeds speeds) {
         m_desiredWheelSpeeds = m_kinematics.toWheelSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, getHeading()));
 
-        m_desiredWheelSpeeds.desaturate(kMaxSpeed);
+//        m_desiredWheelSpeeds.desaturate(kMaxSpeed);
 
         final double frontLeftFeedforward = m_feedforward.calculate(m_desiredWheelSpeeds.frontLeftMetersPerSecond);
         final double frontRightFeedforward = m_feedforward.calculate(m_desiredWheelSpeeds.frontRightMetersPerSecond);

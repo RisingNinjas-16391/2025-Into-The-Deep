@@ -17,16 +17,16 @@ import org.json.simple.parser.JSONParser;
 public class PPLibTelemetry {
   private static boolean compMode = false;
 
-//  private static final DoubleArrayPublisher velPub =
-//      NetworkTableInstance.getDefault().getDoubleArrayTopic("/PathPlanner/vel").publish();
-//  private static final DoublePublisher inaccuracyPub =
-//      NetworkTableInstance.getDefault().getDoubleTopic("/PathPlanner/inaccuracy").publish();
-//  private static final DoubleArrayPublisher posePub =
-//      NetworkTableInstance.getDefault().getDoubleArrayTopic("/PathPlanner/currentPose").publish();
-//  private static final DoubleArrayPublisher pathPub =
-//      NetworkTableInstance.getDefault().getDoubleArrayTopic("/PathPlanner/activePath").publish();
-//  private static final DoubleArrayPublisher targetPosePub =
-//      NetworkTableInstance.getDefault().getDoubleArrayTopic("/PathPlanner/targetPose").publish();
+  private static final DoubleArrayPublisher velPub =
+      NetworkTableInstance.getDefault().getDoubleArrayTopic("/PathPlanner/vel").publish();
+  private static final DoublePublisher inaccuracyPub =
+      NetworkTableInstance.getDefault().getDoubleTopic("/PathPlanner/inaccuracy").publish();
+  private static final DoubleArrayPublisher posePub =
+      NetworkTableInstance.getDefault().getDoubleArrayTopic("/PathPlanner/currentPose").publish();
+  private static final DoubleArrayPublisher pathPub =
+      NetworkTableInstance.getDefault().getDoubleArrayTopic("/PathPlanner/activePath").publish();
+  private static final DoubleArrayPublisher targetPosePub =
+      NetworkTableInstance.getDefault().getDoubleArrayTopic("/PathPlanner/targetPose").publish();
 
   private static final Map<String, List<PathPlannerPath>> hotReloadPaths = new HashMap<>();
   private static final Map<String, List<PathPlannerAuto>> hotReloadAutos = new HashMap<>();
@@ -48,7 +48,7 @@ public class PPLibTelemetry {
    */
   public static void setVelocities(
       double actualVel, double commandedVel, double actualAngVel, double commandedAngVel) {
-//    velPub.set(new double[] {actualVel, commandedVel, actualAngVel, commandedAngVel});
+    velPub.set(new double[] {actualVel, commandedVel, actualAngVel, commandedAngVel});
   }
 
   /**
@@ -57,7 +57,7 @@ public class PPLibTelemetry {
    * @param inaccuracy Inaccuracy in meters
    */
   public static void setPathInaccuracy(double inaccuracy) {
-//    inaccuracyPub.set(inaccuracy);
+    inaccuracyPub.set(inaccuracy);
   }
 
   /**
@@ -66,7 +66,7 @@ public class PPLibTelemetry {
    * @param pose Current robot pose
    */
   public static void setCurrentPose(Pose2d pose) {
-//    posePub.set(new double[] {pose.getX(), pose.getY(), pose.getRotation().getRadians()});
+    posePub.set(new double[] {pose.getX(), pose.getY(), pose.getRotation().getRadians()});
   }
 
   /**
@@ -96,8 +96,8 @@ public class PPLibTelemetry {
    * @param targetPose Target robot pose
    */
   public static void setTargetPose(Pose2d targetPose) {
-//    targetPosePub.set(
-//        new double[] {targetPose.getX(), targetPose.getY(), targetPose.getRotation().getRadians()});
+    targetPosePub.set(
+        new double[] {targetPose.getX(), targetPose.getY(), targetPose.getRotation().getRadians()});
   }
 
 //  /**
