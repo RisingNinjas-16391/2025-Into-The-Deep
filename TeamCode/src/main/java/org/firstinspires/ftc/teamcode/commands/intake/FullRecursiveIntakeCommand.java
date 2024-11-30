@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.commands.intake;
 
 import org.firstinspires.ftc.teamcode.commands.automation.TransferCommand;
+import org.firstinspires.ftc.teamcode.commands.pivot.IntakePivotPositionCommand;
+import org.firstinspires.ftc.teamcode.constants.OperatorPresets;
 import org.firstinspires.ftc.teamcode.subsystems.claws.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.intake.ColorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.intake.IntakeSubsystem;
@@ -29,8 +31,9 @@ public class FullRecursiveIntakeCommand extends SequentialCommandGroup {
         addCommands(
                 new ParallelDeadlineGroup(
                         new WaitUntilCommand(colorSensor::sampleDetected),
-                        new IntakeCommand(intakeSubsystem, () -> -1)
-                ),
+                        new IntakeCommand(intakeSubsystem, () -> -1),
+                        new IntakePivotPositionCommand(intakePivotSubsystem, OperatorPresets.Feeding)
+                        ),
                 new ConditionalCommand(
                         new TransferCommand(
                                 intakePivotSubsystem,

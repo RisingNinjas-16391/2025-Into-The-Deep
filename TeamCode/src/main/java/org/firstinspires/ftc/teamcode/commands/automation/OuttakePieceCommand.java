@@ -15,10 +15,10 @@ public class OuttakePieceCommand extends SequentialCommandGroup {
     public OuttakePieceCommand(ExtendoSubsystem m_extendo, IntakePivotSubsystem m_intakePivot, IntakeSubsystem m_intake) {
         addCommands(
                 new ParallelCommandGroup(
-                        new ExtendoPositionCommand(m_extendo, () -> 40),
+                        new ExtendoPositionCommand(m_extendo, () -> 15),
                         new IntakePivotPositionCommand(m_intakePivot, OperatorPresets.Feeding)
                 ),
-                new IntakeCommand(m_intake, () -> 1)
+                new IntakeCommand(m_intake, () -> 1).withTimeout(0.25)
         );
     }
 }

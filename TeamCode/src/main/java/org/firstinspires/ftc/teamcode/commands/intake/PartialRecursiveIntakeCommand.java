@@ -40,29 +40,29 @@ public class PartialRecursiveIntakeCommand extends SequentialCommandGroup {
 //                                new SequentialCommandGroup(
 //                                    new ExtendoPositionCommand(extendoSubsystem, () -> 20).withTimeout(0.5),
 //                                    new ExtendoPositionCommand(extendoSubsystem, () -> 40).withTimeout(0.5)))
-                ),
-                new ConditionalCommand(
-                        new PartialTransferCommand(
-                                intakePivotSubsystem,
-                                intakeSubsystem,
-                                outtakeClawSubsystem,
-                                elevatorSubsystem,
-                                extendoSubsystem,
-                                outtakePivotSubsystem),
-                        new SequentialCommandGroup(
-                                new IntakeCommand(intakeSubsystem, () -> 1).withTimeout(0.5),
-                                new DeferredCommand(() -> new PartialRecursiveIntakeCommand(
-                                        intakePivotSubsystem,
-                                        intakeSubsystem,
-                                        outtakeClawSubsystem,
-                                        elevatorSubsystem,
-                                        extendoSubsystem,
-                                        outtakePivotSubsystem,
-                                        colorSensor
-                                ), Set.of())
-                        ),
-                        colorSensor::hasCorrectColor
                 )
+//                new ConditionalCommand(
+//                        new PartialTransferCommand(
+//                                intakePivotSubsystem,
+//                                intakeSubsystem,
+//                                outtakeClawSubsystem,
+//                                elevatorSubsystem,
+//                                extendoSubsystem,
+//                                outtakePivotSubsystem),
+//                        new SequentialCommandGroup(
+//                                new IntakeCommand(intakeSubsystem, () -> 1).withTimeout(0.5),
+//                                new DeferredCommand(() -> new PartialRecursiveIntakeCommand(
+//                                        intakePivotSubsystem,
+//                                        intakeSubsystem,
+//                                        outtakeClawSubsystem,
+//                                        elevatorSubsystem,
+//                                        extendoSubsystem,
+//                                        outtakePivotSubsystem,
+//                                        colorSensor
+//                                ), Set.of())
+//                        ),
+//                        colorSensor::hasCorrectColor
+//                )
         );
     }
 }

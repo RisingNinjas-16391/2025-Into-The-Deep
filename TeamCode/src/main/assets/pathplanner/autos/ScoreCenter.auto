@@ -19,7 +19,61 @@
         {
           "type": "named",
           "data": {
-            "name": "RecursiveFeed"
+            "name": "Feed1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1ToDrop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "OuttakePiece"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DropTo2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Feed2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1ToDrop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "OuttakePiece"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "DropTo3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Feed3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1ToDrop"
           }
         }
       ]

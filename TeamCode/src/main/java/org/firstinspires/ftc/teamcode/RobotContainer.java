@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.commands.automation.DropDropCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.DropIntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.OuttakePieceCommand;
@@ -111,7 +112,6 @@ public class RobotContainer {
         //Feeding Controls
         new GamepadButton(m_driverController, GamepadKeys.Button.A).onTrue(new ParallelCommandGroup(
                 new ExtendoPositionCommand(m_extendoSubsystem, () -> 5),
-                new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Feeding),
                 new FullRecursiveIntakeCommand(
                         m_intakePivotSubsystem,
                         m_intakesubsystem,
@@ -124,7 +124,6 @@ public class RobotContainer {
         ));
         new GamepadButton(m_driverController, GamepadKeys.Button.Y).onTrue(new ParallelCommandGroup(
                 new ExtendoPositionCommand(m_extendoSubsystem, () -> 40),
-                new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Feeding),
                 new FullRecursiveIntakeCommand(
                         m_intakePivotSubsystem,
                         m_intakesubsystem,
@@ -225,7 +224,33 @@ public class RobotContainer {
         NamedCommands.registerCommand("DeployFeeder",
                 new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Feeding));
 
-        NamedCommands.registerCommand("RecursiveFeed",
+        NamedCommands.registerCommand("Feed1",
+                new ParallelCommandGroup(
+                        new ExtendoPositionCommand(m_extendoSubsystem, () -> 20),
+                        new PartialRecursiveIntakeCommand(
+                                m_intakePivotSubsystem,
+                                m_intakesubsystem,
+                                m_outtakeClawSubsystem,
+                                m_elevatorSubsystem,
+                                m_extendoSubsystem,
+                                m_outtakePivotSubsystem,
+                                m_colorsensor)
+                ));
+
+        NamedCommands.registerCommand("Feed2",
+                new ParallelCommandGroup(
+                        new ExtendoPositionCommand(m_extendoSubsystem, () -> 30),
+                        new PartialRecursiveIntakeCommand(
+                                m_intakePivotSubsystem,
+                                m_intakesubsystem,
+                                m_outtakeClawSubsystem,
+                                m_elevatorSubsystem,
+                                m_extendoSubsystem,
+                                m_outtakePivotSubsystem,
+                                m_colorsensor)
+                ));
+
+        NamedCommands.registerCommand("Feed3",
                 new ParallelCommandGroup(
                         new ExtendoPositionCommand(m_extendoSubsystem, () -> 40),
                         new PartialRecursiveIntakeCommand(
@@ -242,7 +267,8 @@ public class RobotContainer {
                 new SequentialCommandGroup(
                         new ClawPositionCommand(m_outtakeClawSubsystem, () -> 50),
                         new ElevatorPositionCommand(m_elevatorSubsystem, () -> 50).withTimeout(0.5),
-                        new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> OperatorPresets.ScoreSpecimenBack)));
+                        new WristPositionCommand(m_outtakeWristSubsystem, () -> 180),
+                        new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> OperatorPresets.ScoreSpecimen)));
 
         NamedCommands.registerCommand("HighBarBack", new SequentialCommandGroup(
                 new ElevatorPositionCommand(m_elevatorSubsystem, () -> 10).withTimeout(0.5),
@@ -253,7 +279,6 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("Turn-130",
                 new TurnCommand(m_driveSubsystem, () -> -130));
-
     }
     public Command getAutoCommand(int chooser) {
         switch (chooser) {

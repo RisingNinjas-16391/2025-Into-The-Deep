@@ -6,7 +6,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 
 @Config
 public class DriveConstants {
-    public static double kP = 4.0;
+    public static double kP = 2.0;
     public static double kI = 0.0;
     public static double kD = 0.0;
 
@@ -14,11 +14,11 @@ public class DriveConstants {
     public static double kV = 2.0;
     public static double kA = 0.0;
 
-    public static double HEADING_P = 5.0;
+    public static double HEADING_P = 7.5;
     public static double HEADING_I = 0.0;
     public static double HEADING_D = 0.0;
 
-    public static double TRANSLATION_P = 5.0;
+    public static double TRANSLATION_P = 7.5;
     public static double TRANSLATION_I = 0.0;
     public static double TRANSLATION_D = 0.0;
 

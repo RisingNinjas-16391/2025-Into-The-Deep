@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.4199999972097187,
-        "y": 1.6747356283235058
+        "x": 0.41999999588805653,
+        "y": 1.674818322729398
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.0695117437701533,
+        "x": 1.0410092307671972,
         "y": 1.6747729799049826
       },
       "prevControl": {
-        "x": 0.81951190216873,
-        "y": 1.67505440354162
+        "x": 0.7910092313655548,
+        "y": 1.6747902766912497
       },
       "nextControl": null,
       "isLocked": false,
@@ -55,22 +55,11 @@
           ]
         }
       }
-    },
-    {
-      "name": "",
-      "waypointRelativePos": 0.99,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "HighBarBack"
-        }
-      }
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 1.0,
+    "maxAcceleration": 0.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -78,13 +67,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 0.0
+    "velocity": 0.0,
+    "rotation": 180.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }
