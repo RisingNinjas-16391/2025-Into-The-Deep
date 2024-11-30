@@ -6,9 +6,8 @@ package edu.wpi.first.wpilibj2.command;
 
 import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
 
-import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.util.sendable.SendableBuilder;
+import java.util.function.BooleanSupplier;
 
 /**
  * A command composition that runs one of two commands, depending on the value of the given
@@ -33,6 +32,7 @@ public class ConditionalCommand extends Command {
    * @param onFalse the command to run if the condition is false
    * @param condition the condition to determine which command to run
    */
+  @SuppressWarnings("this-escape")
   public ConditionalCommand(Command onTrue, Command onFalse, BooleanSupplier condition) {
     m_onTrue = requireNonNullParam(onTrue, "onTrue", "ConditionalCommand");
     m_onFalse = requireNonNullParam(onFalse, "onFalse", "ConditionalCommand");
@@ -40,8 +40,8 @@ public class ConditionalCommand extends Command {
 
     CommandScheduler.getInstance().registerComposedCommands(onTrue, onFalse);
 
-    m_requirements.addAll(m_onTrue.getRequirements());
-    m_requirements.addAll(m_onFalse.getRequirements());
+    addRequirements(m_onTrue.getRequirements());
+    addRequirements(m_onFalse.getRequirements());
   }
 
   @Override

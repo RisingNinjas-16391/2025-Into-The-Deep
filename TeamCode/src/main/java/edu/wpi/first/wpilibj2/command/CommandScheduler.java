@@ -6,7 +6,19 @@ package edu.wpi.first.wpilibj2.command;
 
 import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
 
+import com.qualcomm.robotcore.util.RobotLog;
+
+import org.firstinspires.ftc.teamcode.lib.ftclib.opmode.Robot;
+
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.util.sendable.SendableRegistry;
+import edu.wpi.first.wpilibj.event.EventLoop;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -19,13 +31,6 @@ import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.util.sendable.SendableRegistry;
-import edu.wpi.first.wpilibj2.command.event.EventLoop;
-import edu.wpi.first.wpilibj2.command.robot.Robot;
-import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 
 /**
  * The scheduler responsible for running {@link Command}s. A Command-based robot should call {@link
@@ -50,10 +55,6 @@ public final class CommandScheduler implements Sendable, AutoCloseable {
       instance = new CommandScheduler();
     }
     return instance;
-  }
-
-  public synchronized void reset() {
-    instance = null;
   }
 
   private static final Optional<Command> kNoInterruptor = Optional.empty();
@@ -91,13 +92,34 @@ public final class CommandScheduler implements Sendable, AutoCloseable {
   private final List<Optional<Command>> m_toCancelInterruptors = new ArrayList<>();
   private final Set<Command> m_endingCommands = new LinkedHashSet<>();
 
+//  private final Watchdog m_watchdog = new Watchdog(TimedRobot.kDefaultPeriod, () -> {});
+
   CommandScheduler() {
-    SendableRegistry.addLW(this, "Scheduler");
+//    HAL.report(tResourceType.kResourceType_Command, tInstances.kCommand2_Scheduler);
+//    SendableRegistry.addLW(this, "Scheduler");
+//    LiveWindow.setEnabledListener(
+//        () -> {
+//          disable();
+//          cancelAll();
+//        });
+//    LiveWindow.setDisabledListener(this::enable);
+  }
+
+  /**
+   * Changes the period of the loop overrun watchdog. This should be kept in sync with the
+   * TimedRobot period.
+   *
+   * @param period Period in seconds.
+   */
+  public void setPeriod(double period) {
+//    m_watchdog.setTimeout(period);
   }
 
   @Override
   public void close() {
     SendableRegistry.remove(this);
+//    LiveWindow.setEnabledListener(null);
+//    LiveWindow.setDisabledListener(null);
   }
 
   /**
@@ -143,6 +165,8 @@ public final class CommandScheduler implements Sendable, AutoCloseable {
     for (Consumer<Command> action : m_initActions) {
       action.accept(command);
     }
+
+//    m_watchdog.addEpoch(command.getName() + ".initialize()");
   }
 
   /**
@@ -155,7 +179,7 @@ public final class CommandScheduler implements Sendable, AutoCloseable {
    */
   private void schedule(Command command) {
     if (command == null) {
-//      DriverStation.reportWarning("Tried to schedule a null command", true);
+      RobotLog.w("Tried to schedule a null command", true);
       return;
     }
     if (m_inRunLoop) {
@@ -227,10 +251,15 @@ public final class CommandScheduler implements Sendable, AutoCloseable {
     if (m_disabled) {
       return;
     }
+//    m_watchdog.reset();
 
     // Run the periodic method of all registered subsystems.
     for (Subsystem subsystem : m_subsystems.keySet()) {
       subsystem.periodic();
+//      if (RobotBase.isSimulation()) {
+//        subsystem.simulationPeriodic();
+//      }
+//      m_watchdog.addEpoch(subsystem.getName() + ".periodic()");
     }
 
     // Cache the active instance to avoid concurrency problems if setActiveLoop() is called from
@@ -238,6 +267,7 @@ public final class CommandScheduler implements Sendable, AutoCloseable {
     EventLoop loopCache = m_activeButtonLoop;
     // Poll buttons for new commands to add.
     loopCache.poll();
+//    m_watchdog.addEpoch("buttons.run()");
 
     m_inRunLoop = true;
     boolean isDisabled = Robot.isDisabled();
@@ -254,6 +284,7 @@ public final class CommandScheduler implements Sendable, AutoCloseable {
       for (Consumer<Command> action : m_executeActions) {
         action.accept(command);
       }
+//      m_watchdog.addEpoch(command.getName() + ".execute()");
       if (command.isFinished()) {
         m_endingCommands.add(command);
         command.end(false);
@@ -264,6 +295,7 @@ public final class CommandScheduler implements Sendable, AutoCloseable {
         iterator.remove();
 
         m_requirements.keySet().removeAll(command.getRequirements());
+//        m_watchdog.addEpoch(command.getName() + ".end(false)");
       }
     }
     m_inRunLoop = false;
@@ -288,6 +320,12 @@ public final class CommandScheduler implements Sendable, AutoCloseable {
         schedule(subsystemCommand.getValue());
       }
     }
+
+//    m_watchdog.disable();
+//    if (m_watchdog.isExpired()) {
+//      System.out.println("CommandScheduler loop overrun");
+//      m_watchdog.printEpochs();
+//    }
   }
 
   /**
@@ -300,11 +338,11 @@ public final class CommandScheduler implements Sendable, AutoCloseable {
   public void registerSubsystem(Subsystem... subsystems) {
     for (Subsystem subsystem : subsystems) {
       if (subsystem == null) {
-//        DriverStation.reportWarning("Tried to register a null subsystem", true);
+        RobotLog.w("Tried to register a null subsystem", true);
         continue;
       }
       if (m_subsystems.containsKey(subsystem)) {
-//        DriverStation.reportWarning("Tried to register an already-registered subsystem", true);
+        RobotLog.w("Tried to register an already-registered subsystem", true);
         continue;
       }
       m_subsystems.put(subsystem, null);
@@ -342,11 +380,11 @@ public final class CommandScheduler implements Sendable, AutoCloseable {
    */
   public void setDefaultCommand(Subsystem subsystem, Command defaultCommand) {
     if (subsystem == null) {
-//      DriverStation.reportWarning("Tried to set a default command for a null subsystem", true);
+      RobotLog.w("Tried to set a default command for a null subsystem", true);
       return;
     }
     if (defaultCommand == null) {
-//      DriverStation.reportWarning("Tried to set a null default command", true);
+      RobotLog.w("Tried to set a null default command", true);
       return;
     }
 
@@ -357,10 +395,10 @@ public final class CommandScheduler implements Sendable, AutoCloseable {
     }
 
     if (defaultCommand.getInterruptionBehavior() == InterruptionBehavior.kCancelIncoming) {
-//      DriverStation.reportWarning(
-//          "Registering a non-interruptible default command!\n"
-//              + "This will likely prevent any other commands from requiring this subsystem.",
-//          true);
+      RobotLog.w(
+          "Registering a non-interruptible default command!\n"
+              + "This will likely prevent any other commands from requiring this subsystem.",
+          true);
       // Warn, but allow -- there might be a use case for this.
     }
 
@@ -376,7 +414,7 @@ public final class CommandScheduler implements Sendable, AutoCloseable {
    */
   public void removeDefaultCommand(Subsystem subsystem) {
     if (subsystem == null) {
-//      DriverStation.reportWarning("Tried to remove a default command for a null subsystem", true);
+      RobotLog.w("Tried to remove a default command for a null subsystem", true);
       return;
     }
 
@@ -421,7 +459,7 @@ public final class CommandScheduler implements Sendable, AutoCloseable {
    */
   private void cancel(Command command, Optional<Command> interruptor) {
     if (command == null) {
-//      DriverStation.reportWarning("Tried to cancel a null command", true);
+      RobotLog.w("Tried to cancel a null command", true);
       return;
     }
     if (m_endingCommands.contains(command)) {
@@ -444,6 +482,7 @@ public final class CommandScheduler implements Sendable, AutoCloseable {
     m_endingCommands.remove(command);
     m_scheduledCommands.remove(command);
     m_requirements.keySet().removeAll(command.getRequirements());
+//    m_watchdog.addEpoch(command.getName() + ".end(true)");
   }
 
   /** Cancels all commands that are currently scheduled. */
@@ -457,11 +496,28 @@ public final class CommandScheduler implements Sendable, AutoCloseable {
    * scheduled by the scheduler; it will not work on commands inside compositions, as the scheduler
    * does not see them.
    *
-   * @param commands the command to query
-   * @return whether the command is currently scheduled
+   * @param commands multiple commands to check
+   * @return whether all of the commands are currently scheduled
    */
   public boolean isScheduled(Command... commands) {
-    return m_scheduledCommands.containsAll(Set.of(commands));
+    for (var cmd : commands) {
+      if (!isScheduled(cmd)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Whether the given commands are running. Note that this only works on commands that are directly
+   * scheduled by the scheduler; it will not work on commands inside compositions, as the scheduler
+   * does not see them.
+   *
+   * @param command a single command to check
+   * @return whether all of the commands are currently scheduled
+   */
+  public boolean isScheduled(Command command) {
+    return m_scheduledCommands.contains(command);
   }
 
   /**
@@ -484,6 +540,11 @@ public final class CommandScheduler implements Sendable, AutoCloseable {
   /** Enables the command scheduler. */
   public void enable() {
     m_disabled = false;
+  }
+
+  /** Prints list of epochs added so far and their times. */
+  public void printWatchdogEpochs() {
+//    m_watchdog.printEpochs();
   }
 
   /**
@@ -585,6 +646,23 @@ public final class CommandScheduler implements Sendable, AutoCloseable {
   }
 
   /**
+   * Strip additional leading stack trace elements that are in the framework package.
+   *
+   * @param stacktrace the original stacktrace
+   * @return the stacktrace stripped of leading elements so there is at max one leading element from
+   *     the edu.wpi.first.wpilibj2.command package.
+   */
+  private StackTraceElement[] stripFrameworkStackElements(StackTraceElement[] stacktrace) {
+    int i = stacktrace.length - 1;
+    for (; i > 0; i--) {
+      if (stacktrace[i].getClassName().startsWith("edu.wpi.first.wpilibj2.command.")) {
+        break;
+      }
+    }
+    return Arrays.copyOfRange(stacktrace, i, stacktrace.length);
+  }
+
+  /**
    * Requires that the specified command hasn't already been added to a composition.
    *
    * @param commands The commands to check
@@ -594,12 +672,28 @@ public final class CommandScheduler implements Sendable, AutoCloseable {
     for (var command : commands) {
       var exception = m_composedCommands.getOrDefault(command, null);
       if (exception != null) {
-        throw new IllegalArgumentException(
+        exception.setStackTrace(stripFrameworkStackElements(exception.getStackTrace()));
+        var buffer = new StringWriter();
+        var writer = new PrintWriter(buffer);
+        writer.println(
             "Commands that have been composed may not be added to another composition or scheduled "
-                + "individually!",
-            exception);
+                + "individually!");
+        exception.printStackTrace(writer);
+        var thrownException = new IllegalArgumentException(buffer.toString());
+        thrownException.setStackTrace(stripFrameworkStackElements(thrownException.getStackTrace()));
+        throw thrownException;
       }
     }
+  }
+
+  /**
+   * Requires that the specified commands have not already been added to a composition.
+   *
+   * @param commands The commands to check
+   * @throws IllegalArgumentException if the given commands have already been composed.
+   */
+  public void requireNotComposed(Collection<Command> commands) {
+    requireNotComposed(commands.toArray(new Command[0]));
   }
 
   /**

@@ -6,6 +6,7 @@ package edu.wpi.first.wpilibj2.command;
 
 import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
 
+import edu.wpi.first.wpilibj.Timer;
 import java.util.function.BooleanSupplier;
 
 /**
@@ -24,6 +25,19 @@ public class WaitUntilCommand extends Command {
    */
   public WaitUntilCommand(BooleanSupplier condition) {
     m_condition = requireNonNullParam(condition, "condition", "WaitUntilCommand");
+  }
+
+  /**
+   * Creates a new WaitUntilCommand that ends after a given match time.
+   *
+   * <p>NOTE: The match timer used for this command is UNOFFICIAL. Using this command does NOT
+   * guarantee that the time at which the action is performed will be judged to be legal by the
+   * referees. When in doubt, add a safety factor or time the action manually.
+   *
+   * @param time the match time after which to end, in seconds
+   */
+  public WaitUntilCommand(double time) {
+    this(() -> Timer.getMatchTime() - time > 0);
   }
 
   @Override

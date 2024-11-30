@@ -6,13 +6,11 @@ package edu.wpi.first.wpilibj2.command.button;
 
 import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
 
-import java.util.function.BooleanSupplier;
-
 import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
-import edu.wpi.first.wpilibj2.command.event.EventLoop;
+import java.util.function.BooleanSupplier;
 
 /**
  * This class provides an easy way to link commands to conditions.
@@ -49,6 +47,32 @@ public class Trigger implements BooleanSupplier {
    */
   public Trigger(BooleanSupplier condition) {
     this(CommandScheduler.getInstance().getDefaultButtonLoop(), condition);
+  }
+
+  /**
+   * Starts the command when the condition changes.
+   *
+   * @param command the command to start
+   * @return this trigger, so calls can be chained
+   */
+  public Trigger onChange(Command command) {
+    requireNonNullParam(command, "command", "onChange");
+    m_loop.bind(
+        new Runnable() {
+          private boolean m_pressedLast = m_condition.getAsBoolean();
+
+          @Override
+          public void run() {
+            boolean pressed = m_condition.getAsBoolean();
+
+            if (m_pressedLast != pressed) {
+              command.schedule();
+            }
+
+            m_pressedLast = pressed;
+          }
+        });
+    return this;
   }
 
   /**
@@ -108,7 +132,7 @@ public class Trigger implements BooleanSupplier {
    * changes to `false`.
    *
    * <p>Doesn't re-start the command if it ends while the condition is still `true`. If the command
-   * should restart, see {@link RepeatCommand}.
+   * should restart, see {@link edu.wpi.first.wpilibj2.command.RepeatCommand}.
    *
    * @param command the command to start
    * @return this trigger, so calls can be chained
@@ -140,7 +164,7 @@ public class Trigger implements BooleanSupplier {
    * condition changes to `true`.
    *
    * <p>Doesn't re-start the command if it ends while the condition is still `false`. If the command
-   * should restart, see {@link RepeatCommand}.
+   * should restart, see {@link edu.wpi.first.wpilibj2.command.RepeatCommand}.
    *
    * @param command the command to start
    * @return this trigger, so calls can be chained
@@ -239,7 +263,7 @@ public class Trigger implements BooleanSupplier {
    * @return A trigger which is active when both component triggers are active.
    */
   public Trigger and(BooleanSupplier trigger) {
-    return new Trigger(() -> m_condition.getAsBoolean() && trigger.getAsBoolean());
+    return new Trigger(m_loop, () -> m_condition.getAsBoolean() && trigger.getAsBoolean());
   }
 
   /**
@@ -249,7 +273,7 @@ public class Trigger implements BooleanSupplier {
    * @return A trigger which is active when either component trigger is active.
    */
   public Trigger or(BooleanSupplier trigger) {
-    return new Trigger(() -> m_condition.getAsBoolean() || trigger.getAsBoolean());
+    return new Trigger(m_loop, () -> m_condition.getAsBoolean() || trigger.getAsBoolean());
   }
 
   /**
@@ -259,7 +283,7 @@ public class Trigger implements BooleanSupplier {
    * @return the negated trigger
    */
   public Trigger negate() {
-    return new Trigger(() -> !m_condition.getAsBoolean());
+    return new Trigger(m_loop, () -> !m_condition.getAsBoolean());
   }
 
   /**
@@ -283,6 +307,7 @@ public class Trigger implements BooleanSupplier {
    */
   public Trigger debounce(double seconds, Debouncer.DebounceType type) {
     return new Trigger(
+        m_loop,
         new BooleanSupplier() {
           final Debouncer m_debouncer = new Debouncer(seconds, type);
 

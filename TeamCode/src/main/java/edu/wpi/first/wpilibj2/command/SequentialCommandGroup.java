@@ -4,10 +4,9 @@
 
 package edu.wpi.first.wpilibj2.command;
 
+import edu.wpi.first.util.sendable.SendableBuilder;
 import java.util.ArrayList;
 import java.util.List;
-
-import edu.wpi.first.util.sendable.SendableBuilder;
 
 /**
  * A command composition that runs a list of commands in sequence.
@@ -30,6 +29,7 @@ public class SequentialCommandGroup extends Command {
    *
    * @param commands the commands to include in this composition.
    */
+  @SuppressWarnings("this-escape")
   public SequentialCommandGroup(Command... commands) {
     addCommands(commands);
   }
@@ -39,6 +39,7 @@ public class SequentialCommandGroup extends Command {
    *
    * @param commands Commands to add, in order of execution.
    */
+  @SuppressWarnings("PMD.UseArraysAsList")
   public final void addCommands(Command... commands) {
     if (m_currentCommandIndex != -1) {
       throw new IllegalStateException(
@@ -49,7 +50,7 @@ public class SequentialCommandGroup extends Command {
 
     for (Command command : commands) {
       m_commands.add(command);
-      m_requirements.addAll(command.getRequirements());
+      addRequirements(command.getRequirements());
       m_runWhenDisabled &= command.runsWhenDisabled();
       if (command.getInterruptionBehavior() == InterruptionBehavior.kCancelSelf) {
         m_interruptBehavior = InterruptionBehavior.kCancelSelf;
