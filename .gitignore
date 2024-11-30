@@ -80,4 +80,5 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 
-TeamCode/src/main/jniLibs
+TeamCode/src/main/jniLibs/**/*.so
+TeamCode/src/main/jniLibs/**/*.zip
