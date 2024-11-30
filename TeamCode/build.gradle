@@ -12,10 +12,14 @@
 // Custom definitions may go here
 plugins {
     id 'com.github.johnrengelman.shadow' version '8.1.1'
-    id "edu.wpi.first.GradleRIO" version "2024.3.2"
+    id "edu.wpi.first.GradleRIO" version "2025.1.1-beta-1"
     id 'edu.wpi.first.WpilibTools' version '1.3.0'
 }
 
+wpi.maven.useLocal = false
+wpi.maven.useDevelopment = true
+wpi.versions.wpilibVersion = '2025.+'
+wpi.versions.wpimathVersion = '2025.+'
 wpilibTools.deps.wpilibVersion = wpi.versions.wpilibVersion.get()
 
 def nativeConfigName = 'wpilibNatives'

@@ -15,7 +15,6 @@ import edu.wpi.first.math.interpolation.Interpolatable;
 import edu.wpi.first.math.interpolation.TimeInterpolatableBuffer;
 import edu.wpi.first.math.kinematics.Kinematics;
 import edu.wpi.first.math.kinematics.Odometry;
-import edu.wpi.first.math.kinematics.WheelPositions;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import java.util.Map;
@@ -37,7 +36,7 @@ import java.util.Objects;
  *
  * @param <T> Wheel positions type.
  */
-public class PoseEstimator<T extends WheelPositions<T>> {
+public class PoseEstimator<T> {
     private final Kinematics<?, T> m_kinematics;
     private final Odometry<T> m_odometry;
     private final Matrix<N3, N1> m_q = new Matrix<>(Nat.N3(), Nat.N1());
@@ -252,7 +251,7 @@ public class PoseEstimator<T extends WheelPositions<T>> {
         m_odometry.update(gyroAngle, wheelPositions);
         m_poseBuffer.addSample(
                 currentTimeSeconds,
-                new InterpolationRecord(getEstimatedPosition(), gyroAngle, wheelPositions.copy()));
+                new InterpolationRecord(getEstimatedPosition(), gyroAngle, wheelPositions));
 
         return getEstimatedPosition();
     }
@@ -300,7 +299,7 @@ public class PoseEstimator<T extends WheelPositions<T>> {
                 return endValue;
             } else {
                 // Find the new wheel distances.
-                var wheelLerp = wheelPositions.interpolate(endValue.wheelPositions, t);
+                var wheelLerp = endValue.wheelPositions;
 
                 // Find the new gyro angle.
                 var gyroLerp = gyroAngle.interpolate(endValue.gyroAngle, t);

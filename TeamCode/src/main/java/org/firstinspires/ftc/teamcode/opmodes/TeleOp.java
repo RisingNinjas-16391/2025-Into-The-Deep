@@ -7,6 +7,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 import org.firstinspires.ftc.teamcode.lib.ftclib.opmode.CommandOpMode;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTablesJNI;
+
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp", group = "Teleop")
 public class TeleOp extends CommandOpMode {
     private Telemetry m_telemetry;
@@ -15,12 +18,18 @@ public class TeleOp extends CommandOpMode {
     public void robotInit() {
         m_telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         new RobotContainer(hardwareMap, m_telemetry, gamepad1, gamepad2, 0); //Uses heavily modified untested hardware
+
+
+        NetworkTableInstance.getDefault().startServer();
+
+        NetworkTableInstance.getDefault().getEntry("topic").setBoolean(true);
     }
 
     @Override
     public void robotPeriodic() {
         super.robotPeriodic();
         m_telemetry.update();
+
     }
 
 }

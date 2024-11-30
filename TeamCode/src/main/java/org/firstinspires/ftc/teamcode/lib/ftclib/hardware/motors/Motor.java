@@ -369,7 +369,7 @@ public class Motor implements HardwareDevice {
      * @return the feedforward coefficients
      */
     public double[] getFeedforwardCoefficients() {
-        return new double[]{feedforward.ks, feedforward.kv, feedforward.ka};
+        return new double[]{feedforward.getKs(), feedforward.getKv(), feedforward.getKa()};
     }
 
     /**

@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 import edu.wpi.first.cscore.CameraServerJNI;
-import edu.wpi.first.math.WPIMathJNI;
+import edu.wpi.first.math.jni.WPIMathJNI;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTablesJNI;
 import edu.wpi.first.util.CombinedRuntimeLoader;

@@ -32,7 +32,7 @@ import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Voltage;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -295,7 +295,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return new MotorEx[]{m_frontLeftMotor, m_frontRightMotor, m_backLeftMotor, m_backRightMotor};
     }
 
-    public void setMotorVoltage(Measure<Voltage> volts) {
+    public void setMotorVoltage(Voltage volts) {
         m_frontLeftMotor.setVoltage(volts.in(Volts));
         m_frontRightMotor.setVoltage(volts.in(Volts));
         m_backLeftMotor.setVoltage(volts.in(Volts));
@@ -310,7 +310,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         m_turnPIDController.setPID(DriveConstants.HEADING_P, DriveConstants.HEADING_I, DriveConstants.HEADING_D);
 
-        if (m_feedforward.ks != DriveConstants.kS || m_feedforward.kv != DriveConstants.kV || m_feedforward.ka != DriveConstants.kA) {
+        if (m_feedforward.getKs() != DriveConstants.kS || m_feedforward.getKv() != DriveConstants.kV || m_feedforward.getKa() != DriveConstants.kA) {
             m_feedforward = new SimpleMotorFeedforward(DriveConstants.kS, DriveConstants.kV, DriveConstants.kS);
         }
     }

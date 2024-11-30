@@ -4,7 +4,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.commands.automation.DropDropCommand;
@@ -15,7 +14,6 @@ import org.firstinspires.ftc.teamcode.commands.automation.TopTransferCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.TransferCommand;
 import org.firstinspires.ftc.teamcode.commands.claw.ClawPositionCommand;
 import org.firstinspires.ftc.teamcode.commands.drivetrain.DriveCommand;
-import org.firstinspires.ftc.teamcode.commands.drivetrain.DrivetrainSysIDCommand;
 import org.firstinspires.ftc.teamcode.commands.drivetrain.TurnCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.FullRecursiveIntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.IntakeCommand;
@@ -44,12 +42,8 @@ import org.firstinspires.ftc.teamcode.subsystems.wrist.WristSubsystem;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class RobotContainer {
     private final DrivetrainSubsystem m_driveSubsystem;
