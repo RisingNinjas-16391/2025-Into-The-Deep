@@ -248,7 +248,6 @@ public class RobotContainer {
                 new ElevatorPositionCommand(m_elevatorSubsystem, () -> 10).withTimeout(0.5),
                 new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90)));
 
-
         NamedCommands.registerCommand("OuttakePiece",
                 new OuttakePieceCommand(m_extendoSubsystem, m_intakePivotSubsystem, m_intakesubsystem));
 

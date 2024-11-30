@@ -12,7 +12,7 @@ public class IntakePivotPositionCommand extends Command {
         m_intakePivot = pivot;
         m_position = position;
 
-//        addRequirements(pivot);
+        addRequirements(pivot);
     }
 
     @Override
