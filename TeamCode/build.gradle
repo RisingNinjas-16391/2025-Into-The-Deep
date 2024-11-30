@@ -70,3 +70,14 @@ dependencies {
 
     implementation group: "us.hebi.quickbuf", name: "quickbuf-runtime", version: wpi.versions.quickbufVersion.get();
 }
+
+tasks.register('PullWPILibLibraries') {
+    def f = file('src/main/jniLibs/arm64-v8a/libraries.zip')
+
+    new URL('https://github.com/RisingNinjas-16391/wpilib_android/releases/latest/download/libraries.zip').withInputStream{ i -> f.withOutputStream{ it << i }}
+
+    copy {
+        from zipTree(f)
+        into 'src/main/jniLibs/arm64-v8a'
+    }
+}
