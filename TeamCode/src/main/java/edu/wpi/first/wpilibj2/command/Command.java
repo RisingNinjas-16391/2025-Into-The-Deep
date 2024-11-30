@@ -4,16 +4,18 @@
 
 package edu.wpi.first.wpilibj2.command;
 
+import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.BooleanSupplier;
-
+import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.util.function.BooleanConsumer;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.util.sendable.SendableRegistry;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.BooleanSupplier;
 
 /**
  * A state machine representing a complete action to be performed by the robot. Commands are run by
@@ -27,7 +29,7 @@ import edu.wpi.first.util.sendable.SendableRegistry;
  */
 public abstract class Command implements Sendable {
   /** Requirements set. */
-  protected Set<Subsystem> m_requirements = new HashSet<>();
+  private final Set<Subsystem> m_requirements = new HashSet<>();
 
   /** Default constructor. */
   @SuppressWarnings("this-escape")
@@ -95,6 +97,19 @@ public abstract class Command implements Sendable {
   }
 
   /**
+   * Adds the specified subsystems to the requirements of the command. The scheduler will prevent
+   * two commands that require the same subsystem from being scheduled simultaneously.
+   *
+   * <p>Note that the scheduler determines the requirements of a command when it is scheduled, so
+   * this method should normally be called from the command's constructor.
+   *
+   * @param requirements the requirements to add
+   */
+  public final void addRequirements(Collection<Subsystem> requirements) {
+    m_requirements.addAll(requirements);
+  }
+
+  /**
    * Gets the name of this Command.
    *
    * <p>By default, the simple class name is used. This can be changed with {@link
@@ -148,6 +163,23 @@ public abstract class Command implements Sendable {
    */
   public ParallelRaceGroup withTimeout(double seconds) {
     return raceWith(new WaitCommand(seconds));
+  }
+
+  /**
+   * Decorates this command with a timeout. If the specified timeout is exceeded before the command
+   * finishes normally, the command will be interrupted and un-scheduled.
+   *
+   * <p>Note: This decorator works by adding this command to a composition. The command the
+   * decorator was called on cannot be scheduled independently or be added to a different
+   * composition (namely, decorators), unless it is manually cleared from the list of composed
+   * commands with {@link CommandScheduler#removeComposedCommand(Command)}. The command composition
+   * returned from this method can be further decorated without issue.
+   *
+   * @param time the timeout duration
+   * @return the command with the timeout added
+   */
+  public ParallelRaceGroup withTimeout(Time time) {
+    return withTimeout(time.in(Seconds));
   }
 
   /**
@@ -266,10 +298,11 @@ public abstract class Command implements Sendable {
    * commands with {@link CommandScheduler#removeComposedCommand(Command)}. The command composition
    * returned from this method can be further decorated without issue.
    *
-   * @param parallel the commands to run in parallel
+   * @param parallel the commands to run in parallel. Note the parallel commands will be interrupted
+   *     when the deadline command ends
    * @return the decorated command
    */
-  public ParallelDeadlineGroup deadlineWith(Command... parallel) {
+  public ParallelDeadlineGroup deadlineFor(Command... parallel) {
     return new ParallelDeadlineGroup(this, parallel);
   }
 
@@ -330,11 +363,16 @@ public abstract class Command implements Sendable {
   }
 
   /**
-   * Decorates this command to run "by proxy" by wrapping it in a {@link ProxyCommand}. This is
-   * useful for "forking off" from command compositions when the user does not wish to extend the
-   * command's requirements to the entire command composition.
+   * Decorates this command to run "by proxy" by wrapping it in a {@link ProxyCommand}. Use this for
+   * "forking off" from command compositions when the user does not wish to extend the command's
+   * requirements to the entire command composition. ProxyCommand has unique implications and
+   * semantics, see the WPILib docs for a full explanation.
    *
    * @return the decorated command
+   * @see ProxyCommand
+   * @see <a
+   *     href="https://docs.wpilib.org/en/stable/docs/software/commandbased/command-compositions.html#scheduling-other-commands">WPILib
+   *     docs</a>
    */
   public ProxyCommand asProxy() {
     return new ProxyCommand(this);

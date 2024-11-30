@@ -6,10 +6,9 @@ package edu.wpi.first.wpilibj2.command;
 
 import static edu.wpi.first.util.ErrorMessages.requireNonNullParam;
 
+import edu.wpi.first.util.sendable.SendableBuilder;
 import java.util.Map;
 import java.util.function.Supplier;
-
-import edu.wpi.first.util.sendable.SendableBuilder;
 
 /**
  * A command composition that runs one of a selection of commands using a selector and a key to
@@ -39,6 +38,7 @@ public class SelectCommand<K> extends Command {
    * @param commands the map of commands to choose from
    * @param selector the selector to determine which command to run
    */
+  @SuppressWarnings("this-escape")
   public SelectCommand(Map<K, Command> commands, Supplier<? extends K> selector) {
     m_commands = requireNonNullParam(commands, "commands", "SelectCommand");
     m_selector = requireNonNullParam(selector, "selector", "SelectCommand");
@@ -48,7 +48,7 @@ public class SelectCommand<K> extends Command {
         .registerComposedCommands(commands.values().toArray(new Command[] {}));
 
     for (Command command : m_commands.values()) {
-      m_requirements.addAll(command.getRequirements());
+      addRequirements(command.getRequirements());
       m_runsWhenDisabled &= command.runsWhenDisabled();
       if (command.getInterruptionBehavior() == InterruptionBehavior.kCancelSelf) {
         m_interruptBehavior = InterruptionBehavior.kCancelSelf;

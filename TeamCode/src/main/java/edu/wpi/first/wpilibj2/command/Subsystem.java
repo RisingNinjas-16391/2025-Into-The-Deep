@@ -34,6 +34,13 @@ public interface Subsystem {
   default void periodic() {}
 
   /**
+   * This method is called periodically by the {@link CommandScheduler}. Useful for updating
+   * subsystem-specific state that needs to be maintained for simulations, such as for updating
+   * {@link edu.wpi.first.wpilibj.simulation} classes and setting simulated sensor readings.
+   */
+  default void simulationPeriodic() {}
+
+  /**
    * Gets the subsystem name of this Subsystem.
    *
    * @return Subsystem name
@@ -137,6 +144,18 @@ public interface Subsystem {
    */
   default Command runEnd(Runnable run, Runnable end) {
     return Commands.runEnd(run, end, this);
+  }
+
+  /**
+   * Constructs a command that runs an action once and then runs another action every iteration
+   * until interrupted. Requires this subsystem.
+   *
+   * @param start the action to run on start
+   * @param run the action to run every iteration
+   * @return the command
+   */
+  default Command startRun(Runnable start, Runnable run) {
+    return Commands.startRun(start, run, this);
   }
 
   /**
