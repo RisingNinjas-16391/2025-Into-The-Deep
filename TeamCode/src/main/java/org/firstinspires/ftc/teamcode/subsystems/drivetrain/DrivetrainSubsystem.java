@@ -167,7 +167,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_timer = new Timer();
         m_timer.start();
 
-        forceOdometry(new Pose2d(new Translation2d(0.15, 1.66), new Rotation2d()));
+        //forceOdometry(new Pose2d(new Translation2d(0.15, 1.66), Rotation2d.fromDegrees(180)));
     }
 
     @Override
