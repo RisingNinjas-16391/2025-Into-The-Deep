@@ -8,36 +8,36 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.6637348146651489,
-        "y": 1.2841449466001849
+        "x": 0.579588923075791,
+        "y": 1.2013809230745767
       },
       "isLocked": false,
       "linkedName": "ScoreCenter"
     },
     {
       "anchor": {
-        "x": 0.7267473309594348,
-        "y": 1.4014291814919249
+        "x": 1.0410092307671972,
+        "y": 0.9566030769212085
       },
       "prevControl": {
-        "x": 1.0956921671764053,
-        "y": 1.5955709817990082
+        "x": 0.746035804585885,
+        "y": 0.9693174487393685
       },
       "nextControl": {
-        "x": 0.5055079663203806,
-        "y": 1.2850112123715711
+        "x": 1.3673796923050214,
+        "y": 0.9425353846135437
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.7267473309594348,
-        "y": 0.8026761565820625
+        "x": 1.502429538458604,
+        "y": 0.5824024615373243
       },
       "prevControl": {
-        "x": 1.0247624207485104,
-        "y": 1.5097437948162575
+        "x": 1.4270023156000744,
+        "y": 0.8207524857702783
       },
       "nextControl": null,
       "isLocked": false,
@@ -50,14 +50,14 @@
   "eventMarkers": [
     {
       "name": "DeployFeeder",
-      "waypointRelativePos": 0.10348706411698179,
+      "waypointRelativePos": 0.05,
       "endWaypointRelativePos": null,
       "command": null
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 1.0,
+    "maxAcceleration": 0.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -65,13 +65,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -30.364271000160365
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }
