@@ -9,6 +9,7 @@ import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.FlippingUtil;
+import com.qualcomm.robotcore.eventloop.opmode.OpModeRegistrar;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.RobotLog;
 
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.*;
@@ -374,7 +376,7 @@ public class AutoBuilder {
       throw new AutoBuilderException(
           "Auto builder was used to build a pathfinding command before being configured");
     }
-
+    OpModeRegistrar
     return pathfindThenFollowPathCommandBuilder.apply(goalPath, pathfindingConstraints);
   }
 
@@ -461,25 +463,23 @@ public class AutoBuilder {
 //    return chooser;
 //  }
 //
-//  /**
-//   * Get a list of all auto names in the project
-//   *
-//   * @return List of all auto names
-//   */
-//  public static List<String> getAllAutoNames() {
-//    File[] autoFiles = new File(Filesystem.getDeployDirectory(), "pathplanner/autos").listFiles();
-//
-//    if (autoFiles == null) {
-//      return new ArrayList<>();
-//    }
-//
-//    return Stream.of(autoFiles)
-//        .filter(file -> !file.isDirectory())
-//        .map(File::getName)
-//        .filter(name -> name.endsWith(".auto"))
-//        .map(name -> name.substring(0, name.lastIndexOf(".")))
-//        .collect(Collectors.toList());
-//  }
+  /**
+   * Get a list of all auto names in the project
+   *
+   * @return List of all auto names
+   */
+  public static List<String> getAllAutoNames() throws IOException {
+    String[] autoFiles = hardwareMap.appContext.getAssets().list("pathplanner/autos");
+
+    if (autoFiles == null) {
+      return new ArrayList<>();
+    }
+
+    return Stream.of(autoFiles)
+            .filter(name -> name.endsWith(".auto"))
+            .map(name -> name.substring(0, name.lastIndexOf(".")))
+            .collect(Collectors.toList());
+  }
 
   /**
    * Get if AutoBuilder was configured for a holonomic drive train
