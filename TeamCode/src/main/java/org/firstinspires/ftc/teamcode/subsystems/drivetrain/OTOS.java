@@ -17,8 +17,6 @@ public class OTOS {
     private Pose2d pose = new Pose2d();
     private Pose2d poseVel = new Pose2d();
 
-    private Transform2d offset = new Transform2d(0, 0, Rotation2d.fromDegrees(0));
-
     public OTOS(HardwareMap hardwareMap) {
         myOtos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
 
@@ -31,17 +29,11 @@ public class OTOS {
 
         SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(0.120, -0.060, Math.toRadians(270));
         myOtos.setOffset(offset);
-//        48.0 / 44.88
-//        48.0 / 42.91
-//        43.7
-//        43.7
+
         myOtos.setLinearScalar(DriveConstants.LINEAR_SCALAR);
         myOtos.setAngularScalar(DriveConstants.ANGULAR_SCALAR);
 
         myOtos.calibrateImu();
-
-//        SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(0, 0, 0);
-//        myOtos.setPosition(currentPosition);
     }
 
     public Pose2d getPose() {
@@ -61,8 +53,6 @@ public class OTOS {
     }
 
     public void setPosition(Pose2d pose) {
-//        myOtos.resetTracking();
-//        offset = new Transform2d(getPose(), pose);
         myOtos.setPosition(Pose2dtoOTOSPose2d(pose));
     }
 

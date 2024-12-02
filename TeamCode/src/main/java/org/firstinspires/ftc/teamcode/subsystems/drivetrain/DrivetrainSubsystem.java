@@ -47,17 +47,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /** Represents a mecanum drive style drivetrain. */
 public class DrivetrainSubsystem extends SubsystemBase {
-    public static final double kMaxSpeed = 1.5; // 3 meters per second
-    public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
-
     private final MotorEx m_frontLeftMotor;
     private final MotorEx m_frontRightMotor;
     private final MotorEx m_backLeftMotor;
     private final MotorEx m_backRightMotor;
 
     private final OTOS m_otos;
-
-    private ChassisSpeeds robotRelativeSpeeds = new ChassisSpeeds();
 
     private final MecanumDriveKinematics m_kinematics;
 
@@ -67,21 +62,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
     private final MecanumDriveWheelSpeeds m_wheelSpeeds;
     private MecanumDriveWheelSpeeds m_desiredWheelSpeeds;
 
-    private ChassisSpeeds m_desiredChassisSpeeds;
+    private ChassisSpeeds robotRelativeSpeeds = new ChassisSpeeds();
 
-    // Gains are for example purposes only - must be determined for your own robot!
     private SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(DriveConstants.kS, DriveConstants.kV, DriveConstants.kA);
 
     private final PIDController m_frontLeftPIDController = new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
     private final PIDController m_frontRightPIDController = new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
     private final PIDController m_backLeftPIDController = new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
     private final PIDController m_backRightPIDController = new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
-
-    private final PIDController m_turnPIDController = new PIDController(DriveConstants.HEADING_P, DriveConstants.HEADING_I, DriveConstants.HEADING_D);
-    private Rotation2d desiredHeading;
-    private boolean m_turnControllerActive = false;
-
-    private final FtcDashboard dashboard;
 
     private final Telemetry telemetry;
 
@@ -122,7 +110,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_wheelSpeeds = new MecanumDriveWheelSpeeds();
         m_desiredWheelSpeeds = new MecanumDriveWheelSpeeds();
 
-        m_desiredChassisSpeeds = new ChassisSpeeds();
         m_poseEstimator = new MecanumDrivePoseEstimator(m_kinematics, getHeading(), getWheelPositions(), new Pose2d());
 
         try{
@@ -158,10 +145,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
             throw new AutoBuilderException(e.toString() + Arrays.toString(e.getStackTrace()));
         }
 
-        dashboard = FtcDashboard.getInstance();
-
-        dashboard.setTelemetryTransmissionInterval(25);
-
         this.telemetry = telemetry;
 
         m_timer = new Timer();
@@ -181,30 +164,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         m_poseEstimator.addVisionMeasurement(m_otos.getPose(), m_timer.get());
 
-        TelemetryPacket packet = new TelemetryPacket();
-        Canvas fieldOverlay = packet.fieldOverlay();
-
-        fieldOverlay.setStroke("#3F51B5");
-        DashboardUtil.drawRobot(fieldOverlay, getPose());
-
-        DashboardUtil.drawRobot(fieldOverlay, m_otos.getPose());
-
-        packet.put("x", getPose().getX());
-        packet.put("y", getPose().getY());
-        packet.put("heading (deg)", getPose().getRotation().getDegrees());
-
-        packet.put("Front Left Speed", getWheelSpeeds().frontLeftMetersPerSecond);
-        packet.put("Front Right Speed", getWheelSpeeds().frontRightMetersPerSecond);
-        packet.put("Rear Left Speed", getWheelSpeeds().rearLeftMetersPerSecond);
-        packet.put("Rear Right Speed", getWheelSpeeds().rearRightMetersPerSecond);
-
-        packet.put("Desired Front Left Speed", m_desiredWheelSpeeds.frontLeftMetersPerSecond);
-        packet.put("Desired Front Right Speed", m_desiredWheelSpeeds.frontRightMetersPerSecond);
-        packet.put("Desired Rear Left Speed", m_desiredWheelSpeeds.rearLeftMetersPerSecond);
-        packet.put("Desired Rear Right Speed", m_desiredWheelSpeeds.rearRightMetersPerSecond);
-
-        dashboard.sendTelemetryPacket(packet);
-
         telemetry.addLine("Drivetrain");
         telemetry.addData("Pose", getPose().toString());
         telemetry.addData("Wheel Positions", getWheelPositions().toString());
@@ -218,8 +177,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         this.robotRelativeSpeeds = robotRelativeSpeeds;
 
         m_desiredWheelSpeeds = m_kinematics.toWheelSpeeds(robotRelativeSpeeds);
-
-//        m_desiredWheelSpeeds.desaturate(kMaxSpeed);
 
         final Voltage frontLeftFeedforward = m_feedforward.calculate(MetersPerSecond.of(m_desiredWheelSpeeds.frontLeftMetersPerSecond));
         final Voltage frontRightFeedforward = m_feedforward.calculate(MetersPerSecond.of(m_desiredWheelSpeeds.frontRightMetersPerSecond));
@@ -305,8 +262,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_frontRightPIDController.setPID(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
         m_backLeftPIDController.setPID(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
         m_backRightPIDController.setPID(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
-
-        m_turnPIDController.setPID(DriveConstants.HEADING_P, DriveConstants.HEADING_I, DriveConstants.HEADING_D);
 
         if (m_feedforward.getKs() != DriveConstants.kS || m_feedforward.getKv() != DriveConstants.kV || m_feedforward.getKa() != DriveConstants.kA) {
             m_feedforward = new SimpleMotorFeedforward(DriveConstants.kS, DriveConstants.kV, DriveConstants.kS);
