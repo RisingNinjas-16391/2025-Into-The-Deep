@@ -467,7 +467,7 @@ public class AutoBuilder {
    *
    * @return List of all auto names
    */
-  public static List<String> getAllAutoNames(HardwareMap hardwareMap) throws IOException {
+  public static List<String> getAllAutoNames() throws IOException {
     String[] autoFiles = hardwareMap.appContext.getAssets().list("pathplanner/autos/");
 
     if (autoFiles == null) {

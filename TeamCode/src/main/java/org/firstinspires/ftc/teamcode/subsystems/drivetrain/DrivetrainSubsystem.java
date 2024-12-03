@@ -7,7 +7,6 @@ package org.firstinspires.ftc.teamcode.subsystems.drivetrain;
 import static org.firstinspires.ftc.teamcode.subsystems.drivetrain.DriveConstants.TRANSLATION_P;
 import static edu.wpi.first.units.Units.Meter;
 import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -25,13 +24,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.lib.dashboard.DashboardUtil;
 import org.firstinspires.ftc.teamcode.lib.ftclib.hardware.motors.Motor;
 import org.firstinspires.ftc.teamcode.lib.ftclib.hardware.motors.MotorEx;
+import org.firstinspires.ftc.teamcode.lib.wpilib.MecanumDrivePoseEstimator;
 
 import java.util.Arrays;
 
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.estimator.MecanumDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -49,9 +47,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /** Represents a mecanum drive style drivetrain. */
 public class DrivetrainSubsystem extends SubsystemBase {
-    public static final double kMaxSpeed = 1.5; // 3 meters per second
-    public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
-
     private final MotorEx m_frontLeftMotor;
     private final MotorEx m_frontRightMotor;
     private final MotorEx m_backLeftMotor;
@@ -59,32 +54,22 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     private final OTOS m_otos;
 
-    private ChassisSpeeds robotRelativeSpeeds = new ChassisSpeeds();
-
     private final MecanumDriveKinematics m_kinematics;
 
-    private final edu.wpi.first.math.estimator.MecanumDrivePoseEstimator m_poseEstimator;
+    private final MecanumDrivePoseEstimator m_poseEstimator;
 
     private final MecanumDriveWheelPositions m_wheelPositions;
     private final MecanumDriveWheelSpeeds m_wheelSpeeds;
     private MecanumDriveWheelSpeeds m_desiredWheelSpeeds;
-    private MecanumDriveWheelSpeeds prevWheelSpeeds = new MecanumDriveWheelSpeeds();
 
-    private ChassisSpeeds m_desiredChassisSpeeds;
+    private ChassisSpeeds robotRelativeSpeeds = new ChassisSpeeds();
 
-    // Gains are for example purposes only - must be determined for your own robot!
     private SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(DriveConstants.kS, DriveConstants.kV, DriveConstants.kA);
 
     private final PIDController m_frontLeftPIDController = new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
     private final PIDController m_frontRightPIDController = new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
     private final PIDController m_backLeftPIDController = new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
     private final PIDController m_backRightPIDController = new PIDController(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
-
-    private final PIDController m_turnPIDController = new PIDController(DriveConstants.HEADING_P, DriveConstants.HEADING_I, DriveConstants.HEADING_D);
-    private Rotation2d desiredHeading;
-    private boolean m_turnControllerActive = false;
-
-    private final FtcDashboard dashboard;
 
     private final Telemetry telemetry;
 
@@ -125,11 +110,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_wheelSpeeds = new MecanumDriveWheelSpeeds();
         m_desiredWheelSpeeds = new MecanumDriveWheelSpeeds();
 
-        m_desiredChassisSpeeds = new ChassisSpeeds();
-        m_poseEstimator = new MecanumDrivePoseEstimator(m_kinematics, getHeading(), getWheelPositions(), new Pose2d(),
-                VecBuilder.fill(0.01, 0.01, 0.01),
-                VecBuilder.fill(0.01, 0.01, 0.01)
-                );
+        m_poseEstimator = new MecanumDrivePoseEstimator(m_kinematics, getHeading(), getWheelPositions(), new Pose2d());
 
         try{
             RobotConfig config = RobotConfig.fromGUISettings(hwMap);
@@ -164,16 +145,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
             throw new AutoBuilderException(e.toString() + Arrays.toString(e.getStackTrace()));
         }
 
-        dashboard = FtcDashboard.getInstance();
-
-        dashboard.setTelemetryTransmissionInterval(25);
-
         this.telemetry = telemetry;
 
         m_timer = new Timer();
         m_timer.start();
 
-        forceOdometry(new Pose2d(new Translation2d(0.15, 1.66), Rotation2d.fromDegrees(0)));
+        //forceOdometry(new Pose2d(new Translation2d(0.15, 1.66), Rotation2d.fromDegrees(180)));
     }
 
     @Override
@@ -185,31 +162,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         m_poseEstimator.updateWithTime(m_timer.get(), getHeading(), m_wheelPositions);
 
-//        m_poseEstimator.addVisionMeasurement(m_otos.getPose(), m_timer.get());
-
-        TelemetryPacket packet = new TelemetryPacket();
-        Canvas fieldOverlay = packet.fieldOverlay();
-
-        fieldOverlay.setStroke("#3F51B5");
-        DashboardUtil.drawRobot(fieldOverlay, getPose());
-
-        DashboardUtil.drawRobot(fieldOverlay, m_otos.getPose());
-
-        packet.put("x", getPose().getX());
-        packet.put("y", getPose().getY());
-        packet.put("heading (deg)", getPose().getRotation().getDegrees());
-
-        packet.put("Front Left Speed", getWheelSpeeds().frontLeftMetersPerSecond);
-        packet.put("Front Right Speed", getWheelSpeeds().frontRightMetersPerSecond);
-        packet.put("Rear Left Speed", getWheelSpeeds().rearLeftMetersPerSecond);
-        packet.put("Rear Right Speed", getWheelSpeeds().rearRightMetersPerSecond);
-
-        packet.put("Desired Front Left Speed", m_desiredWheelSpeeds.frontLeftMetersPerSecond);
-        packet.put("Desired Front Right Speed", m_desiredWheelSpeeds.frontRightMetersPerSecond);
-        packet.put("Desired Rear Left Speed", m_desiredWheelSpeeds.rearLeftMetersPerSecond);
-        packet.put("Desired Rear Right Speed", m_desiredWheelSpeeds.rearRightMetersPerSecond);
-
-        dashboard.sendTelemetryPacket(packet);
+        m_poseEstimator.addVisionMeasurement(m_otos.getPose(), m_timer.get());
 
         telemetry.addLine("Drivetrain");
         telemetry.addData("Pose", getPose().toString());
@@ -225,12 +178,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         m_desiredWheelSpeeds = m_kinematics.toWheelSpeeds(robotRelativeSpeeds);
 
-//        m_desiredWheelSpeeds.desaturate(kMaxSpeed);
-
-        final Voltage frontLeftFeedforward = m_feedforward.calculate(MetersPerSecond.of(prevWheelSpeeds.frontLeftMetersPerSecond), MetersPerSecond.of(m_desiredWheelSpeeds.frontLeftMetersPerSecond));
-        final Voltage frontRightFeedforward = m_feedforward.calculate(MetersPerSecond.of(prevWheelSpeeds.frontRightMetersPerSecond), MetersPerSecond.of(m_desiredWheelSpeeds.frontRightMetersPerSecond));
-        final Voltage backLeftFeedforward = m_feedforward.calculate(MetersPerSecond.of(prevWheelSpeeds.rearLeftMetersPerSecond), MetersPerSecond.of(m_desiredWheelSpeeds.rearLeftMetersPerSecond));
-        final Voltage backRightFeedforward = m_feedforward.calculate(MetersPerSecond.of(prevWheelSpeeds.rearRightMetersPerSecond), MetersPerSecond.of(m_desiredWheelSpeeds.rearRightMetersPerSecond));
+        final Voltage frontLeftFeedforward = m_feedforward.calculate(MetersPerSecond.of(m_desiredWheelSpeeds.frontLeftMetersPerSecond));
+        final Voltage frontRightFeedforward = m_feedforward.calculate(MetersPerSecond.of(m_desiredWheelSpeeds.frontRightMetersPerSecond));
+        final Voltage backLeftFeedforward = m_feedforward.calculate(MetersPerSecond.of(m_desiredWheelSpeeds.rearLeftMetersPerSecond));
+        final Voltage backRightFeedforward = m_feedforward.calculate(MetersPerSecond.of(m_desiredWheelSpeeds.rearRightMetersPerSecond));
 
         final double frontLeftOutput =
                 m_frontLeftPIDController.calculate(
@@ -249,8 +200,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_frontRightMotor.setVoltage(frontRightFeedforward.magnitude() + frontRightOutput);
         m_backLeftMotor.setVoltage(backLeftFeedforward.magnitude() + backLeftOutput);
         m_backRightMotor.setVoltage(backRightFeedforward.magnitude() + backRightOutput);
-
-        this.prevWheelSpeeds = m_desiredWheelSpeeds;
     }
 
     public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
@@ -294,14 +243,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public ChassisSpeeds getRobotRelativeSpeeds() {
-        return m_kinematics.toChassisSpeeds(
-                new MecanumDriveWheelSpeeds(
-                        m_frontLeftMotor.getVelocity() * DriveConstants.GEAR_RATIO,
-                        m_frontRightMotor.getVelocity() * DriveConstants.GEAR_RATIO,
-                        m_backLeftMotor.getVelocity() * DriveConstants.GEAR_RATIO,
-                        m_backRightMotor.getVelocity() * DriveConstants.GEAR_RATIO
-                )
-        );
+        return robotRelativeSpeeds;
     }
 
     public MotorEx[] getMotors() {
@@ -320,8 +262,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_frontRightPIDController.setPID(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
         m_backLeftPIDController.setPID(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
         m_backRightPIDController.setPID(DriveConstants.kP, DriveConstants.kI, DriveConstants.kD);
-
-        m_turnPIDController.setPID(DriveConstants.HEADING_P, DriveConstants.HEADING_I, DriveConstants.HEADING_D);
 
         if (m_feedforward.getKs() != DriveConstants.kS || m_feedforward.getKv() != DriveConstants.kV || m_feedforward.getKa() != DriveConstants.kA) {
             m_feedforward = new SimpleMotorFeedforward(DriveConstants.kS, DriveConstants.kV, DriveConstants.kS);
