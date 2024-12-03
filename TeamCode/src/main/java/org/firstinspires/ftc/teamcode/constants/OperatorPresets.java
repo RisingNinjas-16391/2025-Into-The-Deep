@@ -21,7 +21,7 @@ public class OperatorPresets {
 
     public static double IntakeSpecimen = 300;
 
-    public static double ScoreSpecimen = 350;
+    public static double ScoreSpecimen = 330;
 
     public static double ScoreSpecimenBack = 0;
 }

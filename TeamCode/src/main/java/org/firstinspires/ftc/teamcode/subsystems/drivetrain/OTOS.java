@@ -61,7 +61,7 @@ public class OTOS {
     }
 
     public void setPosition(Pose2d pose) {
-//        myOtos.resetTracking();
+        myOtos.resetTracking();
 //        offset = new Transform2d(getPose(), pose);
         myOtos.setPosition(Pose2dtoOTOSPose2d(pose));
     }

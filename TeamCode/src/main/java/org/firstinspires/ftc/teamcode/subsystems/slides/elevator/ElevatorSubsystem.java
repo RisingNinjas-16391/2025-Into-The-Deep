@@ -12,10 +12,13 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 @Config
 public class ElevatorSubsystem extends SubsystemBase {
+    NetworkTable elev;
     private final MotorEx m_leftMotor;
     private final MotorEx m_rightMotor;
     private final PIDController m_feedbackController = new PIDController(ElevatorConstants.kP,ElevatorConstants.kI,ElevatorConstants.kD);
@@ -53,6 +56,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         goal = new TrapezoidProfile.State(getExtensionMeters(), 0);
         forwardGoal = goal;
         setpoint = goal;
+
+        elev = NetworkTableInstance.getDefault().getTable("Elevator");
     }
     @Override
     public void periodic(){
@@ -66,6 +71,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         m_telemetry.addData("Right Motor Ticks:", m_rightMotor.getCurrentPosition());
         m_telemetry.addData("Position Meters:", getExtensionMeters());
         m_telemetry.addData("Velocity Meters Per Second:", getVelocity());
+
+        elev.getEntry("Position Meters").setDouble(getExtensionMeters());
+        elev.getEntry("Velocity Meters Per Second").setDouble(getVelocity());
+        elev.getEntry("Goal Meters").setDouble(goal.position);
+        elev.getEntry("Goal Velocity").setDouble(goal.velocity);
 
 //        super.updateTelemetry(telemetry, "Extendo");
 //        telemetry.addData("Motor Ticks:", m_motor.getCurrentPosition());

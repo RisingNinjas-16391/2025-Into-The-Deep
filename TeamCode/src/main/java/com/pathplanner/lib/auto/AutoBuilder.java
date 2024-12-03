@@ -376,7 +376,6 @@ public class AutoBuilder {
       throw new AutoBuilderException(
           "Auto builder was used to build a pathfinding command before being configured");
     }
-    OpModeRegistrar
     return pathfindThenFollowPathCommandBuilder.apply(goalPath, pathfindingConstraints);
   }
 
@@ -468,8 +467,8 @@ public class AutoBuilder {
    *
    * @return List of all auto names
    */
-  public static List<String> getAllAutoNames() throws IOException {
-    String[] autoFiles = hardwareMap.appContext.getAssets().list("pathplanner/autos");
+  public static List<String> getAllAutoNames(HardwareMap hardwareMap) throws IOException {
+    String[] autoFiles = hardwareMap.appContext.getAssets().list("pathplanner/autos/");
 
     if (autoFiles == null) {
       return new ArrayList<>();

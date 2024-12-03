@@ -3,51 +3,42 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.12,
+        "x": 0.16412307692275627,
         "y": 1.675
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.6585819820998424,
-        "y": 1.2016057112963399
-      },
-      "isLocked": false,
-      "linkedName": "ScoreCenter"
-    },
-    {
-      "anchor": {
-        "x": 1.0410092307671972,
-        "y": 0.9566030769212085
-      },
-      "prevControl": {
-        "x": 0.746035804585885,
-        "y": 0.9693174487393685
-      },
-      "nextControl": {
-        "x": 1.3673796923050214,
-        "y": 0.9425353846135437
+        "x": 1.3146719386137362,
+        "y": 1.685285258699125
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.4469864768655016,
-        "y": 0.581397864767548
+        "x": 1.12,
+        "y": 1.675
       },
       "prevControl": {
-        "x": 1.371559254006972,
-        "y": 0.8197478890005019
+        "x": 0.12468307068467599,
+        "y": 1.6929373289876295
       },
       "nextControl": null,
-      "isLocked": true,
-      "linkedName": "Pick1"
+      "isLocked": false,
+      "linkedName": "ScoreCenter"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "HighBar",
+      "waypointRelativePos": 0.031007751937983493,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 0.75,
     "maxAcceleration": 0.5,
@@ -57,14 +48,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 0.25,
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Frontal6Specimen",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

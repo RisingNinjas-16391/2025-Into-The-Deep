@@ -11,6 +11,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ClawRelease"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "CenterTo1"
@@ -19,13 +25,61 @@
         {
           "type": "named",
           "data": {
-            "name": "Feed3"
+            "name": "ReadyFeed"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Push Pieces"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "OuttakePiece"
+            "name": "HighBar"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "WallToCenter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ClawRelease"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterToWall"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "HighBar"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "WallToCenter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ClawRelease"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterToWall"
           }
         }
       ]

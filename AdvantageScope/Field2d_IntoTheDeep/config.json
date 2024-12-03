@@ -1,0 +1,8 @@
+{
+  "name": "Into The Deep",
+  "topLeft": [0, 0],
+  "bottomRight": [4096, 4096],
+  "widthInches": 144,
+  "heightInches": 144,
+  "defaultOrigin": "auto"
+}

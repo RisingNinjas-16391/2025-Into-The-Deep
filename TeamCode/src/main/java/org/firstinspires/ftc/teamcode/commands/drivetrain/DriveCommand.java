@@ -29,8 +29,4 @@ public class DriveCommand extends Command {
                 move);
     }
 
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
 }

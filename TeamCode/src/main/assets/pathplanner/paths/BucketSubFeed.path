@@ -3,45 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.12,
-        "y": 1.675
+        "x": 0.3536113878993318,
+        "y": 3.2714476868281865
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.6585819820998424,
-        "y": 1.2016057112963399
+        "x": 0.675249230767912,
+        "y": 3.2261907692244685
       },
       "isLocked": false,
-      "linkedName": "ScoreCenter"
+      "linkedName": "ScoreBucket"
     },
     {
       "anchor": {
-        "x": 1.0410092307671972,
-        "y": 0.9566030769212085
+        "x": 1.1863753846130671,
+        "y": 3.0339323076863827
       },
       "prevControl": {
-        "x": 0.746035804585885,
-        "y": 0.9693174487393685
+        "x": 0.9650811689826503,
+        "y": 3.150245978974493
       },
       "nextControl": {
-        "x": 1.3673796923050214,
-        "y": 0.9425353846135437
+        "x": 1.407669600243484,
+        "y": 2.9176186363982723
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.4469864768655016,
-        "y": 0.581397864767548
+        "x": 1.5250846975059178,
+        "y": 2.4036896797106078
       },
       "prevControl": {
-        "x": 1.371559254006972,
-        "y": 0.8197478890005019
+        "x": 1.5207459074703393,
+        "y": 2.837568683268479
       },
       "nextControl": null,
-      "isLocked": true,
-      "linkedName": "Pick1"
+      "isLocked": false,
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -58,13 +58,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -90.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "HighBucket",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 180.0
+    "velocity": 0.0,
+    "rotation": -45.0
   },
   "useDefaultConstraints": true
 }

@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
+import org.firstinspires.ftc.robotcore.internal.opmode.RegisteredOpModes;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.commands.automation.DropDropCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.DropIntakeCommand;
@@ -30,6 +32,7 @@ import org.firstinspires.ftc.teamcode.constants.OperatorPresets;
 import org.firstinspires.ftc.teamcode.lib.ftclib.button.GamepadButton;
 import org.firstinspires.ftc.teamcode.lib.ftclib.gamepad.GamepadEx;
 import org.firstinspires.ftc.teamcode.lib.ftclib.gamepad.GamepadKeys;
+import org.firstinspires.ftc.teamcode.opmodes.BlueAuto;
 import org.firstinspires.ftc.teamcode.subsystems.claws.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.DrivetrainSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.intake.ColorSubsystem;
@@ -265,25 +268,44 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("HighBar",
                 new SequentialCommandGroup(
-                        new ClawPositionCommand(m_outtakeClawSubsystem, () -> 50),
-                        new ElevatorPositionCommand(m_elevatorSubsystem, () -> 50).withTimeout(0.5),
-                        new WristPositionCommand(m_outtakeWristSubsystem, () -> 180),
+                        new ClawPositionCommand(m_outtakeClawSubsystem, () -> 30).withTimeout(0.6),
+                        new ElevatorPositionCommand(m_elevatorSubsystem, () -> 23).withTimeout(0.1),
+                        new WristPositionCommand(m_outtakeWristSubsystem, () -> 150),
                         new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> OperatorPresets.ScoreSpecimen)));
 
-        NamedCommands.registerCommand("HighBarBack", new SequentialCommandGroup(
-                new ElevatorPositionCommand(m_elevatorSubsystem, () -> 10).withTimeout(0.5),
-                new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90)));
+        NamedCommands.registerCommand("ClawRelease", new SequentialCommandGroup(
+                new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90)
+        ));
+
+
+        NamedCommands.registerCommand("ReadyFeed", new ParallelCommandGroup(
+                new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90),
+                new ElevatorPositionCommand(m_elevatorSubsystem, () -> 0),
+                new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> OperatorPresets.IntakeSpecimen),
+                new WristPositionCommand(m_outtakeWristSubsystem, () ->110)
+
+
+        ).withTimeout(.1));
+
 
         NamedCommands.registerCommand("OuttakePiece",
                 new OuttakePieceCommand(m_extendoSubsystem, m_intakePivotSubsystem, m_intakesubsystem));
 
         NamedCommands.registerCommand("Turn-130",
                 new TurnCommand(m_driveSubsystem, () -> -130));
+
+        NamedCommands.registerCommand("PullDownScore",
+                new SequentialCommandGroup(
+                        new ElevatorPositionCommand(m_elevatorSubsystem, () -> 20),
+                        new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90)
+                ));
+
+
     }
     public Command getAutoCommand(int chooser) {
         switch (chooser) {
             case 1:
-                return AutoBuilder.buildAuto("ScoreCenter");
+                return null;
             case 2:
                 return null;
             case 3:

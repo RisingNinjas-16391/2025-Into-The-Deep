@@ -2,18 +2,33 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.qualcomm.robotcore.eventloop.opmode.AnnotatedOpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.OpModeRegistrar;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
 import org.firstinspires.ftc.teamcode.RobotContainer;
 import org.firstinspires.ftc.teamcode.lib.ftclib.opmode.CommandOpMode;
 
-import edu.wpi.first.networktables.NetworkTableInstance;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-@Autonomous(name = "BlueAuto", group = "Auto")
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj2.command.Command;
+
 public class BlueAuto extends CommandOpMode {
     private Telemetry m_telemetry;
     private RobotContainer m_robotContainer;
+
+    private String auto;
+
+    public BlueAuto(String auto) {
+        this.auto = auto;
+    }
 
     @Override
     public void robotInit() {
@@ -29,7 +44,21 @@ public class BlueAuto extends CommandOpMode {
 
     @Override
     public void enabledInit() {
-        m_robotContainer.getAutoCommand(1).schedule();
+        AutoBuilder.buildAuto(auto).schedule();
     }
+
+    @OpModeRegistrar
+    public static void register(AnnotatedOpModeManager opModeManager) {
+        String[] names = {"ScoreCenter", "Frontal6Specimen"};
+        for (String name : names) {
+            opModeManager.register(
+                    new OpModeMeta.Builder()
+                            .setName(name)
+                            .setFlavor(OpModeMeta.Flavor.AUTONOMOUS)
+                            .build(),
+                    new BlueAuto(name));
+        }
+    }
+
 
 }

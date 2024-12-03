@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.0410092307671972,
-        "y": 1.6747729799049826
+        "x": 0.3536113878993318,
+        "y": 3.2714476868281865
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.7167953584612508,
-        "y": 1.6747729799049826
+        "x": 0.6876982206392264,
+        "y": 3.2150434163638275
       },
       "isLocked": false,
-      "linkedName": "ScoreCenter"
+      "linkedName": "ScoreBucket"
     },
     {
       "anchor": {
-        "x": 0.17,
-        "y": 1.6747729799049826
+        "x": 1.05,
+        "y": 3.35
       },
       "prevControl": {
-        "x": 0.6700000000000003,
-        "y": 1.6747729799049826
+        "x": 0.7244740213508009,
+        "y": 3.3365295373600317
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "PickupY2"
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.0,
+    "maxVelocity": 0.75,
     "maxAcceleration": 0.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -45,10 +45,10 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "HighBucket",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 0.0
+    "velocity": 0.0,
+    "rotation": -45.0
   },
   "useDefaultConstraints": true
 }

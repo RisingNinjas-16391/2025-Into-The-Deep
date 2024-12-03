@@ -8,40 +8,40 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.6585819820998424,
-        "y": 1.2016057112963399
+        "x": 0.8675076923059979,
+        "y": 1.4442830769202561
       },
       "isLocked": false,
       "linkedName": "ScoreCenter"
     },
     {
       "anchor": {
-        "x": 1.0410092307671972,
-        "y": 0.9566030769212085
+        "x": 1.5427569230739102,
+        "y": 0.694006153844798
       },
       "prevControl": {
-        "x": 0.746035804585885,
-        "y": 0.9693174487393685
+        "x": 0.8644182965506271,
+        "y": 1.5288844634119185
       },
       "nextControl": {
-        "x": 1.3673796923050214,
-        "y": 0.9425353846135437
+        "x": 1.7004050793475263,
+        "y": 0.49997765381573134
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.4469864768655016,
-        "y": 0.581397864767548
+        "x": 0.13598769230742658,
+        "y": 0.4970584615374906
       },
       "prevControl": {
-        "x": 1.371559254006972,
-        "y": 0.8197478890005019
+        "x": 0.9941169230749816,
+        "y": 0.6471138461525818
       },
       "nextControl": null,
-      "isLocked": true,
-      "linkedName": "Pick1"
+      "isLocked": false,
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -61,10 +61,10 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Frontal6Specimen",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }
