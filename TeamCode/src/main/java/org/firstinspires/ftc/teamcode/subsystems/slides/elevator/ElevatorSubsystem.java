@@ -62,9 +62,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     @Override
     public void periodic(){
         setVoltage(calculateVoltage(goal.velocity, goal.position));
-
         m_feedbackController.setPID(ElevatorConstants.kP, ElevatorConstants.kI, ElevatorConstants.kD);
         m_feedforwardController.setGains(ElevatorConstants.kS, ElevatorConstants.kG, ElevatorConstants.kV, ElevatorConstants.kA);
+
 
         m_telemetry.addLine("Elevator");
         m_telemetry.addData("Left Motor Ticks:", m_leftMotor.getCurrentPosition());

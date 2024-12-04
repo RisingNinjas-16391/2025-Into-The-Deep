@@ -165,6 +165,7 @@ public class RobotContainer {
                 new ClawPositionCommand(m_outtakeClawSubsystem, () -> 60).withTimeout(300),
                 new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> OperatorPresets.IntakeSpecimen).withTimeout(800),
                 new ElevatorPositionCommand(m_elevatorSubsystem, () -> 0),
+                new WristPositionCommand(m_outtakeWristSubsystem,()->70),
                 new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90)
         ));
 
@@ -231,7 +232,7 @@ public class RobotContainer {
                         ));
 
         NamedCommands.registerCommand("BucketReset",
-                new ParallelCommandGroup(
+                new SequentialCommandGroup(
                         new ElevatorPositionCommand(m_elevatorSubsystem, ()-> 15),
                         new OuttakePivotPositionCommand(m_outtakePivotSubsystem, 149),
                         new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90),

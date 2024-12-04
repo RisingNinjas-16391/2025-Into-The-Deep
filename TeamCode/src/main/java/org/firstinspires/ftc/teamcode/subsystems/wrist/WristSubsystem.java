@@ -17,7 +17,7 @@ public class WristSubsystem extends SubsystemBase {
                 180, AngleUnit.DEGREES);
 
         m_telemetry = telemetry;
-        turnToAngle(90);
+        turnToAngle(100);
     }
 
     @Override

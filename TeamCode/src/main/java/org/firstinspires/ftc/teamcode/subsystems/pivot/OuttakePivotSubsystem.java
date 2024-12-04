@@ -23,7 +23,7 @@ public class OuttakePivotSubsystem extends SubsystemBase {
 
         m_telemetry = telemetry;
 
-        turnToAngle(OperatorPresets.ScoreSpecimenBack);
+        turnToAngle(0);
     }
 
     @Override

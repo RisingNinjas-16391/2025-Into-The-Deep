@@ -25,9 +25,9 @@
             <RevColorSensorV3 name="sensor_color" port="1" bus="1"/>
 
             <Servo name="rightDepositPivot" port="1"/>
-            <Servo name="leftDepositPivot" port="3"/>
+            <Servo name="leftDepositPivot" port="2"/>
             <Servo name="depositClaw" port="5"/>
-            <Servo name="wrist" port="2"/>
+            <Servo name="wrist" port="3"/>
             <Servo name="intakeClaw" port="0"/>
 
 

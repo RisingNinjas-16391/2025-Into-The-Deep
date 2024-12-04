@@ -19,7 +19,8 @@ public class OperatorPresets {
     public static double HighBucket = 86;
     public static double LowBucket = 40;
 
-    public static double IntakeSpecimen = 300;
+    //intakes off wall
+    public static double IntakeSpecimen = 0;
 
     public static double ScoreSpecimen = 330;
 

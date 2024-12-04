@@ -23,7 +23,7 @@ public class PickUpSPCommand extends SequentialCommandGroup {
                 new ClawPositionCommand(outtakeClawSubsystem, () -> 45),
                 new WaitCommand(0.3),
                 new ElevatorPositionCommand(elevatorSubsystem, () -> OperatorPresets.HighBarBack),
-                new OuttakePivotPositionCommand(outtakePivotSubsystem, () -> 15)
+                new OuttakePivotPositionCommand(outtakePivotSubsystem, () -> 355)
 
 
         );
