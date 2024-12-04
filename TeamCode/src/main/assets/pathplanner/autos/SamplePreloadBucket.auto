@@ -11,6 +11,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ClawRelease"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "PickupFirst"
@@ -20,6 +26,12 @@
           "type": "path",
           "data": {
             "pathName": "ScoreFirst"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ClawRelease"
           }
         },
         {
@@ -35,9 +47,27 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "ClawRelease"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "PickupThird"
+            "pathName": "BucketSubFeed"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Feed1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Feed2"
           }
         }
       ]

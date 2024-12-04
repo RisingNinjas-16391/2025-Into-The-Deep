@@ -43,7 +43,13 @@
             {
               "type": "named",
               "data": {
-                "name": "ReadyFeed"
+                "name": "LowerFeeder"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "HighBucket"
               }
             }
           ]

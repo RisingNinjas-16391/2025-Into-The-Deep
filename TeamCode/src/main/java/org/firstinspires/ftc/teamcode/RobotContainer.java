@@ -206,13 +206,7 @@ public class RobotContainer {
                 m_extendoSubsystem,
                 m_outtakePivotSubsystem));
 
-        new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_RIGHT).onTrue(new SequentialCommandGroup(
-                new WristPositionCommand(m_outtakeWristSubsystem, () -> 90)
-        ));
 
-        new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_LEFT).onTrue(new SequentialCommandGroup(
-                new WristPositionCommand(m_outtakeWristSubsystem, () -> 180)
-        ));
 
         new GamepadButton(m_operatorController, GamepadKeys.Button.START).whileTrue(new ElevatorVelocityCommand(m_elevatorSubsystem, () -> -50).andThen(m_elevatorSubsystem::resetPosition));
 //        new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_LEFT).whileTrue(new ExtendoVelocityCommand(m_extendoSubsystem, () -> -50).andThen(m_extendoSubsystem::resetPosition));
@@ -221,6 +215,33 @@ public class RobotContainer {
     }
 
     private void registerAutoNamedCommands() {
+        //General Commands
+
+        NamedCommands.registerCommand("ClawRelease", new SequentialCommandGroup(
+                new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90)
+        ));
+
+        //BucketCommands
+
+        NamedCommands.registerCommand("HighBucket",
+                new ParallelCommandGroup(
+                        new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.HighBucket),
+                        new ExtendoPositionCommand(m_extendoSubsystem, () -> 0),
+                        new OuttakePivotPositionCommand(m_outtakePivotSubsystem, 355)
+                        ));
+
+        NamedCommands.registerCommand("BucketReset",
+                new ParallelCommandGroup(
+                        new ElevatorPositionCommand(m_elevatorSubsystem, ()-> 15),
+                        new OuttakePivotPositionCommand(m_outtakePivotSubsystem, 149),
+                        new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90),
+                        new OuttakePivotPositionCommand(m_outtakePivotSubsystem, 355),
+                        new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Feeding)
+                ));
+
+        NamedCommands.registerCommand("OuttakePiece",
+                new OuttakePieceCommand(m_extendoSubsystem, m_intakePivotSubsystem, m_intakesubsystem));
+
         NamedCommands.registerCommand("LowerFeeder",
                 new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Vertical));
 
@@ -266,6 +287,8 @@ public class RobotContainer {
                                 m_colorsensor)
                 ));
 
+
+        //Specimen Commands
         NamedCommands.registerCommand("HighBar",
                 new SequentialCommandGroup(
                         new ClawPositionCommand(m_outtakeClawSubsystem, () -> 30).withTimeout(0.6),
@@ -273,11 +296,7 @@ public class RobotContainer {
                         new WristPositionCommand(m_outtakeWristSubsystem, () -> 150),
                         new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> OperatorPresets.ScoreSpecimen)));
 
-        NamedCommands.registerCommand("ClawRelease", new SequentialCommandGroup(
-                new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90)
-        ));
-
-
+            // This is for wall intaking
         NamedCommands.registerCommand("ReadyFeed", new ParallelCommandGroup(
                 new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90),
                 new ElevatorPositionCommand(m_elevatorSubsystem, () -> 0),
@@ -287,9 +306,6 @@ public class RobotContainer {
 
         ).withTimeout(.1));
 
-
-        NamedCommands.registerCommand("OuttakePiece",
-                new OuttakePieceCommand(m_extendoSubsystem, m_intakePivotSubsystem, m_intakesubsystem));
 
         NamedCommands.registerCommand("Turn-130",
                 new TurnCommand(m_driveSubsystem, () -> -130));
