@@ -24,8 +24,8 @@ public class PickUpSPCommand extends SequentialCommandGroup {
                 new ClawPositionCommand(outtakeClawSubsystem, () -> 45),
                 new WaitCommand(0.3),
                 new ElevatorPositionCommand(elevatorSubsystem, () -> OperatorPresets.HighBar),
-                new OuttakePivotPositionCommand(outtakePivotSubsystem, () -> 355),
-                new WristPositionCommand(wristSubsystem, ()->180)
+                new OuttakePivotPositionCommand(outtakePivotSubsystem, () -> 285),
+                new WristPositionCommand(wristSubsystem, ()-> OperatorPresets.ScoreSpecimen)
 
 
         );

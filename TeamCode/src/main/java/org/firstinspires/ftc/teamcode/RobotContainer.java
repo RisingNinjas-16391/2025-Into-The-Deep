@@ -46,8 +46,10 @@ import org.firstinspires.ftc.teamcode.subsystems.wrist.WristSubsystem;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class RobotContainer {
     private final DrivetrainSubsystem m_driveSubsystem;
@@ -109,7 +111,7 @@ public class RobotContainer {
 
     public void configureButtonBindings() {
         //Driver Controls
-//        m_resetHeading.onTrue(new InstantCommand(m_driveSubsystem::resetHeading));
+        m_resetHeading.onTrue(new InstantCommand(m_driveSubsystem::resetHeading));
 
 
         //Feeding Controls
@@ -159,10 +161,12 @@ public class RobotContainer {
 
         //WallFeed
         new GamepadButton(m_driverController, GamepadKeys.Button.B).onTrue(new SequentialCommandGroup(
-                new ClawPositionCommand(m_outtakeClawSubsystem, () -> 60).withTimeout(300),
-                new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> OperatorPresets.IntakeSpecimen).withTimeout(800),
+                new ClawPositionCommand(m_outtakeClawSubsystem, () -> 60),
+                new WaitCommand(.2),
+                new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> OperatorPresets.IntakeSpecimen),
+                new WaitCommand(.5),
                 new ElevatorPositionCommand(m_elevatorSubsystem, () -> 0),
-                new WristPositionCommand(m_outtakeWristSubsystem,()->70),
+                new WristPositionCommand(m_outtakeWristSubsystem,()-> OperatorPresets.IntakeSpecimenWrist),
                 new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90)
         ));
 
@@ -206,7 +210,7 @@ public class RobotContainer {
         new GamepadButton(m_operatorController, GamepadKeys.Button.START).whileTrue(new ElevatorVelocityCommand(m_elevatorSubsystem, () -> -50).andThen(m_elevatorSubsystem::resetPosition));
         new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_LEFT).whileTrue(new ExtendoVelocityCommand(m_extendoSubsystem, () -> -50).andThen(m_extendoSubsystem::resetPosition));
 
-        m_resetHeading.onTrue(new TurnCommand(m_driveSubsystem, () -> 90));
+//        m_resetHeading.onTrue(new TurnCommand(m_driveSubsystem, () -> 90));
     }
 
     private void registerAutoNamedCommands() {

@@ -242,6 +242,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_otos.setPosition(pose);
     }
 
+    public void resetHeading() {
+        forceOdometry(new Pose2d(getPose().getTranslation(), new Rotation2d()));
+    }
+
     public ChassisSpeeds getRobotRelativeSpeeds() {
         return robotRelativeSpeeds;
     }

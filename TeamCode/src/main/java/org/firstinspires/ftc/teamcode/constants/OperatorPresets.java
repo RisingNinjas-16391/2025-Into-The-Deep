@@ -12,16 +12,17 @@ public class OperatorPresets {
     public static double Vertical= 100;
 
     //ElevatorPresets
-    public static double HighBar = 27;
+    public static double HighBar = 48;
 
     public static double HighBucket = 86;
     public static double LowBucket = 40;
 
 
     //DepoArmPresets
-    public static double IntakeSpecimen = 0;
+    public static double IntakeSpecimen = 20;
+    public static double IntakeSpecimenWrist = 35;
 
-    public static double ScoreSpecimen = 330;
+    public static double ScoreSpecimen = 0;
     public static double ScoreSample = 330;
 
 
