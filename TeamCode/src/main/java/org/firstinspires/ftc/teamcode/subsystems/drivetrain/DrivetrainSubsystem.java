@@ -203,7 +203,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
-        fieldRelativeSpeeds.toRobotRelativeSpeeds(getHeading());
+        fieldRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, getHeading());
         driveRobotRelative(fieldRelativeSpeeds);
     }
 

@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3146719386137362,
-        "y": 1.685285258699125
+        "x": 1.3151230769227562,
+        "y": 1.675
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +20,8 @@
         "y": 1.675
       },
       "prevControl": {
-        "x": 0.12468307068467599,
-        "y": 1.6929373289876295
+        "x": 0.12452145299213202,
+        "y": 1.675
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,10 +33,22 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "HighBar",
-      "waypointRelativePos": 0.031007751937983493,
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "HighBar"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "globalConstraints": {
@@ -48,14 +60,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.25,
-    "rotation": 0.0
+    "velocity": 0.0,
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "Frontal6Specimen",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

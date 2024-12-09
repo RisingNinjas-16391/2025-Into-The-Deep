@@ -124,7 +124,8 @@ public class RobotContainer {
                         m_elevatorSubsystem,
                         m_extendoSubsystem,
                         m_outtakePivotSubsystem,
-                        m_colorsensor)
+                        m_colorsensor,
+                        m_outtakeWristSubsystem)
 
         ));
         new GamepadButton(m_driverController, GamepadKeys.Button.Y).onTrue(new ParallelCommandGroup(
@@ -136,7 +137,8 @@ public class RobotContainer {
                         m_elevatorSubsystem,
                         m_extendoSubsystem,
                         m_outtakePivotSubsystem,
-                        m_colorsensor)
+                        m_colorsensor,
+                        m_outtakeWristSubsystem)
         ));
 
 
@@ -144,6 +146,7 @@ public class RobotContainer {
         //Transfer Back
         new GamepadButton(m_driverController, GamepadKeys.Button.DPAD_DOWN).onTrue(new SequentialCommandGroup(
                 new TransferCommand(
+                        m_outtakeWristSubsystem,
                         m_intakePivotSubsystem,
                         m_intakesubsystem,
                         m_outtakeClawSubsystem,
@@ -184,7 +187,7 @@ public class RobotContainer {
 
 
         //Operator Controls
-
+        new GamepadButton(m_operatorController,GamepadKeys.Button.A).onTrue(new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Feeding));
         new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_UP).onTrue(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.HighBucket));
         new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_DOWN).onTrue(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.LowBucket));
 
@@ -291,9 +294,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("HighBar",
                 new SequentialCommandGroup(
                         new ClawPositionCommand(m_outtakeClawSubsystem, () -> 30).withTimeout(0.6),
-                        new ElevatorPositionCommand(m_elevatorSubsystem, () -> 23).withTimeout(0.1),
-                        new WristPositionCommand(m_outtakeWristSubsystem, () -> 150),
-                        new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> OperatorPresets.ScoreSpecimen)));
+                        new ElevatorPositionCommand(m_elevatorSubsystem, () -> 44).withTimeout(0.1),
+                        new WristPositionCommand(m_outtakeWristSubsystem, () -> 15),
+                        new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> 285)));
 
             // This is for wall intaking
         NamedCommands.registerCommand("ReadyFeed", new ParallelCommandGroup(

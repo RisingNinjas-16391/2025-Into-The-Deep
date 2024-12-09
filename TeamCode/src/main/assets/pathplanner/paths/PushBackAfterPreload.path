@@ -8,36 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.8675076923059979,
-        "y": 1.4442830769202561
+        "x": 0.8699274021335326,
+        "y": 1.2929594306024572
       },
       "isLocked": false,
       "linkedName": "ScoreCenter"
     },
     {
       "anchor": {
-        "x": 1.5427569230739102,
-        "y": 0.694006153844798
+        "x": 0.5879060498209161,
+        "y": 0.8764355871869
       },
       "prevControl": {
-        "x": 0.8644182965506271,
-        "y": 1.5288844634119185
-      },
-      "nextControl": {
-        "x": 1.7004050793475263,
-        "y": 0.49997765381573134
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 0.13598769230742658,
-        "y": 0.4970584615374906
-      },
-      "prevControl": {
-        "x": 0.9941169230749816,
-        "y": 0.6471138461525818
+        "x": 0.7744740213508009,
+        "y": 1.1367629893216233
       },
       "nextControl": null,
       "isLocked": false,
@@ -58,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "Frontal6Specimen",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

@@ -97,8 +97,7 @@ public class PPHolonomicDriveController implements PathFollowingController {
     double yFF = targetState.fieldSpeeds.vyMetersPerSecond;
 
     if (!this.isEnabled) {
-      ChassisSpeeds ret = new ChassisSpeeds(xFF, yFF, 0);
-      ret.toRobotRelativeSpeeds(currentPose.getRotation());
+      ChassisSpeeds ret = ChassisSpeeds.fromFieldRelativeSpeeds(xFF, yFF, 0, currentPose.getRotation());
       return ret;
     }
 
@@ -126,8 +125,7 @@ public class PPHolonomicDriveController implements PathFollowingController {
     }
 
     ChassisSpeeds ret =
-        new ChassisSpeeds(xFF + xFeedback, yFF + yFeedback, rotationFF + rotationFeedback);
-    ret.toRobotRelativeSpeeds(currentPose.getRotation());
+        ChassisSpeeds.fromFieldRelativeSpeeds(xFF + xFeedback, yFF + yFeedback, rotationFF + rotationFeedback, currentPose.getRotation());
     return ret;
   }
 
