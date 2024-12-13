@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.util.RobotLog;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.*;
+import edu.wpi.first.wpilibj.Filesystem;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -185,10 +187,10 @@ public class PPLibTelemetry {
 
   private static void handleAutoHotReloadEvent(NetworkTableEvent event) {
     if (!compMode) {
-      if (DriverStation.isEnabled()) {
-        DriverStation.reportWarning("Ignoring auto hot reload, robot is enabled", false);
-        return;
-      }
+//      if (DriverStation.isEnabled()) {
+//        DriverStation.reportWarning("Ignoring auto hot reload, robot is enabled", false);
+//        return;
+//      }
 
       try {
         String jsonStr = event.valueData.value.getString();
@@ -203,18 +205,18 @@ public class PPLibTelemetry {
           }
         }
 
-        if (RobotBase.isReal()) {
-          File pathFile =
-              new File(Filesystem.getDeployDirectory(), "pathplanner/autos/" + name + ".auto");
 
-          try (FileWriter writer = new FileWriter(pathFile)) {
-            writer.write(autoJson.toJSONString());
-            writer.flush();
-          } catch (IOException e) {
-            DriverStation.reportWarning(
-                "Failed to save updated auto file contents, please re-deploy code", false);
-          }
+        File pathFile =
+            new File(Filesystem.getDeployDirectory(), "pathplanner/autos/" + name + ".auto");
+
+        try (FileWriter writer = new FileWriter(pathFile)) {
+          writer.write(autoJson.toJSONString());
+          writer.flush();
+        } catch (IOException e) {
+//          DriverStation.reportWarning(
+//              "Failed to save updated auto file contents, please re-deploy code", false);
         }
+
       } catch (Exception e) {
         // Ignore
       }
