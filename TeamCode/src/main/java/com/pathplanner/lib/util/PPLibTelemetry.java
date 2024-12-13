@@ -93,131 +93,131 @@ public class PPLibTelemetry {
     }
   }
 
-//  /**
-//   * Register a path for hot reload. This is used internally.
-//   *
-//   * @param pathName Name of the path
-//   * @param path Reference to the path
-//   */
-//  public static void registerHotReloadPath(String pathName, PathPlannerPath path) {
-//    if (!compMode) {
-//      ensureHotReloadListenersInitialized();
-//      if (!hotReloadPaths.containsKey(pathName)) {
-//        hotReloadPaths.put(pathName, new ArrayList<>());
-//      }
-//
-//      hotReloadPaths.get(pathName).add(path);
-//    }
-//  }
-//
-//  /**
-//   * Register an auto for hot reload. This is used internally.
-//   *
-//   * @param autoName Name of the auto
-//   * @param auto Reference to the auto
-//   */
-//  public static void registerHotReloadAuto(String autoName, PathPlannerAuto auto) {
-//    if (!compMode) {
-//      ensureHotReloadListenersInitialized();
-//      if (!hotReloadAutos.containsKey(autoName)) {
-//        hotReloadAutos.put(autoName, new ArrayList<>());
-//      }
-//
-//      hotReloadAutos.get(autoName).add(auto);
-//    }
-//  }
-//
-//  private static void ensureHotReloadListenersInitialized() {
-//    if (hotReloadPathListener == null) {
-//      hotReloadPathListener =
-//          NetworkTableListener.createListener(
-//              NetworkTableInstance.getDefault()
-//                  .getStringTopic("/PathPlanner/HotReload/hotReloadPath"),
-//              EnumSet.of(NetworkTableEvent.Kind.kValueRemote),
-//              PPLibTelemetry::handlePathHotReloadEvent);
-//    }
-//    if (hotReloadAutoListener == null) {
-//      hotReloadAutoListener =
-//          NetworkTableListener.createListener(
-//              NetworkTableInstance.getDefault()
-//                  .getStringTopic("/PathPlanner/HotReload/hotReloadAuto"),
-//              EnumSet.of(NetworkTableEvent.Kind.kValueRemote),
-//              PPLibTelemetry::handleAutoHotReloadEvent);
-//    }
-//  }
+  /**
+   * Register a path for hot reload. This is used internally.
+   *
+   * @param pathName Name of the path
+   * @param path Reference to the path
+   */
+  public static void registerHotReloadPath(String pathName, PathPlannerPath path) {
+    if (!compMode) {
+      ensureHotReloadListenersInitialized();
+      if (!hotReloadPaths.containsKey(pathName)) {
+        hotReloadPaths.put(pathName, new ArrayList<>());
+      }
 
-//  private static void handlePathHotReloadEvent(NetworkTableEvent event) {
-//    if (!compMode) {
-//      if (!Robot.isDisabled()) {
-//        RobotLog.w("Ignoring path hot reload, robot is enabled", false);
-//        return;
-//      }
-//
-//      try {
-//        String jsonStr = event.valueData.value.getString();
-//
-//        JSONObject json = (JSONObject) new JSONParser().parse(jsonStr);
-//        String name = (String) json.get("name");
-//        JSONObject pathJson = (JSONObject) json.get("path");
-//
-//        if (hotReloadPaths.containsKey(name)) {
-//          for (PathPlannerPath path : hotReloadPaths.get(name)) {
-//            path.hotReload(pathJson);
-//          }
-//        }
-//
-//        File pathFile =
-//            new File(Filesystem.getDeployDirectory(), "pathplanner/paths/" + name + ".path");
-//
-//        try (FileWriter writer = new FileWriter(pathFile)) {
-//          writer.write(pathJson.toJSONString());
-//          writer.flush();
-//        } catch (IOException e) {
-//          RobotLog.w(
-//              "Failed to save updated path file contents, please re-deploy code", false);
-//        }
-//
-//      } catch (Exception e) {
-//        // Ignore
-//      }
-//    }
-//  }
+      hotReloadPaths.get(pathName).add(path);
+    }
+  }
 
-//  private static void handleAutoHotReloadEvent(NetworkTableEvent event) {
-//    if (!compMode) {
-//      if (DriverStation.isEnabled()) {
-//        DriverStation.reportWarning("Ignoring auto hot reload, robot is enabled", false);
-//        return;
-//      }
-//
-//      try {
-//        String jsonStr = event.valueData.value.getString();
-//
-//        JSONObject json = (JSONObject) new JSONParser().parse(jsonStr);
-//        String name = (String) json.get("name");
-//        JSONObject autoJson = (JSONObject) json.get("auto");
-//
-//        if (hotReloadAutos.containsKey(name)) {
-//          for (PathPlannerAuto auto : hotReloadAutos.get(name)) {
-//            auto.hotReload(autoJson);
-//          }
-//        }
-//
-//        if (RobotBase.isReal()) {
-//          File pathFile =
-//              new File(Filesystem.getDeployDirectory(), "pathplanner/autos/" + name + ".auto");
-//
-//          try (FileWriter writer = new FileWriter(pathFile)) {
-//            writer.write(autoJson.toJSONString());
-//            writer.flush();
-//          } catch (IOException e) {
-//            DriverStation.reportWarning(
-//                "Failed to save updated auto file contents, please re-deploy code", false);
-//          }
-//        }
-//      } catch (Exception e) {
-//        // Ignore
-//      }
-//    }
-//  }
+  /**
+   * Register an auto for hot reload. This is used internally.
+   *
+   * @param autoName Name of the auto
+   * @param auto Reference to the auto
+   */
+  public static void registerHotReloadAuto(String autoName, PathPlannerAuto auto) {
+    if (!compMode) {
+      ensureHotReloadListenersInitialized();
+      if (!hotReloadAutos.containsKey(autoName)) {
+        hotReloadAutos.put(autoName, new ArrayList<>());
+      }
+
+      hotReloadAutos.get(autoName).add(auto);
+    }
+  }
+
+  private static void ensureHotReloadListenersInitialized() {
+    if (hotReloadPathListener == null) {
+      hotReloadPathListener =
+          NetworkTableListener.createListener(
+              NetworkTableInstance.getDefault()
+                  .getStringTopic("/PathPlanner/HotReload/hotReloadPath"),
+              EnumSet.of(NetworkTableEvent.Kind.kValueRemote),
+              PPLibTelemetry::handlePathHotReloadEvent);
+    }
+    if (hotReloadAutoListener == null) {
+      hotReloadAutoListener =
+          NetworkTableListener.createListener(
+              NetworkTableInstance.getDefault()
+                  .getStringTopic("/PathPlanner/HotReload/hotReloadAuto"),
+              EnumSet.of(NetworkTableEvent.Kind.kValueRemote),
+              PPLibTelemetry::handleAutoHotReloadEvent);
+    }
+  }
+
+  private static void handlePathHotReloadEvent(NetworkTableEvent event) {
+    if (!compMode) {
+      if (!Robot.isDisabled()) {
+        RobotLog.w("Ignoring path hot reload, robot is enabled", false);
+        return;
+      }
+
+      try {
+        String jsonStr = event.valueData.value.getString();
+
+        JSONObject json = (JSONObject) new JSONParser().parse(jsonStr);
+        String name = (String) json.get("name");
+        JSONObject pathJson = (JSONObject) json.get("path");
+
+        if (hotReloadPaths.containsKey(name)) {
+          for (PathPlannerPath path : hotReloadPaths.get(name)) {
+            path.hotReload(pathJson);
+          }
+        }
+
+        File pathFile =
+            new File(Filesystem.getDeployDirectory(), "pathplanner/paths/" + name + ".path");
+
+        try (FileWriter writer = new FileWriter(pathFile)) {
+          writer.write(pathJson.toJSONString());
+          writer.flush();
+        } catch (IOException e) {
+          RobotLog.w(
+              "Failed to save updated path file contents, please re-deploy code", false);
+        }
+
+      } catch (Exception e) {
+        // Ignore
+      }
+    }
+  }
+
+  private static void handleAutoHotReloadEvent(NetworkTableEvent event) {
+    if (!compMode) {
+      if (DriverStation.isEnabled()) {
+        DriverStation.reportWarning("Ignoring auto hot reload, robot is enabled", false);
+        return;
+      }
+
+      try {
+        String jsonStr = event.valueData.value.getString();
+
+        JSONObject json = (JSONObject) new JSONParser().parse(jsonStr);
+        String name = (String) json.get("name");
+        JSONObject autoJson = (JSONObject) json.get("auto");
+
+        if (hotReloadAutos.containsKey(name)) {
+          for (PathPlannerAuto auto : hotReloadAutos.get(name)) {
+            auto.hotReload(autoJson);
+          }
+        }
+
+        if (RobotBase.isReal()) {
+          File pathFile =
+              new File(Filesystem.getDeployDirectory(), "pathplanner/autos/" + name + ".auto");
+
+          try (FileWriter writer = new FileWriter(pathFile)) {
+            writer.write(autoJson.toJSONString());
+            writer.flush();
+          } catch (IOException e) {
+            DriverStation.reportWarning(
+                "Failed to save updated auto file contents, please re-deploy code", false);
+          }
+        }
+      } catch (Exception e) {
+        // Ignore
+      }
+    }
+  }
 }

@@ -309,7 +309,7 @@ public class PathPlannerPath {
 
       PathPlannerPath path = PathPlannerPath.fromJson(json);
       path.name = pathName;
-//      PPLibTelemetry.registerHotReloadPath(pathName, path);
+      PPLibTelemetry.registerHotReloadPath(pathName, path);
       pathCache.put(pathName, path);
       return path;
     }

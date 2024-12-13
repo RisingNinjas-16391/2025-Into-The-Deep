@@ -5,19 +5,18 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.RobotContainer;
+import org.firstinspires.ftc.teamcode.constants.OperatorPresets;
 import org.firstinspires.ftc.teamcode.lib.ftclib.opmode.CommandOpMode;
 
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.NetworkTablesJNI;
-
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "TeleOp", group = "Teleop")
-public class TeleOp extends CommandOpMode {
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "REDTeleOp", group = "Teleop")
+public class RedTeleOp extends CommandOpMode {
     private Telemetry m_telemetry;
 
     @Override
     public void robotInit() {
         m_telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         new RobotContainer(hardwareMap, m_telemetry, gamepad1, gamepad2, 0); //Uses heavily modified untested hardware
+        OperatorPresets.IsRed = true;
     }
 
     @Override

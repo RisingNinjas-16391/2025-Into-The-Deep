@@ -81,3 +81,8 @@ tasks.register('PullWPILibLibraries') {
         into 'src/main/jniLibs/arm64-v8a'
     }
 }
+
+task('CopyPPFilesToControlHub', type: Exec) {
+    executable 'adb'
+    args 'push', project.projectDir.toString() + 'TeamCode/src/main/assets/pathplanner', '/sdcard/FIRST'
+}

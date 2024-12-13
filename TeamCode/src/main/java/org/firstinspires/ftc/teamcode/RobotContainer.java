@@ -1,16 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.internal.opmode.OpModeMeta;
-import org.firstinspires.ftc.robotcore.internal.opmode.RegisteredOpModes;
-import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
-import org.firstinspires.ftc.teamcode.commands.automation.DropDropCommand;
-import org.firstinspires.ftc.teamcode.commands.automation.DropIntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.OuttakePieceCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.PickUpSPCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.TopTransferCommand;
@@ -32,7 +26,6 @@ import org.firstinspires.ftc.teamcode.constants.OperatorPresets;
 import org.firstinspires.ftc.teamcode.lib.ftclib.button.GamepadButton;
 import org.firstinspires.ftc.teamcode.lib.ftclib.gamepad.GamepadEx;
 import org.firstinspires.ftc.teamcode.lib.ftclib.gamepad.GamepadKeys;
-import org.firstinspires.ftc.teamcode.opmodes.BlueAuto;
 import org.firstinspires.ftc.teamcode.subsystems.claws.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.drivetrain.DrivetrainSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.intake.ColorSubsystem;
@@ -59,7 +52,7 @@ public class RobotContainer {
     private final OuttakePivotSubsystem m_outtakePivotSubsystem;
     private final WristSubsystem m_outtakeWristSubsystem;
     private final ClawSubsystem m_outtakeClawSubsystem;
-    private final IntakeSubsystem m_intakesubsystem;
+    private final IntakeSubsystem m_intakeSubsystem;
     private final ColorSubsystem m_colorsensor;
 
     private final GamepadEx m_driverController;
@@ -74,7 +67,7 @@ public class RobotContainer {
         m_intakePivotSubsystem = new IntakePivotSubsystem(hwMap, telemetry);
         m_outtakePivotSubsystem = new OuttakePivotSubsystem(hwMap, telemetry);
         m_outtakeWristSubsystem = new WristSubsystem(hwMap, telemetry);
-        m_intakesubsystem = new IntakeSubsystem(hwMap, telemetry);
+        m_intakeSubsystem = new IntakeSubsystem(hwMap, telemetry);
         m_colorsensor = new ColorSubsystem(hwMap, telemetry);
         m_outtakeClawSubsystem = new ClawSubsystem(hwMap, telemetry, "depositClaw", 50);
 
@@ -94,18 +87,18 @@ public class RobotContainer {
     public void setDefaultCommands(){
         m_driveSubsystem.setDefaultCommand(new DriveCommand(m_driveSubsystem,
                 () -> new ChassisSpeeds(
-                MathUtil.applyDeadband(m_driverController.getLeftY(),
-                        .1),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(),
-                        .1),
+                MathUtil.applyDeadband(m_driverController.getLeftY()*1.4,
+                        .01),
+                -MathUtil.applyDeadband(m_driverController.getLeftX()*1.4,
+                        .01),
                 -Math.toRadians(100 * MathUtil
-                        .applyDeadband(m_driverController.getRightX(), 0.1))),
+                        .applyDeadband(m_driverController.getRightX()*1.4, 0.1))),
                 () -> true));
 
         m_extendoSubsystem.setDefaultCommand(new ExtendoVelocityCommand(m_extendoSubsystem, () -> 0));
 
-        m_intakesubsystem.setDefaultCommand(new IntakeCommand(
-                m_intakesubsystem,
+        m_intakeSubsystem.setDefaultCommand(new IntakeCommand(
+                m_intakeSubsystem,
                 () -> m_operatorController.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) - m_operatorController.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)-.2 ));
     }
 
@@ -119,7 +112,7 @@ public class RobotContainer {
                 new ExtendoPositionCommand(m_extendoSubsystem, () -> 5),
                 new FullRecursiveIntakeCommand(
                         m_intakePivotSubsystem,
-                        m_intakesubsystem,
+                        m_intakeSubsystem,
                         m_outtakeClawSubsystem,
                         m_elevatorSubsystem,
                         m_extendoSubsystem,
@@ -132,7 +125,7 @@ public class RobotContainer {
                 new ExtendoPositionCommand(m_extendoSubsystem, () -> 40),
                 new FullRecursiveIntakeCommand(
                         m_intakePivotSubsystem,
-                        m_intakesubsystem,
+                        m_intakeSubsystem,
                         m_outtakeClawSubsystem,
                         m_elevatorSubsystem,
                         m_extendoSubsystem,
@@ -148,7 +141,7 @@ public class RobotContainer {
                 new TransferCommand(
                         m_outtakeWristSubsystem,
                         m_intakePivotSubsystem,
-                        m_intakesubsystem,
+                        m_intakeSubsystem,
                         m_outtakeClawSubsystem,
                         m_elevatorSubsystem,
                         m_extendoSubsystem,
@@ -187,10 +180,10 @@ public class RobotContainer {
 
 
         //Operator Controls
-        new GamepadButton(m_operatorController,GamepadKeys.Button.A).onTrue(new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Feeding));
+        //new GamepadButton(m_operatorController,GamepadKeys.Button.A).onTrue(new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Feeding));
         new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_UP).onTrue(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.HighBucket));
         new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_DOWN).onTrue(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.LowBucket));
-
+        new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_LEFT).onTrue(new ElevatorPositionCommand(m_elevatorSubsystem, () -> 18));
     /*
         new GamepadButton(m_operatorController, GamepadKeys.Button.RIGHT_BUMPER).onTrue(new DropIntakeCommand(
                 m_intakePivotSubsystem,
@@ -242,7 +235,7 @@ public class RobotContainer {
                 ));
 
         NamedCommands.registerCommand("OuttakePiece",
-                new OuttakePieceCommand(m_extendoSubsystem, m_intakePivotSubsystem, m_intakesubsystem));
+                new OuttakePieceCommand(m_extendoSubsystem, m_intakePivotSubsystem, m_intakeSubsystem));
 
         NamedCommands.registerCommand("LowerFeeder",
                 new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Vertical));
@@ -250,12 +243,48 @@ public class RobotContainer {
         NamedCommands.registerCommand("DeployFeeder",
                 new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Feeding));
 
+//        NamedCommands.registerCommand("FeedYellow",
+//                new SequentialCommandGroup(
+//
+//                        new IntakePivotPositionCommand(m_intakePivotSubsystem,OperatorPresets.Feeding),
+//                        new ExtendoPositionCommand(m_extendoSubsystem, () -> 0).withTimeout(0.1),
+//                        new FullRecursiveIntakeCommand(
+//                                m_intakePivotSubsystem,
+//                                m_intakesubsystem,
+//                                m_outtakeClawSubsystem,
+//                                m_elevatorSubsystem,
+//                                m_extendoSubsystem,
+//                                m_outtakePivotSubsystem,
+//                                m_colorsensor,
+//                                m_outtakeWristSubsystem)
+//                ));
+
+        NamedCommands.registerCommand("FeedYellow",
+                new SequentialCommandGroup(
+                        new IntakeCommand(m_intakeSubsystem, () -> -1, false).withTimeout(0.1)
+                ));
+
+        NamedCommands.registerCommand("Transfer",
+                new SequentialCommandGroup(
+                        new TransferCommand(
+                                m_outtakeWristSubsystem,
+                                m_intakePivotSubsystem,
+                                m_intakeSubsystem,
+                                m_outtakeClawSubsystem,
+                                m_elevatorSubsystem,
+                                m_extendoSubsystem,
+
+                                m_outtakePivotSubsystem),
+                        new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.HighBucket)
+                ));
+
+
         NamedCommands.registerCommand("Feed1",
                 new ParallelCommandGroup(
                         new ExtendoPositionCommand(m_extendoSubsystem, () -> 20),
                         new PartialRecursiveIntakeCommand(
                                 m_intakePivotSubsystem,
-                                m_intakesubsystem,
+                                m_intakeSubsystem,
                                 m_outtakeClawSubsystem,
                                 m_elevatorSubsystem,
                                 m_extendoSubsystem,
@@ -268,7 +297,7 @@ public class RobotContainer {
                         new ExtendoPositionCommand(m_extendoSubsystem, () -> 30),
                         new PartialRecursiveIntakeCommand(
                                 m_intakePivotSubsystem,
-                                m_intakesubsystem,
+                                m_intakeSubsystem,
                                 m_outtakeClawSubsystem,
                                 m_elevatorSubsystem,
                                 m_extendoSubsystem,
@@ -281,7 +310,7 @@ public class RobotContainer {
                         new ExtendoPositionCommand(m_extendoSubsystem, () -> 40),
                         new PartialRecursiveIntakeCommand(
                                 m_intakePivotSubsystem,
-                                m_intakesubsystem,
+                                m_intakeSubsystem,
                                 m_outtakeClawSubsystem,
                                 m_elevatorSubsystem,
                                 m_extendoSubsystem,

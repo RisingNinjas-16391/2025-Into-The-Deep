@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.9870747330933008,
-        "y": 3.063185765115656
+        "x": 0.9610419928806855,
+        "y": 3.0197978647627854
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.6790206405677354,
-        "y": 3.1543003558675613
+        "x": 0.65298790035512,
+        "y": 3.1109124555146908
       },
       "isLocked": false,
       "linkedName": "PickUpY1"
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 0.75,
+    "maxVelocity": 0.5,
     "maxAcceleration": 0.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -45,7 +45,7 @@
     "rotation": -45.0
   },
   "reversed": false,
-  "folder": "HighBucket",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

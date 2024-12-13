@@ -16,28 +16,28 @@
     },
     {
       "anchor": {
-        "x": 1.1863753846130671,
-        "y": 3.0339323076863827
+        "x": 1.1909978647663573,
+        "y": 3.119590035581096
       },
       "prevControl": {
-        "x": 0.9650811689826503,
-        "y": 3.150245978974493
+        "x": 0.9697036491359404,
+        "y": 3.2359037068692063
       },
       "nextControl": {
-        "x": 1.407669600243484,
-        "y": 2.9176186363982723
+        "x": 1.4122920803967742,
+        "y": 3.0032763642929856
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.5250846975059178,
+        "x": 1.6,
         "y": 2.4036896797106078
       },
       "prevControl": {
-        "x": 1.5207459074703393,
-        "y": 2.837568683268479
+        "x": 1.5956612099644223,
+        "y": 3.054508185047415
       },
       "nextControl": null,
       "isLocked": false,
@@ -49,7 +49,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 0.75,
+    "maxVelocity": 0.5,
     "maxAcceleration": 0.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -61,7 +61,7 @@
     "rotation": -90.0
   },
   "reversed": false,
-  "folder": "HighBucket",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0.0,
     "rotation": -45.0

@@ -162,15 +162,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         m_poseEstimator.updateWithTime(m_timer.get(), getHeading(), m_wheelPositions);
 
-        m_poseEstimator.addVisionMeasurement(m_otos.getPose(), m_timer.get());
+//        m_poseEstimator.addVisionMeasurement(m_otos.getPose(), m_timer.get());
 
         telemetry.addLine("Drivetrain");
         telemetry.addData("Pose", getPose().toString());
         telemetry.addData("Wheel Positions", getWheelPositions().toString());
         telemetry.addData("Wheel Speeds", getWheelSpeeds().toString());
 
-        updateGains();
-        m_otos.updateScalars();
+//        updateGains();
+//        m_otos.updateScalars();
     }
 
     public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
@@ -203,7 +203,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
-        fieldRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, getHeading());
+        fieldRelativeSpeeds.toRobotRelativeSpeeds(getHeading());
         driveRobotRelative(fieldRelativeSpeeds);
     }
 
@@ -239,7 +239,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public void forceOdometry(Pose2d pose) {
         m_poseEstimator.resetPosition(getHeading(), getWheelPositions(), pose);
-        m_otos.setPosition(pose);
+//        m_otos.setPosition(pose);
     }
 
     public void resetHeading() {

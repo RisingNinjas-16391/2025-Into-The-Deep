@@ -34,9 +34,9 @@ public class FullRecursiveIntakeCommand extends SequentialCommandGroup {
         addCommands(
                 new ParallelDeadlineGroup(
                         new WaitUntilCommand(colorSensor::sampleDetected),
-                        new IntakeCommand(intakeSubsystem, () -> -1)
+                        new IntakeCommand(intakeSubsystem, () -> -1),
                         //,
-                        //new IntakePivotPositionCommand(intakePivotSubsystem, OperatorPresets.Feeding)
+                        new IntakePivotPositionCommand(intakePivotSubsystem, OperatorPresets.Feeding)
                         ),
                 new ConditionalCommand(
                         new TransferCommand(

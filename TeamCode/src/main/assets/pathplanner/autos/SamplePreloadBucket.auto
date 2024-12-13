@@ -17,9 +17,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "FeedYellow"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "PickupFirst"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Transfer"
           }
         },
         {
@@ -47,27 +59,21 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "ClawRelease"
+            "pathName": "PickupThird"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ScoreThird"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "BucketSubFeed"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Feed1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Feed2"
           }
         }
       ]

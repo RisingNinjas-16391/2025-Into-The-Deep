@@ -12,9 +12,11 @@ public class IntakeCommand extends Command {
     private final IntakeSubsystem m_intake;
     private DoubleSupplier m_power;
 
+    private boolean m_finish;
     public IntakeCommand(IntakeSubsystem intake, DoubleSupplier power){
         m_intake = intake;
         m_power = power;
+        m_finish = true;
 
         addRequirements(m_intake);
     }
@@ -22,6 +24,15 @@ public class IntakeCommand extends Command {
     public IntakeCommand(IntakeSubsystem intake, double power){
         m_intake = intake;
         m_power = () -> power;
+        m_finish = true;
+
+        addRequirements(m_intake);
+    }
+
+    public IntakeCommand(IntakeSubsystem intake, DoubleSupplier power, boolean finish){
+        m_intake = intake;
+        m_power = power;
+        m_finish = finish;
 
         addRequirements(m_intake);
     }
@@ -33,6 +44,8 @@ public class IntakeCommand extends Command {
 
     @Override
     public void end(boolean cancelled) {
-        m_intake.setPower(0);
+        if (m_finish) {
+            m_intake.setPower(0);
+        }
     }
 }

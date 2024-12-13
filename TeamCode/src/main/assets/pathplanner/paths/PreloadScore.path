@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 0.12452145299213202,
-        "y": 1.675
+        "y": 1.6750000000000003
       },
       "nextControl": null,
       "isLocked": false,
@@ -52,7 +52,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 0.75,
+    "maxVelocity": 0.5,
     "maxAcceleration": 0.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -64,7 +64,7 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": "Frontal6Specimen",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0

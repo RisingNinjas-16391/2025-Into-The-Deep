@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.8699274021335326,
-        "y": 1.2929594306024572
+        "x": 0.6139387900343884,
+        "y": 1.5489480427016011
       },
       "isLocked": false,
       "linkedName": "ScoreCenter"
     },
     {
       "anchor": {
-        "x": 0.5879060498209161,
-        "y": 0.8764355871869
+        "x": 0.1800597864765168,
+        "y": 0.6030918149454411
       },
       "prevControl": {
-        "x": 0.7744740213508009,
-        "y": 1.1367629893216233
+        "x": 0.6312939501767036,
+        "y": 0.8243701067599556
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "WallPickUp"
     }
   ],
   "rotationTargets": [],
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 0.75,
+    "maxVelocity": 0.5,
     "maxAcceleration": 0.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -45,7 +45,7 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": "Frontal6Specimen",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0
