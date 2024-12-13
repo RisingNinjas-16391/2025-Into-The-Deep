@@ -19,6 +19,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import java.io.*;
 import java.util.*;
@@ -287,10 +288,9 @@ public class PathPlannerPath {
 
     try (BufferedReader br =
         new BufferedReader(
-                new InputStreamReader(
-                        AutoBuilder.getHardwareMap().appContext
-                                .getAssets()
-                                .open("pathplanner" + "/paths/" + pathName + ".path")))) {
+                new FileReader(
+                        new File(
+                                Filesystem.getDeployDirectory(), "pathplanner/paths/" + pathName + ".path")))) {
       StringBuilder fileContentBuilder = new StringBuilder();
       String line;
       while ((line = br.readLine()) != null) {
@@ -309,7 +309,7 @@ public class PathPlannerPath {
 
       PathPlannerPath path = PathPlannerPath.fromJson(json);
       path.name = pathName;
-//      PPLibTelemetry.registerHotReloadPath(pathName, path);
+      PPLibTelemetry.registerHotReloadPath(pathName, path);
       pathCache.put(pathName, path);
       return path;
     }
@@ -319,10 +319,9 @@ public class PathPlannerPath {
       throws IOException, ParseException, FileVersionException {
     try (BufferedReader br =
         new BufferedReader(
-                new InputStreamReader(
-                        AutoBuilder.getHardwareMap().appContext
-                                .getAssets()
-                                .open("choreo/" + trajectoryName + ".traj")))) {
+                new FileReader(
+                        new File(
+                                Filesystem.getDeployDirectory(), "choreo/" + trajectoryName + ".traj")))) {
       StringBuilder fileContentBuilder = new StringBuilder();
       String line;
       while ((line = br.readLine()) != null) {
