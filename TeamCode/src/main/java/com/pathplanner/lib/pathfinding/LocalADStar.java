@@ -6,6 +6,8 @@ import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.Filesystem;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -79,10 +81,9 @@ public class LocalADStar implements Pathfinder {
 
       try {
         BufferedReader br = new BufferedReader(
-                new InputStreamReader(
-                        AutoBuilder.getHardwareMap().appContext
-                                .getAssets()
-                                .open("pathplanner/navgrid.json")));
+                new FileReader(
+                        new File(
+                                Filesystem.getDeployDirectory(),"pathplanner/navgrid.json")));
 
         StringBuilder fileContentBuilder = new StringBuilder();
         String line;

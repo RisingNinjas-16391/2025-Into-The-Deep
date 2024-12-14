@@ -18,6 +18,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -65,10 +66,9 @@ public class PathPlannerAuto extends Command {
 
     try (BufferedReader br =
         new BufferedReader(
-                new InputStreamReader(
-                        AutoBuilder.getHardwareMap().appContext
-                                .getAssets()
-                                .open("pathplanner" + "/autos/" + autoName + ".auto")))) {
+                new FileReader(
+                        new File(
+                                Filesystem.getDeployDirectory(),"pathplanner" + "/autos/" + autoName + ".auto")))) {
       StringBuilder fileContentBuilder = new StringBuilder();
       String line;
       while ((line = br.readLine()) != null) {
@@ -595,10 +595,9 @@ public class PathPlannerAuto extends Command {
       throws IOException, ParseException {
     try (BufferedReader br =
         new BufferedReader(
-                new InputStreamReader(
-                        AutoBuilder.getHardwareMap().appContext
-                                .getAssets()
-                                .open("pathplanner" + "/autos/" + autoName + ".auto")))) {
+                new FileReader(
+                        new File(
+                                Filesystem.getDeployDirectory(),"pathplanner" + "/autos/" + autoName + ".auto")))) {
       StringBuilder fileContentBuilder = new StringBuilder();
       String line;
       while ((line = br.readLine()) != null) {

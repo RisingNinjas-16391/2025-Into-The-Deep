@@ -37,6 +37,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelSpeeds;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.PerUnit;
 import edu.wpi.first.units.Unit;
@@ -138,7 +140,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
 //                        return false;
                         return false;
                     },
-                    hwMap,
                     this
             );
         }catch(Exception e){
@@ -169,6 +170,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
         telemetry.addData("Wheel Positions", getWheelPositions().toString());
         telemetry.addData("Wheel Speeds", getWheelSpeeds().toString());
 
+        NetworkTable drive = NetworkTableInstance.getDefault().getTable("Drive");
+
+//        drive.getEntry("Otos").setValue(m_otos.getPose());
 //        updateGains();
 //        m_otos.updateScalars();
     }
@@ -203,7 +207,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public void driveFieldRelative(ChassisSpeeds fieldRelativeSpeeds) {
-        fieldRelativeSpeeds.toRobotRelativeSpeeds(getHeading());
+        fieldRelativeSpeeds.toRobotRelativeSpeeds(getGyroHeading());
         driveRobotRelative(fieldRelativeSpeeds);
     }
 
@@ -216,6 +220,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return m_otos.getRotation2d();
     }
 
+    public Rotation2d getGyroHeading() {
+        return m_poseEstimator.getEstimatedPosition().getRotation();
+    }
     public MecanumDriveWheelPositions getWheelPositions() {
         return m_wheelPositions;
     }
@@ -238,7 +245,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public void forceOdometry(Pose2d pose) {
-        m_poseEstimator.resetPosition(getHeading(), getWheelPositions(), pose);
+        m_poseEstimator.resetPosition(m_otos.getPose().getRotation(), getWheelPositions(), pose);
 //        m_otos.setPosition(pose);
     }
 

@@ -7,7 +7,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 @Config
 public final class ElevatorConstants {
     public static final TrapezoidProfile.Constraints TRAPEZOIDAL_CONSTRAINTS = new TrapezoidProfile.Constraints(5000, 5000);
-    public static double kP = 0.8;
+    public static double kP = 1.5;
     public static double kI = 0.005;
     public static double kD = 0;
     public static double kF = 0;

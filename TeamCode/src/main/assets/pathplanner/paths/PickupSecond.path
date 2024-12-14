@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.3536113878993318,
-        "y": 3.2714476868281865
+        "x": 0.32,
+        "y": 3.3
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.6876982206392264,
-        "y": 3.2150434163638275
+        "x": 0.70726641975343,
+        "y": 3.087990273834414
       },
       "isLocked": false,
       "linkedName": "ScoreBucket"
     },
     {
       "anchor": {
-        "x": 0.8956430769213276,
-        "y": 3.2714476868281865
+        "x": 1.012873846151868,
+        "y": 3.1699199999938092
       },
       "prevControl": {
-        "x": 0.5701170982721284,
-        "y": 3.257977224188218
+        "x": 0.7811371428460786,
+        "y": 3.076121810560513
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "PickupY2"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.40877192982455557,
+      "rotationDegrees": 20.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,7 +47,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 13.056649355014692
+    "rotation": 20.0
   },
   "reversed": false,
   "folder": null,

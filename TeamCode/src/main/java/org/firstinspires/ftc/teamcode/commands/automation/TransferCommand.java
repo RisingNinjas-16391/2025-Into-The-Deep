@@ -32,7 +32,7 @@ public class TransferCommand extends SequentialCommandGroup {
                                 new IntakePivotPositionCommand(intakePivotSubsystem, OperatorPresets.Transfer),
                                 new WaitCommand(0.3),
                                 new ExtendoPositionCommand(extendoSubsystem, () -> -1).withTimeout(0.5),
-                                new IntakeCommand(intakeSubsystem, () -> -0.5).withTimeout(0.5)
+                                new IntakeCommand(intakeSubsystem, () -> -0.5, false).withTimeout(0.5)
                         ),
                         new SequentialCommandGroup(
                                 new ClawPositionCommand(outtakeClawSubsystem, () -> 55),

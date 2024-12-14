@@ -47,9 +47,27 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "DeployFeeder"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FeedYellow"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "PickupSecond"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Transfer"
           }
         },
         {
@@ -59,15 +77,52 @@
           }
         },
         {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ClawRelease"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "DeployFeeder"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "FeedYellow"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "PickupThird"
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Transfer"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "ScoreThird"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ClawRelease"
           }
         },
         {

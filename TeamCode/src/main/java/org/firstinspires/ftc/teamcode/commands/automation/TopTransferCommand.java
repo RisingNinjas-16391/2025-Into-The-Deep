@@ -21,7 +21,7 @@ public class TopTransferCommand extends SequentialCommandGroup {
                 new ClawPositionCommand(outtakeClawSubsystem, () -> 90),
                 new ElevatorPositionCommand(elevatorSubsystem, () -> 0).withTimeout(500),
                 new ClawPositionCommand(outtakeClawSubsystem, () -> 45),
-                new WaitCommand(400),
+                new WaitCommand(0.4),
                 new ElevatorPositionCommand(elevatorSubsystem, () -> 10),
                 new OuttakePivotPositionCommand(outtakePivotSubsystem, 355)
         );
