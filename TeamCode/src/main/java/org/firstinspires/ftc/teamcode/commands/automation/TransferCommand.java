@@ -43,9 +43,9 @@ public class TransferCommand extends SequentialCommandGroup {
                                 new ClawPositionCommand(outtakeClawSubsystem, () -> 90))
                  ).withTimeout(6),
 
-                new ElevatorPositionCommand(elevatorSubsystem, () -> 8).withTimeout(0.5),
+                new ElevatorPositionCommand(elevatorSubsystem, () -> 10).withTimeout(0.1),
                 new ClawPositionCommand(outtakeClawSubsystem, () -> 35),
-                new WaitCommand(0.25),
+                new WaitCommand(0.35),
                 new ElevatorPositionCommand(elevatorSubsystem, () -> 20).withTimeout(0.5),
                 new OuttakePivotPositionCommand(outtakePivotSubsystem, 325));
     }

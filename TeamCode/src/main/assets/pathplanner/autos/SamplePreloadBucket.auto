@@ -114,21 +114,9 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "ScoreThird"
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "ClawRelease"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "BucketSubFeed"
+            "name": "LowerElevator"
           }
         }
       ]

@@ -87,9 +87,9 @@ public class RobotContainer {
     public void setDefaultCommands(){
         m_driveSubsystem.setDefaultCommand(new DriveCommand(m_driveSubsystem,
                 () -> new ChassisSpeeds(
-                MathUtil.applyDeadband(m_driverController.getLeftY()*1.4,
+                MathUtil.applyDeadband(m_driverController.getLeftY()*1.0,
                         .01),
-                -MathUtil.applyDeadband(m_driverController.getLeftX()*1.4,
+                -MathUtil.applyDeadband(m_driverController.getLeftX()*1.0,
                         .01),
                 -Math.toRadians(100 * MathUtil
                         .applyDeadband(m_driverController.getRightX()*1.4, 0.1))),
@@ -181,30 +181,14 @@ public class RobotContainer {
 
         //Operator Controls
         //new GamepadButton(m_operatorController,GamepadKeys.Button.A).onTrue(new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Feeding));
-        new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_UP).onTrue(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.HighBucket));
+        new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_UP).onTrue(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.HighBucket).andThen(new OuttakePivotPositionCommand(m_outtakePivotSubsystem, 325)));
         new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_DOWN).onTrue(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.LowBucket));
         new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_LEFT).onTrue(new ElevatorPositionCommand(m_elevatorSubsystem, () -> 18));
-    /*
-        new GamepadButton(m_operatorController, GamepadKeys.Button.RIGHT_BUMPER).onTrue(new DropIntakeCommand(
-                m_intakePivotSubsystem,
-                m_intakesubsystem,
-                m_outtakeClawSubsystem,
-                m_elevatorSubsystem,
-                m_extendoSubsystem,
-                m_outtakePivotSubsystem));
-
-        new GamepadButton(m_operatorController, GamepadKeys.Button.LEFT_BUMPER).onTrue(new DropDropCommand(
-                m_intakePivotSubsystem,
-                m_intakesubsystem,
-                m_outtakeClawSubsystem,
-                m_elevatorSubsystem,
-                m_extendoSubsystem,
-                m_outtakePivotSubsystem));
-    */
+//        new GamepadButton(m_operatorController,GamepadKeys.Button.Y). onTrue(new IntakePivotPositionCommand(m_intakePivotSubsystem,()->10));
 
 
         new GamepadButton(m_operatorController, GamepadKeys.Button.START).whileTrue(new ElevatorVelocityCommand(m_elevatorSubsystem, () -> -50).andThen(m_elevatorSubsystem::resetPosition));
-        new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_LEFT).whileTrue(new ExtendoVelocityCommand(m_extendoSubsystem, () -> -50).andThen(m_extendoSubsystem::resetPosition));
+        new GamepadButton(m_operatorController, GamepadKeys.Button.A).whileTrue(new ExtendoVelocityCommand(m_extendoSubsystem, () -> -50).andThen(m_extendoSubsystem::resetPosition));
 
 //        m_resetHeading.onTrue(new TurnCommand(m_driveSubsystem, () -> 90));
     }
@@ -278,6 +262,8 @@ public class RobotContainer {
                         new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.HighBucket)
                 ));
 
+        NamedCommands.registerCommand("LowerElevator",
+                new ElevatorPositionCommand(m_elevatorSubsystem, () -> 0));
 
         NamedCommands.registerCommand("Feed1",
                 new ParallelCommandGroup(

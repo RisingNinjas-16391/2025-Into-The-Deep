@@ -7,12 +7,12 @@ public class OperatorPresets {
     public static boolean IsRed=true;
 
     //feeder Pivot Presets
-    public static double Feeding = 35;
+    public static double Feeding = 20;
     public static double Transfer =350;
     public static double Vertical= 100;
 
     //ElevatorPresets
-    public static double HighBar = 46;
+    public static double HighBar = 45;
 
     public static double HighBucket = 86;
     public static double LowBucket = 40;

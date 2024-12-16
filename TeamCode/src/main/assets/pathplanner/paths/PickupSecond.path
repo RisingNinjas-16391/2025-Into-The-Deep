@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.32,
-        "y": 3.3
+        "x": 0.35795017793524436,
+        "y": 3.2801252668975085
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.70726641975343,
-        "y": 3.087990273834414
+        "x": 0.7452165976886744,
+        "y": 3.0681155407319225
       },
       "isLocked": false,
       "linkedName": "ScoreBucket"
     },
     {
       "anchor": {
-        "x": 1.012873846151868,
-        "y": 3.1699199999938092
+        "x": 0.9957523131653155,
+        "y": 3.2801252668975085
       },
       "prevControl": {
-        "x": 0.7811371428460786,
-        "y": 3.076121810560513
+        "x": 0.7640156098595261,
+        "y": 3.1863270774642123
       },
       "nextControl": null,
       "isLocked": false,
@@ -38,7 +38,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 0.5,
+    "maxVelocity": 0.75,
     "maxAcceleration": 0.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,

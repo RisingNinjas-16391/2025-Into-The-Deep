@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.0785230769209708,
-        "y": 3.4418953846086624
+        "x": 1.108560854090362,
+        "y": 3.5361138789966526
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.7726255680227202,
-        "y": 3.3893758116484856
+        "x": 0.8026633451921114,
+        "y": 3.483594306036476
       },
       "isLocked": false,
       "linkedName": "PickupY3"
     },
     {
       "anchor": {
-        "x": 0.32,
-        "y": 3.3
+        "x": 0.35795017793524436,
+        "y": 3.2801252668975085
       },
       "prevControl": {
-        "x": 0.6454092526687369,
-        "y": 3.3564042704606876
+        "x": 0.6833594306039813,
+        "y": 3.3365295373581962
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 0.5,
+    "maxVelocity": 0.75,
     "maxAcceleration": 0.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,

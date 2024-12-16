@@ -23,8 +23,8 @@ public class DriveCommand extends Command {
         m_moveSupply = speedsSupplier;
         m_fieldRelative = fieldRelativeSupplier;
 
-        m_xLimiter = new SlewRateLimiter(2.0, -4.0, 0.0);
-        m_yLimiter = new SlewRateLimiter(2.0, -4.0, 0.0);
+        m_xLimiter = new SlewRateLimiter(3.0, -6.0, 0.0);
+        m_yLimiter = new SlewRateLimiter(3.0, -6.0, 0.0);
         m_rotLimiter = new SlewRateLimiter(0.5);
 
         addRequirements(drive);

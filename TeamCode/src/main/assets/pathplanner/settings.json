@@ -7,7 +7,7 @@
     "HighBucket"
   ],
   "autoFolders": [],
-  "defaultMaxVel": 0.5,
+  "defaultMaxVel": 0.75,
   "defaultMaxAccel": 0.5,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,

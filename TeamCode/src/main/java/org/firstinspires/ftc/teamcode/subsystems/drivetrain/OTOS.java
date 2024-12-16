@@ -53,7 +53,7 @@ public class OTOS {
     }
 
     public void setPosition(Pose2d pose) {
-        myOtos.setPosition(Pose2dtoOTOSPose2d(new Pose2d(pose.getTranslation(), this.pose.getRotation())));
+        myOtos.setPosition(Pose2dtoOTOSPose2d(new Pose2d(pose.getTranslation(), getPose().getRotation())));
     }
 
     public void updateScalars() {

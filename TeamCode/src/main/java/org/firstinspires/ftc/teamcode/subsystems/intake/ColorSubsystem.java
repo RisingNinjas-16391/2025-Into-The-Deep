@@ -33,8 +33,7 @@ public class ColorSubsystem extends SubsystemBase {
                     //||m_ColorSensor.green() > m_ColorSensor.red();
         }
         else {
-            return m_colorSensor.blue() > m_colorSensor.red();
-                    //||m_ColorSensor.red()+m_ColorSensor.green() > m_ColorSensor.blue()*2;2;
+            return m_colorSensor.blue() > m_colorSensor.red()||m_colorSensor.green() > m_colorSensor.blue()*.6+m_colorSensor.red();
             //                    //||m_ColorSensor.green() > m_ColorSensor.red();
         }
 

@@ -84,5 +84,5 @@ tasks.register('PullWPILibLibraries') {
 
 task('CopyPPFilesToControlHub', type: Exec) {
     executable 'adb'
-    args 'push', 'src/main/assets/pathplanner', '/sdcard/FIRST'
+    args 'push', 'TeamCode/src/main/assets/pathplanner', '/sdcard/FIRST'
 }
