@@ -177,7 +177,7 @@ public class RobotContainer {
 
 
         //Elevator up a bit
-        new GamepadButton(m_driverController, GamepadKeys.Button.LEFT_BUMPER).onTrue(new ElevatorPositionCommand(m_elevatorSubsystem, () -> 55));
+        new GamepadButton(m_driverController, GamepadKeys.Button.LEFT_BUMPER).onTrue(new ElevatorPositionCommand(m_elevatorSubsystem, () -> 60));
 
         new GamepadButton(m_driverController, GamepadKeys.Button.BACK).or(new GamepadButton(m_operatorController, GamepadKeys.Button.BACK)).onTrue(new TopTransferCommand(m_outtakeClawSubsystem, m_elevatorSubsystem, m_outtakePivotSubsystem));
 
