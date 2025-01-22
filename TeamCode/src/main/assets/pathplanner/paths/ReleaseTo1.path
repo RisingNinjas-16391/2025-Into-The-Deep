@@ -3,59 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.18,
-        "y": 3.1652307692245873
+        "x": 1.12,
+        "y": 1.675
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.41656950130108683,
-        "y": 2.95894175534893
+        "x": 0.1200925925908033,
+        "y": 1.6613920387927363
       },
       "isLocked": false,
-      "linkedName": "ScoreB1"
+      "linkedName": "ScoreCenter"
     },
     {
       "anchor": {
-        "x": 0.6312939501767034,
-        "y": 2.915666903908896
+        "x": 1.4687794579143922,
+        "y": 0.6417757489288464
       },
       "prevControl": {
-        "x": 0.38837152413903187,
-        "y": 2.8566017286533194
-      },
-      "nextControl": {
-        "x": 0.8862646153828845,
-        "y": 2.977661538455723
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.0304626334499452,
-        "y": 3.0328142348695217
-      },
-      "prevControl": {
-        "x": 0.767865710373535,
-        "y": 2.915583465638982
+        "x": 1.2838561320335469,
+        "y": 0.8100117841447497
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "PickUpY1"
+      "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1.0315789473684185,
-      "rotationDegrees": 14.999999999999998
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",
@@ -64,13 +43,7 @@
             {
               "type": "named",
               "data": {
-                "name": "DeployFeeder"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "FeedYellow"
+                "name": "ClawRelease"
               }
             }
           ]
@@ -79,7 +52,7 @@
     },
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.5182724252491585,
+      "waypointRelativePos": 0.08372721134368917,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",
@@ -88,7 +61,7 @@
             {
               "type": "named",
               "data": {
-                "name": "BucketReset"
+                "name": "LowerElevator"
               }
             }
           ]
@@ -106,13 +79,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 14.999999999999998
+    "rotation": -90.0
   },
   "reversed": false,
-  "folder": "HighBucket",
+  "folder": null,
   "idealStartingState": {
-    "velocity": 0.0,
-    "rotation": -90.0
+    "velocity": 0,
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

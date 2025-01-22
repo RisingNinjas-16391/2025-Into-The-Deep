@@ -26,6 +26,6 @@ public class PartialTransferCommand extends SequentialCommandGroup {
         addCommands(
                 new IntakePivotPositionCommand(intakePivotSubsystem, OperatorPresets.Vertical),
                 new WaitCommand(0.3),
-                new ExtendoPositionCommand(extendoSubsystem, () -> 0).withTimeout(0.5));
+                new ExtendoPositionCommand(extendoSubsystem, () -> -2).withTimeout(0.7));
     }
 }

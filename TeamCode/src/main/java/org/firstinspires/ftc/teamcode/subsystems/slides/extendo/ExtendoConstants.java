@@ -18,7 +18,8 @@ public final class ExtendoConstants {
 
     public static final double ERROR_MARGIN = 2.0;
     public static final double LOWER_BOUND = 0.0;
-    public static final double UPPER_BOUND = 55.0;
+    public static final double UPPER_BOUND = 55;
+    //55
 
     public static final double CENTIMETERS_PER_TICK = 62.0 / 946.0;
 

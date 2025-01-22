@@ -114,6 +114,43 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "ScoreThird"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ClawRelease"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "DeployFeeder"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "FeedYellow"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AutoReset"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "LowerElevator"

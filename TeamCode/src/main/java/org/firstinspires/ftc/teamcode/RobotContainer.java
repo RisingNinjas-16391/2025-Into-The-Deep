@@ -122,7 +122,7 @@ public class RobotContainer {
 
         ));
         new GamepadButton(m_driverController, GamepadKeys.Button.Y).onTrue(new ParallelCommandGroup(
-                new ExtendoPositionCommand(m_extendoSubsystem, () -> 40),
+                new ExtendoPositionCommand(m_extendoSubsystem, () -> 45),
                 new FullRecursiveIntakeCommand(
                         m_intakePivotSubsystem,
                         m_intakeSubsystem,
@@ -177,7 +177,7 @@ public class RobotContainer {
 
 
         //Elevator up a bit
-        new GamepadButton(m_driverController, GamepadKeys.Button.LEFT_BUMPER).onTrue(new ElevatorPositionCommand(m_elevatorSubsystem, () -> 60));
+        new GamepadButton(m_driverController, GamepadKeys.Button.LEFT_BUMPER).onTrue(new ElevatorPositionCommand(m_elevatorSubsystem, () -> 55));
 
         new GamepadButton(m_driverController, GamepadKeys.Button.BACK).or(new GamepadButton(m_operatorController, GamepadKeys.Button.BACK)).onTrue(new TopTransferCommand(m_outtakeClawSubsystem, m_elevatorSubsystem, m_outtakePivotSubsystem));
 
@@ -188,7 +188,21 @@ public class RobotContainer {
         new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_DOWN).onTrue(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.LowBucket));
         new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_LEFT).onTrue(new ElevatorPositionCommand(m_elevatorSubsystem, () -> 18));
 //        new GamepadButton(m_operatorController,GamepadKeys.Button.Y). onTrue(new IntakePivotPositionCommand(m_intakePivotSubsystem,()->10));
+//Operator Outfeed Reset
+        new GamepadButton(m_operatorController, GamepadKeys.Button.X).onTrue(new SequentialCommandGroup(
+                new ExtendoPositionCommand(m_extendoSubsystem, () -> 40),
+                new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Feeding),
+                new IntakeCommand(m_intakeSubsystem, () -> 1).withTimeout(0.5)
+        ));
 
+        // Specimen Cycling Outtake
+        new GamepadButton(m_operatorController, GamepadKeys.Button.Y).onTrue(new SequentialCommandGroup(
+                new ExtendoPositionCommand(m_extendoSubsystem, () -> 0),
+                new ElevatorPositionCommand(m_elevatorSubsystem,()->5),
+                new IntakePivotPositionCommand(m_intakePivotSubsystem, (50)),
+                new IntakeCommand(m_intakeSubsystem, () -> 1).withTimeout(0.5),
+                new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Transfer)
+        ));
 
         new GamepadButton(m_operatorController, GamepadKeys.Button.START).whileTrue(new ElevatorVelocityCommand(m_elevatorSubsystem, () -> -50).andThen(m_elevatorSubsystem::resetPosition));
         new GamepadButton(m_operatorController, GamepadKeys.Button.A).whileTrue(new ExtendoVelocityCommand(m_extendoSubsystem, () -> -50).andThen(m_extendoSubsystem::resetPosition));
@@ -315,6 +329,11 @@ public class RobotContainer {
                         new ElevatorPositionCommand(m_elevatorSubsystem, () -> 44).withTimeout(0.1),
                         new WristPositionCommand(m_outtakeWristSubsystem, () -> 15),
                         new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> 285)));
+
+            //this is up a bit to score
+        NamedCommands.registerCommand("SpecimenUp", new SequentialCommandGroup(
+                new ElevatorPositionCommand(m_elevatorSubsystem, () -> 55)
+        ));
 
             // This is for wall intaking
         NamedCommands.registerCommand("ReadyFeed", new ParallelCommandGroup(

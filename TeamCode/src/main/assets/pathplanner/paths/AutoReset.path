@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.0879015384594135,
-        "y": 2.625969230764102
+        "x": 0.35795017793524436,
+        "y": 3.2801252668975085
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.7117193098197161,
-        "y": 2.75135275116701
+        "x": 0.6109869442155151,
+        "y": 3.279592810494105
       },
-      "isLocked": false,
-      "linkedName": null
+      "isLocked": true,
+      "linkedName": "ScoreBucket"
     },
     {
       "anchor": {
-        "x": 0.15474461538431317,
-        "y": 2.2883446153801463
+        "x": 0.5,
+        "y": 3.2801252668975085
       },
       "prevControl": {
-        "x": 0.45595929147444364,
-        "y": 2.3224924034387824
+        "x": 0.22249412132438245,
+        "y": 3.274259292003305
       },
       "nextControl": null,
       "isLocked": false,
@@ -44,7 +44,7 @@
     "maxAcceleration": 0.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
-    "nominalVoltage": 12.0,
+    "nominalVoltage": 13.0,
     "unlimited": false
   },
   "goalEndState": {
@@ -52,7 +52,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "HighBucket",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

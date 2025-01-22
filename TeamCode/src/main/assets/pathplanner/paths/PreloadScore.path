@@ -24,7 +24,7 @@
         "y": 1.6750000000000003
       },
       "nextControl": null,
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": "ScoreCenter"
     }
   ],
@@ -33,17 +33,35 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0,
+      "name": "",
+      "waypointRelativePos": 0.9141439205955355,
       "endWaypointRelativePos": null,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
                 "name": "HighBar"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "",
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "SpecimenUp"
               }
             }
           ]
@@ -56,7 +74,7 @@
     "maxAcceleration": 0.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
-    "nominalVoltage": 12.0,
+    "nominalVoltage": 13.0,
     "unlimited": false
   },
   "goalEndState": {
