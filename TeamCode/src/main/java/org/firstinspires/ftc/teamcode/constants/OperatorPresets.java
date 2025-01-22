@@ -12,7 +12,7 @@ public class OperatorPresets {
     public static double Vertical= 100;
 
     //ElevatorPresets
-    public static double HighBar = 37
+    public static double HighBar = 37;
 
     public static double HighBucket = 86;
     public static double LowBucket = 40;
