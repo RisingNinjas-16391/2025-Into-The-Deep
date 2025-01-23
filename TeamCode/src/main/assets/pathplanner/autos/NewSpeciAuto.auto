@@ -9,6 +9,24 @@
           "data": {
             "pathName": "PreloadScore"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ClawRelease"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterTo1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Push Pieces"
+          }
         }
       ]
     }

@@ -10,9 +10,11 @@ import org.firstinspires.ftc.teamcode.commands.automation.PickUpSPCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.TopTransferCommand;
 import org.firstinspires.ftc.teamcode.commands.automation.TransferCommand;
 import org.firstinspires.ftc.teamcode.commands.claw.ClawPositionCommand;
+import org.firstinspires.ftc.teamcode.commands.climb.ClimbPowerCommand;
 import org.firstinspires.ftc.teamcode.commands.drivetrain.DriveCommand;
 import org.firstinspires.ftc.teamcode.commands.drivetrain.TurnCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.FullRecursiveIntakeCommand;
+import org.firstinspires.ftc.teamcode.commands.intake.FullRecursiveTeleOpIntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.IntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.PartialRecursiveIntakeCommand;
 import org.firstinspires.ftc.teamcode.commands.pivot.IntakePivotPositionCommand;
@@ -35,6 +37,7 @@ import org.firstinspires.ftc.teamcode.subsystems.pivot.OuttakePivotSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.slides.elevator.ElevatorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.slides.extendo.ExtendoSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.wrist.WristSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.climb.ClimbSubsystem;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -54,6 +57,7 @@ public class RobotContainer {
     private final ClawSubsystem m_outtakeClawSubsystem;
     private final IntakeSubsystem m_intakeSubsystem;
     private final ColorSubsystem m_colorsensor;
+    private final ClimbSubsystem m_climbSubsystem;
 
     private final GamepadEx m_driverController;
     private final GamepadEx m_operatorController;
@@ -70,6 +74,7 @@ public class RobotContainer {
         m_intakeSubsystem = new IntakeSubsystem(hwMap, telemetry);
         m_colorsensor = new ColorSubsystem(hwMap, telemetry);
         m_outtakeClawSubsystem = new ClawSubsystem(hwMap, telemetry, "depositClaw", 50);
+        m_climbSubsystem= new ClimbSubsystem(hwMap,telemetry);
 
         m_driverController = new GamepadEx(gamepad1);
         m_operatorController = new GamepadEx(gamepad2);
@@ -96,10 +101,15 @@ public class RobotContainer {
                 () -> true));
 
         m_extendoSubsystem.setDefaultCommand(new ExtendoVelocityCommand(m_extendoSubsystem, () -> 0));
-
+        m_climbSubsystem.setDefaultCommand(new ClimbPowerCommand(
+                m_climbSubsystem,
+                () -> m_operatorController.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) - m_operatorController.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)));
+/*
         m_intakeSubsystem.setDefaultCommand(new IntakeCommand(
                 m_intakeSubsystem,
                 () -> m_operatorController.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) - m_operatorController.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)-.2 ));
+        */
+
     }
 
     public void configureButtonBindings() {
@@ -123,7 +133,7 @@ public class RobotContainer {
         ));
         new GamepadButton(m_driverController, GamepadKeys.Button.Y).onTrue(new ParallelCommandGroup(
                 new ExtendoPositionCommand(m_extendoSubsystem, () -> 45),
-                new FullRecursiveIntakeCommand(
+                new FullRecursiveTeleOpIntakeCommand(
                         m_intakePivotSubsystem,
                         m_intakeSubsystem,
                         m_outtakeClawSubsystem,
@@ -133,8 +143,6 @@ public class RobotContainer {
                         m_colorsensor,
                         m_outtakeWristSubsystem)
         ));
-
-
 
         //Transfer Back
         new GamepadButton(m_driverController, GamepadKeys.Button.DPAD_DOWN).onTrue(new SequentialCommandGroup(
@@ -182,12 +190,13 @@ public class RobotContainer {
         new GamepadButton(m_driverController, GamepadKeys.Button.BACK).or(new GamepadButton(m_operatorController, GamepadKeys.Button.BACK)).onTrue(new TopTransferCommand(m_outtakeClawSubsystem, m_elevatorSubsystem, m_outtakePivotSubsystem));
 
 
+
         //Operator Controls
-        //new GamepadButton(m_operatorController,GamepadKeys.Button.A).onTrue(new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Feeding));
+        new GamepadButton(m_operatorController,GamepadKeys.Button.A).onTrue(new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Feeding));
         new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_UP).onTrue(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.HighBucket).andThen(new OuttakePivotPositionCommand(m_outtakePivotSubsystem, 325)));
         new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_DOWN).onTrue(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.LowBucket));
         new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_LEFT).onTrue(new ElevatorPositionCommand(m_elevatorSubsystem, () -> 18));
-//        new GamepadButton(m_operatorController,GamepadKeys.Button.Y). onTrue(new IntakePivotPositionCommand(m_intakePivotSubsystem,()->10));
+
 //Operator Outfeed Reset
         new GamepadButton(m_operatorController, GamepadKeys.Button.X).onTrue(new SequentialCommandGroup(
                 new ExtendoPositionCommand(m_extendoSubsystem, () -> 40),
@@ -205,7 +214,7 @@ public class RobotContainer {
         ));
 
         new GamepadButton(m_operatorController, GamepadKeys.Button.START).whileTrue(new ElevatorVelocityCommand(m_elevatorSubsystem, () -> -50).andThen(m_elevatorSubsystem::resetPosition));
-        new GamepadButton(m_operatorController, GamepadKeys.Button.A).whileTrue(new ExtendoVelocityCommand(m_extendoSubsystem, () -> -50).andThen(m_extendoSubsystem::resetPosition));
+        new GamepadButton(m_operatorController, GamepadKeys.Button.BACK).whileTrue(new ExtendoVelocityCommand(m_extendoSubsystem, () -> -50).andThen(m_extendoSubsystem::resetPosition));
 
 //        m_resetHeading.onTrue(new TurnCommand(m_driveSubsystem, () -> 90));
     }

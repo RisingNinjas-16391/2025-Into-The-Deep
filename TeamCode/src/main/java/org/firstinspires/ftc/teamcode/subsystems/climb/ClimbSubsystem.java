@@ -10,20 +10,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ClimbSubsystem extends SubsystemBase {
     private final CRServo m_rightClimb;
     private final CRServo m_leftClimb;
-    private final String m_name;
     private final Telemetry m_telemetry;
 
-    public ClimbSubsystem(HardwareMap hwMap, Telemetry telemetry, String name, double initialPos) {
-        m_rightClimb = new CRServo(hwMap, name);
-        m_leftClimb = new CRServo(hwMap, name);
-        m_name = name;
+    public ClimbSubsystem(HardwareMap hwMap, Telemetry telemetry) {
+        m_rightClimb = new CRServo(hwMap, "rightClimb");
+        m_leftClimb = new CRServo(hwMap, "leftClimb");
 
         m_telemetry = telemetry;
     }
 
     @Override
     public void periodic() {
-        m_telemetry.addLine(m_name);
+        m_telemetry.addLine("Climb");
+        m_telemetry.addData("ClimbPower",m_rightClimb.get());
     }
 
     public void setPower(double power) {
