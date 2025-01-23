@@ -27,6 +27,18 @@
           "data": {
             "pathName": "Push Pieces"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "WallToCenter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterToWall"
+          }
         }
       ]
     }

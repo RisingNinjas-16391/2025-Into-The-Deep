@@ -49,7 +49,7 @@ public class BlueAuto extends CommandOpMode {
 
     @OpModeRegistrar
     public static void register(AnnotatedOpModeManager opModeManager) {
-        String[] names = {"ScoreCenter", "Frontal6Specimen","SamplePreloadBucket"};
+        String[] names = {"NewSpeciAuto","SamplePreloadBucket"};
         for (String name : names) {
             opModeManager.register(
                     new OpModeMeta.Builder()

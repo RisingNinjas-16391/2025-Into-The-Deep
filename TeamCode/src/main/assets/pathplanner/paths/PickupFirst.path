@@ -109,7 +109,7 @@
     "rotation": 14.999999999999998
   },
   "reversed": false,
-  "folder": "HighBucket",
+  "folder": "Bucket",
   "idealStartingState": {
     "velocity": 0.0,
     "rotation": -90.0

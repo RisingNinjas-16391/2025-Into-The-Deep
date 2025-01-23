@@ -3,8 +3,8 @@
   "robotLength": 0.318,
   "holonomicMode": true,
   "pathFolders": [
-    "Frontal6Specimen",
-    "HighBucket"
+    "Bucket",
+    "Specimen"
   ],
   "autoFolders": [],
   "defaultMaxVel": 0.75,

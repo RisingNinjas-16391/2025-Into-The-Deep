@@ -253,21 +253,6 @@ public class RobotContainer {
         NamedCommands.registerCommand("DeployFeeder",
                 new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Feeding));
 
-//        NamedCommands.registerCommand("FeedYellow",
-//                new SequentialCommandGroup(
-//
-//                        new IntakePivotPositionCommand(m_intakePivotSubsystem,OperatorPresets.Feeding),
-//                        new ExtendoPositionCommand(m_extendoSubsystem, () -> 0).withTimeout(0.1),
-//                        new FullRecursiveIntakeCommand(
-//                                m_intakePivotSubsystem,
-//                                m_intakesubsystem,
-//                                m_outtakeClawSubsystem,
-//                                m_elevatorSubsystem,
-//                                m_extendoSubsystem,
-//                                m_outtakePivotSubsystem,
-//                                m_colorsensor,
-//                                m_outtakeWristSubsystem)
-//                ));
 
         NamedCommands.registerCommand("FeedYellow",
                 new SequentialCommandGroup(

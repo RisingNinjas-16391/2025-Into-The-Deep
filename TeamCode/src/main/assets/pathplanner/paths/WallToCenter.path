@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.9891193905785367,
-        "y": 1.519000489083699
+        "x": 0.7017791726091857,
+        "y": 1.1739800285283772
       },
       "isLocked": false,
       "linkedName": "PickupWall"
@@ -28,12 +28,7 @@
       "linkedName": "SecondScore"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.510526315789467,
-      "rotationDegrees": 180.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -46,11 +41,11 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.2,
-    "rotation": 180.0
+    "velocity": 0.0,
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Specimen",
   "idealStartingState": {
     "velocity": 0.0,
     "rotation": 0.0
