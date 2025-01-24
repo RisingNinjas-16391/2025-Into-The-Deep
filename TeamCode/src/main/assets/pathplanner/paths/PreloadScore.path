@@ -8,7 +8,7 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3151230769227562,
+        "x": 0.4141230769227563,
         "y": 1.675
       },
       "isLocked": false,
@@ -20,8 +20,8 @@
         "y": 1.675
       },
       "prevControl": {
-        "x": 0.12452145299213202,
-        "y": 1.6750000000000003
+        "x": 0.8700000000000001,
+        "y": 1.675
       },
       "nextControl": null,
       "isLocked": true,
@@ -79,13 +79,13 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "reversed": false,
   "folder": "Specimen",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

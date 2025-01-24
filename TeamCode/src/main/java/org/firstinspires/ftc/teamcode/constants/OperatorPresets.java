@@ -7,7 +7,7 @@ public class OperatorPresets {
     public static boolean IsRed=true;
 
     //feeder Pivot Presets,.m
-    public static double Feeding = 20;
+    public static double Feeding = 0;
     public static double Transfer =350;
     public static double Vertical= 100;
 

@@ -5,7 +5,7 @@
 
             <Servo name="rightIntakePivot" port="1"/>
             <Servo name="leftIntakePivot" port="0"/>
-            <ContinuousRotationServo name="rightClimb" port="2"/>
+            <ContinuousRotationServo name="rightClimb" port="5"/>
 
             <goBILDA5202SeriesMotor name="extension" port="0"/>-->
             <goBILDA5202SeriesMotor name="intake" port="1"/>-->
