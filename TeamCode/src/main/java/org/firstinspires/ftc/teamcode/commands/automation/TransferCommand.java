@@ -30,21 +30,23 @@ public class TransferCommand extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
                                 new IntakePivotPositionCommand(intakePivotSubsystem, OperatorPresets.Transfer),
-                                new WaitCommand(0.3),
+                                new WaitCommand(0.1),
                                 new ExtendoPositionCommand(extendoSubsystem, () -> -2).withTimeout(0.5),
                                 new IntakeCommand(intakeSubsystem, () -> -0.5, false).withTimeout(0.2)
                         ),
-        b                 new SequentialCommandGroup(b
+                         new SequentialCommandGroup(
+                                 new ClawPositionCommand(outtakeClawSubsystem, () -> 90),
                                 new OuttakePivotPositionCommand(outtakePivotSubsystem, 230),
                                 new ElevatorPositionCommand(elevatorSubsystem, () -> 5).withTimeout(0.3),
-                                new WristPositionCommand(outtakeWristSubsystem, () -> 80),
-                                new ClawPositionCommand(outtakeClawSubsystem, () -> 90))
+                                new WristPositionCommand(outtakeWristSubsystem, () -> 80)
+                         )
                  ).withTimeout(6),
 
                 new ElevatorPositionCommand(elevatorSubsystem, () -> 0).withTimeout(0.1),
                 new ClawPositionCommand(outtakeClawSubsystem, () -> 35),
                 new WaitCommand(0.35),
-                new ElevatorPositionCommand(elevatorSubsystem, () -> 20).withTimeout(0.5),
-                new OuttakePivotPositionCommand(outtakePivotSubsystem, 0));
+                new OuttakePivotPositionCommand(outtakePivotSubsystem, 0),
+                new ElevatorPositionCommand(elevatorSubsystem, () -> 20).withTimeout(0.5)
+                );
     }
 }

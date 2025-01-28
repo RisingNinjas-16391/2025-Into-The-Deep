@@ -36,7 +36,7 @@ public class FullRecursiveTeleOpIntakeCommand extends SequentialCommandGroup {
                         new WaitUntilCommand(colorSensor::sampleDetected),
                         new IntakeCommand(intakeSubsystem, () -> -1),
                         //,
-                        new IntakePivotPositionCommand(intakePivotSubsystem, OperatorPresets.Vertical)
+                        new IntakePivotPositionCommand(intakePivotSubsystem, OperatorPresets.Feeding)
                 ),
                 new ConditionalCommand(
                         new TransferCommand(
