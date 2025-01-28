@@ -17,9 +17,9 @@ public class OuttakePivotSubsystem extends SubsystemBase {
 
     public OuttakePivotSubsystem(HardwareMap hwMap, Telemetry telemetry) {
         m_leftMotor = new SimpleServo(hwMap, "leftDepositPivot", 0,
-                355, AngleUnit.DEGREES);
+                255, AngleUnit.DEGREES);
         m_rightMotor = new SimpleServo(hwMap, "rightDepositPivot", 0,
-                355, AngleUnit.DEGREES);
+                255, AngleUnit.DEGREES);
 
         m_telemetry = telemetry;
 

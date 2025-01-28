@@ -31,22 +31,20 @@ public class TransferCommand extends SequentialCommandGroup {
                         new SequentialCommandGroup(
                                 new IntakePivotPositionCommand(intakePivotSubsystem, OperatorPresets.Transfer),
                                 new WaitCommand(0.3),
-                                new ExtendoPositionCommand(extendoSubsystem, () -> -2).withTimeout(0.7),
-                                new IntakeCommand(intakeSubsystem, () -> -0.5, false).withTimeout(0.5)
+                                new ExtendoPositionCommand(extendoSubsystem, () -> -2).withTimeout(0.5),
+                                new IntakeCommand(intakeSubsystem, () -> -0.5, false).withTimeout(0.2)
                         ),
-                        new SequentialCommandGroup(
-                                new ClawPositionCommand(outtakeClawSubsystem, () -> 55),
-                                new ElevatorPositionCommand(elevatorSubsystem, () -> 18).withTimeout(0.5),
+        b                 new SequentialCommandGroup(b
+                                new OuttakePivotPositionCommand(outtakePivotSubsystem, 230),
+                                new ElevatorPositionCommand(elevatorSubsystem, () -> 5).withTimeout(0.3),
                                 new WristPositionCommand(outtakeWristSubsystem, () -> 80),
-                                new OuttakePivotPositionCommand(outtakePivotSubsystem, 0),
-                                new WaitCommand(0.2),
                                 new ClawPositionCommand(outtakeClawSubsystem, () -> 90))
                  ).withTimeout(6),
 
-                new ElevatorPositionCommand(elevatorSubsystem, () -> 10).withTimeout(0.1),
+                new ElevatorPositionCommand(elevatorSubsystem, () -> 0).withTimeout(0.1),
                 new ClawPositionCommand(outtakeClawSubsystem, () -> 35),
                 new WaitCommand(0.35),
                 new ElevatorPositionCommand(elevatorSubsystem, () -> 20).withTimeout(0.5),
-                new OuttakePivotPositionCommand(outtakePivotSubsystem, 150));
+                new OuttakePivotPositionCommand(outtakePivotSubsystem, 0));
     }
 }
