@@ -45,12 +45,6 @@
               "data": {
                 "name": "DeployFeeder"
               }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "HighBucket"
-              }
             }
           ]
         }
@@ -58,7 +52,7 @@
     },
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.5160575858250234,
+      "waypointRelativePos": 0.03781228899392666,
       "endWaypointRelativePos": null,
       "command": {
         "type": "sequential",

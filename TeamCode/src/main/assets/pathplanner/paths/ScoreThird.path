@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.8026633451921114,
-        "y": 3.483594306036476
+        "x": 0.7985587847315871,
+        "y": 3.357996326897676
       },
       "isLocked": false,
       "linkedName": "PickupY3"
     },
     {
       "anchor": {
-        "x": 0.35795017793524436,
-        "y": 3.2801252668975085
+        "x": 0.420023965762375,
+        "y": 3.214096433659914
       },
       "prevControl": {
-        "x": 0.6833594306039813,
-        "y": 3.3365295373581962
+        "x": 1.0713634740283973,
+        "y": 3.3055166481049647
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 0.75,
-    "maxAcceleration": 0.5,
+    "maxVelocity": 1.2,
+    "maxAcceleration": 0.75,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 13.0,

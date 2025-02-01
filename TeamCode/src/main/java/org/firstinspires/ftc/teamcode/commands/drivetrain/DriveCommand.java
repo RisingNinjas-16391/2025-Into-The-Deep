@@ -25,7 +25,8 @@ public class DriveCommand extends Command {
 
         m_xLimiter = new SlewRateLimiter(3.0, -6.0, 0.0);
         m_yLimiter = new SlewRateLimiter(3.0, -6.0, 0.0);
-        m_rotLimiter = new SlewRateLimiter(0.5);
+        m_rotLimiter = new SlewRateLimiter(5.5);
+        //.5
 
         addRequirements(drive);
     }

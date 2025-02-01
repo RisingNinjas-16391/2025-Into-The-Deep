@@ -26,7 +26,7 @@ public class ClimbSubsystem extends SubsystemBase {
     }
 
     public void setPower(double power) {
-        m_rightClimb.set(power);
+        m_rightClimb.set(-power);
         m_leftClimb.set(power);
 
     }

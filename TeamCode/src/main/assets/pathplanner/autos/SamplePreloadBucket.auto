@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "HighBucket"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "PreloadBucket"
@@ -43,13 +49,13 @@
         {
           "type": "named",
           "data": {
-            "name": "ClawRelease"
+            "name": "DeployFeeder"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "DeployFeeder"
+            "name": "ClawRelease"
           }
         },
         {
@@ -108,19 +114,26 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Transfer"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "ScoreThird"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Transfer"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "ScoreThird"
-          }
-        },
-        {
-          "type": "sequential",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -138,22 +151,16 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "FeedYellow"
+                  "name": "LowerElevator"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ServoReset"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "AutoReset"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "LowerElevator"
           }
         }
       ]

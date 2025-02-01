@@ -41,7 +41,7 @@ public class ColorSubsystem extends SubsystemBase {
     }
 
     public boolean sampleDetected() {
-        return m_colorSensor.blue() + m_colorSensor.red() + m_colorSensor.green() > 900;
+        return m_colorSensor.blue() + m_colorSensor.red() + m_colorSensor.green() > 1000;
         // Figure this out
     }
 

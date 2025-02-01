@@ -23,6 +23,8 @@ public class OuttakePivotSubsystem extends SubsystemBase {
 
         m_telemetry = telemetry;
 
+
+        turnToAngle(150);
     }
 
     @Override

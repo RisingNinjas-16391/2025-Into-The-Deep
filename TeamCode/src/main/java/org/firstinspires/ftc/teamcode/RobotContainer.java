@@ -55,6 +55,7 @@ public class RobotContainer {
     private final OuttakePivotSubsystem m_outtakePivotSubsystem;
     private final WristSubsystem m_outtakeWristSubsystem;
     private final ClawSubsystem m_outtakeClawSubsystem;
+    private final ClawSubsystem m_GoBildaLight;
     private final IntakeSubsystem m_intakeSubsystem;
     private final ColorSubsystem m_colorsensor;
     private final ClimbSubsystem m_climbSubsystem;
@@ -74,6 +75,8 @@ public class RobotContainer {
         m_intakeSubsystem = new IntakeSubsystem(hwMap, telemetry);
         m_colorsensor = new ColorSubsystem(hwMap, telemetry);
         m_outtakeClawSubsystem = new ClawSubsystem(hwMap, telemetry, "depositClaw", 50);
+        m_GoBildaLight = new ClawSubsystem(hwMap, telemetry, "GoLight", 65);
+        //90=green, 180=white,60 orange, 65 yellow, 52 red,
         m_climbSubsystem= new ClimbSubsystem(hwMap,telemetry);
 
         m_driverController = new GamepadEx(gamepad1);
@@ -161,14 +164,12 @@ public class RobotContainer {
         new GamepadButton(m_driverController, GamepadKeys.Button.RIGHT_BUMPER).onTrue(new SequentialCommandGroup(
                 new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90).withTimeout(300)
 
+
         ));
 
         //WallFeed
         new GamepadButton(m_driverController, GamepadKeys.Button.B).onTrue(new SequentialCommandGroup(
-                new ClawPositionCommand(m_outtakeClawSubsystem, () -> 60),
-                new WaitCommand(.2),
                 new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> OperatorPresets.IntakeSpecimen),
-                new WaitCommand(.5),
                 new ElevatorPositionCommand(m_elevatorSubsystem, () -> 0),
                 new WristPositionCommand(m_outtakeWristSubsystem,()-> OperatorPresets.IntakeSpecimenWrist),
                 new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90)
@@ -193,8 +194,8 @@ public class RobotContainer {
 
         //Operator Controls
         new GamepadButton(m_operatorController,GamepadKeys.Button.A).onTrue(new IntakePivotPositionCommand(m_intakePivotSubsystem, OperatorPresets.Feeding));
-        new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_UP).onTrue(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.HighBucket).andThen(new OuttakePivotPositionCommand(m_outtakePivotSubsystem, 325)));
-        new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_DOWN).onTrue(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.LowBucket));
+        new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_UP).onTrue(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.HighBucket).andThen(new OuttakePivotPositionCommand(m_outtakePivotSubsystem, 0)));
+        new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_DOWN).onTrue(new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.LowBucket).andThen(new OuttakePivotPositionCommand(m_outtakePivotSubsystem, 0)));
         new GamepadButton(m_operatorController, GamepadKeys.Button.DPAD_LEFT).onTrue(new ElevatorPositionCommand(m_elevatorSubsystem, () -> 18));
 
 //Operator Outfeed Reset
@@ -226,13 +227,19 @@ public class RobotContainer {
                 new ClawPositionCommand(m_outtakeClawSubsystem, () -> 90)
         ));
 
+
+        NamedCommands.registerCommand("ServoReset", new SequentialCommandGroup(
+                new OuttakePivotPositionCommand(m_outtakePivotSubsystem, () -> 150)
+        ));
+
         //BucketCommands
 
         NamedCommands.registerCommand("HighBucket",
                 new ParallelCommandGroup(
+
+                        new OuttakePivotPositionCommand(m_outtakePivotSubsystem, 0),
                         new ElevatorPositionCommand(m_elevatorSubsystem, () -> OperatorPresets.HighBucket),
-                        new ExtendoPositionCommand(m_extendoSubsystem, () -> 0),
-                        new OuttakePivotPositionCommand(m_outtakePivotSubsystem, 355)
+                        new ExtendoPositionCommand(m_extendoSubsystem, () -> 0)
                         ));
 
         NamedCommands.registerCommand("BucketReset",
@@ -274,7 +281,9 @@ public class RobotContainer {
                 ));
 
         NamedCommands.registerCommand("LowerElevator",
-                new ElevatorPositionCommand(m_elevatorSubsystem, () -> 0));
+                new ParallelCommandGroup(
+                        new ElevatorPositionCommand(m_elevatorSubsystem, () -> 0)
+        ));
 
         NamedCommands.registerCommand("Feed1",
                 new ParallelCommandGroup(

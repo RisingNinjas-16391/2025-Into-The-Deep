@@ -28,9 +28,9 @@
             <Servo name="rightDepositPivot" port="1"/>
             <Servo name="leftDepositPivot" port="2"/>
             <Servo name="depositClaw" port="5"/>
-            <ContinuousRotationServo name="leftClimb" port="4"/>
+            <Servo name="GoLight" port="4"/>
             <Servo name="wrist" port="3"/>
-            <Servo name="intakeClaw" port="0"/>
+            <ContinuousRotationServo name="leftClimb" port="0"/>
 
 
         </LynxModule>
